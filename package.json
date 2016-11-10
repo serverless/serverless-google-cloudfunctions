@@ -1,0 +1,26 @@
+{
+  "name": "serverless-google-cloudfunctions",
+  "version": "0.1.0",
+  "description": "Provider plugin for the Serverless Framework v1.x which adds support for Google Cloud Functions.",
+  "main": "index.js",
+  "author": "serverless.com",
+  "license": "MIT",
+  "repository": {
+    "git": "https://github.com/serverless/serverless-google-cloudfunctions"
+  },
+  "homepage": "https://github.com/serverless/serverless-google-cloudfunctions",
+  "keywords": [
+    "serverless",
+    "serverless framework",
+    "serverless applications",
+    "serverless modules",
+    "google cloud functions",
+    "iot",
+    "internet of things",
+    "serverless.com"
+  ],
+  "dependencies": {
+    "google-cloud": "^0.43.0",
+    "googleapis": "^14.2.0"
+  }
+}
