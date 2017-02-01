@@ -8,6 +8,9 @@
   "repository": {
     "git": "https://github.com/serverless/serverless-google-cloudfunctions"
   },
+  "scripts": {
+    "test": "mocha tests/all -- -R spec --recursive"
+  },
   "homepage": "https://github.com/serverless/serverless-google-cloudfunctions",
   "keywords": [
     "serverless",
@@ -20,11 +23,15 @@
     "serverless.com"
   ],
   "dependencies": {
+    "async": "^2.1.2",
+    "bluebird": "^3.4.6",
+    "chalk": "^1.1.3",
     "google-cloud": "^0.43.0",
     "googleapis": "^14.2.0",
-    "bluebird": "^3.4.6",
-    "lodash": "^4.16.6",
-    "chalk": "^1.1.3",
-    "async": "^2.1.2"
+    "lodash": "^4.17.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2"
   }
 }
