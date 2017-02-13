@@ -8,7 +8,9 @@
   "repository": {
     "git": "https://github.com/serverless/serverless-google-cloudfunctions"
   },
-  "scripts": {},
+  "scripts": {
+    "test": "jest"
+  },
   "homepage": "https://github.com/serverless/serverless-google-cloudfunctions",
   "keywords": [
     "serverless",
@@ -21,5 +23,7 @@
     "serverless.com"
   ],
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "jest": "^18.1.0"
+  }
 }
