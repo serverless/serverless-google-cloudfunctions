@@ -18,3 +18,6 @@ script:
 
 script:
   - if [[ ! -z "$DISABLE_TESTS" && ! -z "$LINTING" ]]; then npm run lint; fi
+
+after_success:
+  - ./node_modules/jest/bin/jest.js --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
