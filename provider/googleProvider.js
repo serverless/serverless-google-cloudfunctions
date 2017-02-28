@@ -75,13 +75,8 @@ class GoogleProvider {
     const keyFileContent = fs.readFileSync(this.serverless.service.provider.credentials).toString();
     const key = JSON.parse(keyFileContent);
 
-    return new google.auth.JWT(
-      key.client_email,
-      null,
-      key.private_key,
-      ['https://www.googleapis.com/auth/cloud-platform'],
-      null,
-    );
+    return new google.auth
+      .JWT(key.client_email, null, key.private_key, ['https://www.googleapis.com/auth/cloud-platform'], null);
   }
 
   isServiceSupported(service) {
