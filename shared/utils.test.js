@@ -1,3 +1,5 @@
+'use strict';
+
 const setDefaults = require('./utils');
 const GoogleProvider = require('../provider/googleProvider');
 const Serverless = require('../test/serverless');

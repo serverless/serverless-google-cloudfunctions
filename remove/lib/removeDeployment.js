@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
   removeDeployment() {
     this.serverless.cli.log('Removing deployment...');

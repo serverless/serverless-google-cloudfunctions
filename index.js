@@ -1,3 +1,5 @@
+'use strict';
+
 /*
 NOTE: this plugin is used to add all the differnet provider related plugins at once.
 This way only one plugin needs to be added to the service in order to get access to the

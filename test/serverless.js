@@ -1,3 +1,5 @@
+'use strict';
+
 // mock of the serverless instance
 class Serverless {
   constructor() {

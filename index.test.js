@@ -1,3 +1,5 @@
+'use strict';
+
 const GoogleIndex = require('./index');
 const GoogleProvider = require('./provider/googleProvider');
 const GoogleDeploy = require('./deploy/googleDeploy');

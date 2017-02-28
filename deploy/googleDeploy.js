@@ -1,3 +1,5 @@
+'use strict';
+
 const BbPromise = require('bluebird');
 
 const validate = require('../shared/validate');

@@ -1,3 +1,5 @@
+'use strict';
+
 const GoogleProvider = require('../../provider/googleProvider');
 const GoogleDeploy = require('../googleDeploy');
 const Serverless = require('../../test/serverless');
