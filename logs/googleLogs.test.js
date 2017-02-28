@@ -77,14 +77,12 @@ describe('GoogleLogs', () => {
         .hooks['before:logs:logs']().then(() => {
           expect(validateStub.calledOnce).toEqual(true);
           expect(setDefaultsStub.calledAfter(validateStub)).toEqual(true);
-        }),
-      );
+        }));
 
       it('should run "logs:logs" promise chain', () => googleLogs
         .hooks['logs:logs']().then(() => {
           expect(retrieveLogsStub.calledOnce).toEqual(true);
-        }),
-      );
+        }));
     });
   });
 });

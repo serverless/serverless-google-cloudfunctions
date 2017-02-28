@@ -16,8 +16,7 @@ class GoogleInfo {
       this,
       validate,
       setDefaults,
-      displayServiceInfo,
-    );
+      displayServiceInfo);
 
     this.hooks = {
       'before:info:info': () => BbPromise.bind(this)

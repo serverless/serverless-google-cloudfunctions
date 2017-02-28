@@ -16,8 +16,7 @@ class GoogleInvoke {
       this,
       validate,
       setDefaults,
-      invokeFunction,
-    );
+      invokeFunction);
 
     this.hooks = {
       'before:invoke:invoke': () => BbPromise.bind(this)

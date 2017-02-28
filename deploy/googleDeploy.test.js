@@ -84,14 +84,12 @@ describe('GoogleDeploy', () => {
         .hooks['before:deploy:initialize']().then(() => {
           expect(validateStub.calledOnce).toEqual(true);
           expect(setDefaultsStub.calledAfter(validateStub)).toEqual(true);
-        }),
-      );
+        }));
 
       it('should run "deploy:initialize" promise chain', () => googleDeploy
         .hooks['deploy:initialize']().then(() => {
           expect(prepareDeploymentStub.calledOnce).toEqual(true);
-        }),
-      );
+        }));
 
       it('it should run "deploy:setupProviderConfiguration" promise chain', () => googleDeploy
         .hooks['deploy:setupProviderConfiguration']().then(() => {
@@ -103,16 +101,14 @@ describe('GoogleDeploy', () => {
         .hooks['before:deploy:compileFunctions']().then(() => {
           expect(generateArtifactDirectoryNameStub.calledOnce).toEqual(true);
           expect(compileFunctionsStub.calledAfter(generateArtifactDirectoryNameStub)).toEqual(true);
-        }),
-      );
+        }));
 
       it('should run "deploy:deploy" promise chain', () => googleDeploy
         .hooks['deploy:deploy']().then(() => {
           expect(uploadArtifactsStub.calledOnce).toEqual(true);
           expect(updateDeploymentStub.calledAfter(uploadArtifactsStub)).toEqual(true);
           expect(cleanupDeploymentBucketStub.calledAfter(updateDeploymentStub)).toEqual(true);
-        }),
-      );
+        }));
     });
   });
 });

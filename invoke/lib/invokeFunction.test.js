@@ -57,8 +57,7 @@ describe('InvokeFunction', () => {
         expect(invokeStub.calledOnce).toEqual(true);
         expect(getLogsStub.calledAfter(invokeStub));
         expect(printLogsStub.calledAfter(getLogsStub));
-      }),
-    );
+      }));
   });
 
   describe('#invoke()', () => {
@@ -87,8 +86,7 @@ describe('InvokeFunction', () => {
             resource: {
               data: '',
             },
-          },
-        )).toEqual(true);
+          })).toEqual(true);
       });
     });
 
@@ -108,8 +106,7 @@ describe('InvokeFunction', () => {
             resource: {
               data: googleInvoke.options.data,
             },
-          },
-        )).toEqual(true);
+          })).toEqual(true);
       });
     });
 
@@ -146,8 +143,7 @@ describe('InvokeFunction', () => {
               'projects/my-project',
             ],
             pageSize: 2,
-          },
-        )).toEqual(true);
+          })).toEqual(true);
       });
     });
 

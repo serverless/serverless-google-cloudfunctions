@@ -30,8 +30,7 @@ class GoogleDeploy {
       uploadArtifacts,
       compileFunctions,
       updateDeployment,
-      cleanupDeploymentBucket,
-    );
+      cleanupDeploymentBucket);
 
     this.hooks = {
       'before:deploy:initialize': () => BbPromise.bind(this)

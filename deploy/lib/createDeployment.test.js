@@ -35,8 +35,7 @@ describe('CreateDeployment', () => {
     configurationTemplateCreateFilePath = path.join(
       serverless.config.servicePath,
       '.serverless',
-      'configuration-template-create.yml',
-    );
+      'configuration-template-create.yml');
   });
 
   afterEach(() => {

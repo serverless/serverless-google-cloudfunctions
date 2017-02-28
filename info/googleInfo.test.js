@@ -59,20 +59,17 @@ describe('GoogleInfo', () => {
         .hooks['before:info:info']().then(() => {
           expect(validateStub.calledOnce).toEqual(true);
           expect(setDefaultsStub.calledAfter(validateStub)).toEqual(true);
-        }),
-      );
+        }));
 
       it('should run "deploy:deploy" promise chain', () => googleInfo
         .hooks['deploy:deploy']().then(() => {
           expect(displayServiceInfoStub.calledOnce).toEqual(true);
-        }),
-      );
+        }));
 
       it('should run "info:info" promise chain', () => googleInfo
         .hooks['info:info']().then(() => {
           expect(displayServiceInfoStub.calledOnce).toEqual(true);
-        }),
-      );
+        }));
     });
   });
 });

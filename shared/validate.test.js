@@ -44,8 +44,7 @@ describe('Validate', () => {
       .validate().then(() => {
         expect(validateServicePathStub.calledOnce).toEqual(true);
         expect(validateServiceNameStub.calledAfter(validateServicePathStub));
-      }),
-    );
+      }));
   });
 
   describe('#validateServicePath()', () => {

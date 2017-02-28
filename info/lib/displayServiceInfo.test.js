@@ -71,8 +71,7 @@ describe('DisplayServiceInfo', () => {
         expect(getResourcesStub.calledOnce).toEqual(true);
         expect(gatherDataStub.calledAfter(getResourcesStub));
         expect(printInfoStub.calledAfter(gatherDataStub));
-      }),
-    );
+      }));
   });
 
   describe('#getResources()', () => {
@@ -95,10 +94,8 @@ describe('DisplayServiceInfo', () => {
           {
             project: 'my-project',
             deployment: 'sls-my-service-dev',
-          },
-        )).toEqual(true);
-      }),
-    );
+          })).toEqual(true);
+      }));
   });
 
   describe('#gatherData()', () => {

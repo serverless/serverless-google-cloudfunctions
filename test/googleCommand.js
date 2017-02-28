@@ -10,8 +10,7 @@ class GoogleCommand {
 
     Object.assign(
       this,
-      testSubject,
-    );
+      testSubject);
   }
 }
 

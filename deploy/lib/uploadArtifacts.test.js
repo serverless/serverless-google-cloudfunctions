@@ -59,10 +59,8 @@ describe('UploadArtifacts', () => {
               mimeType: 'application/octet-stream',
               body: fs.createReadStream('artifact.zip'),
             },
-          },
-        )).toEqual(true);
-      }),
-    );
+          })).toEqual(true);
+      }));
 
     it('should log info messages', () => googleDeploy
       .uploadArtifacts().then(() => {
@@ -81,10 +79,8 @@ describe('UploadArtifacts', () => {
               mimeType: 'application/octet-stream',
               body: fs.createReadStream('artifact.zip'),
             },
-          },
-        )).toEqual(true);
-      }),
-    );
+          })).toEqual(true);
+      }));
 
     it('should read artifact file as read stream', () => googleDeploy
       .uploadArtifacts().then(() => {
@@ -103,9 +99,7 @@ describe('UploadArtifacts', () => {
               mimeType: 'application/octet-stream',
               body: fs.createReadStream('artifact.zip'),
             },
-          },
-        )).toEqual(true);
-      }),
-    );
+          })).toEqual(true);
+      }));
   });
 });

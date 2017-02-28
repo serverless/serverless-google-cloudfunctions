@@ -46,8 +46,7 @@ describe('EmptyDeploymentBucket', () => {
       .emptyDeploymentBucket().then(() => {
         expect(getObjectsToRemoveStub.calledOnce).toEqual(true);
         expect(removeObjectsStub.calledAfter(getObjectsToRemoveStub));
-      }),
-    );
+      }));
   });
 
   describe('#getObjectsToRemove()', () => {
@@ -76,8 +75,7 @@ describe('EmptyDeploymentBucket', () => {
           'list',
           {
             bucket: 'sls-my-service-dev',
-          },
-        )).toEqual(true);
+          })).toEqual(true);
       });
     });
 
@@ -112,8 +110,7 @@ describe('EmptyDeploymentBucket', () => {
           'list',
           {
             bucket: 'sls-my-service-dev',
-          },
-        )).toEqual(true);
+          })).toEqual(true);
       });
     });
   });
