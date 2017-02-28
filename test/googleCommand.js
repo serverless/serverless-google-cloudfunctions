@@ -1,5 +1,3 @@
-'use strict';
-
 // mock to test functionality in a command unrelated matter
 // this mean that not e.g. googleDeploy but the more abstract googleCommand can be used
 class GoogleCommand {
@@ -10,7 +8,7 @@ class GoogleCommand {
 
     Object.assign(
       this,
-      testSubject
+      testSubject,
     );
   }
 }
