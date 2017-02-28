@@ -12,8 +12,9 @@ This guide will help you setup a Google Cloud Project (required) and your first 
 
 Google support for the `create` command is coming soon. Until then, follow these steps:
 
-1. Run `serverless install --url https://github.com/pmuens/boilerplate-googlecloudfunctions-nodejs`.
-2. Rename your service. Make sure the name does not include "google" or "goog".
+1. Run `serverless install --url https://github.com/pmuens/boilerplate-googlecloudfunctions-nodejs --name <my-service>`
+2. `cd <my-service> && npm install`
+3. Rename the `service` property in `serverless.yml` (make sure the name does not include "google" or "goog")
 
 ### Set up Google Cloud Platform
 
