@@ -1,3 +1,5 @@
+'use strict';
+
 /* eslint no-use-before-define: 0 */
 
 const path = require('path');

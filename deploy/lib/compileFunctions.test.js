@@ -1,3 +1,5 @@
+'use strict';
+
 const sinon = require('sinon');
 
 const GoogleProvider = require('../../provider/googleProvider');

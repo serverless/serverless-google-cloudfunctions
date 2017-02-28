@@ -1,3 +1,5 @@
+'use strict';
+
 const sinon = require('sinon');
 const BbPromise = require('bluebird');
 const chalk = require('chalk');
