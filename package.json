@@ -9,7 +9,7 @@
     "git": "https://github.com/serverless/serverless-google-cloudfunctions"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --maxWorkers=5",
     "lint": "eslint . --cache"
   },
   "homepage": "https://github.com/serverless/serverless-google-cloudfunctions",
