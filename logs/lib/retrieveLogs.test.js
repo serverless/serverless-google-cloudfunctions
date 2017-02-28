@@ -52,8 +52,7 @@ describe('RetrieveLogs', () => {
       .retrieveLogs().then(() => {
         expect(getLogsStub.calledOnce).toEqual(true);
         expect(printLogsStub.calledAfter(getLogsStub));
-      }),
-    );
+      }));
   });
 
   describe('#getLogs()', () => {
@@ -82,8 +81,7 @@ describe('RetrieveLogs', () => {
               'projects/my-project',
             ],
             pageSize: 1,
-          },
-        )).toEqual(true);
+          })).toEqual(true);
       });
     });
 
@@ -103,8 +101,7 @@ describe('RetrieveLogs', () => {
               'projects/my-project',
             ],
             pageSize: googleLogs.options.count,
-          },
-        )).toEqual(true);
+          })).toEqual(true);
       });
     });
 

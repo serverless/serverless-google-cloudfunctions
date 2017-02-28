@@ -20,8 +20,7 @@ class GoogleRemove {
       setDefaults,
       emptyDeploymentBucket,
       removeDeployment,
-      monitorDeployment,
-    );
+      monitorDeployment);
 
     this.hooks = {
       'before:remove:remove': () => BbPromise.bind(this)

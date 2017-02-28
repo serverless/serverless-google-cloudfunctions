@@ -28,8 +28,7 @@ module.exports = {
         this.options.region,
         `gs://sls-${
           this.serverless.service.service
-        }-${this.options.stage}/${this.serverless.service.package.artifactFilePath}`,
-      );
+        }-${this.options.stage}/${this.serverless.service.package.artifactFilePath}`);
 
       const eventType = Object.keys(funcObject.events[0])[0];
 

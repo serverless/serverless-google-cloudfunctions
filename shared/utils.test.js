@@ -20,8 +20,7 @@ describe('Utils', () => {
       .setDefaults().then(() => {
         expect(googleCommand.options.stage).toEqual('dev');
         expect(googleCommand.options.region).toEqual('us-central1');
-      }),
-    );
+      }));
 
     it('should set the options when they are provided', () => {
       googleCommand.options.stage = 'my-stage';

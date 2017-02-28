@@ -35,8 +35,7 @@ describe('UpdateDeployment', () => {
     configurationTemplateUpdateFilePath = path.join(
       serverless.config.servicePath,
       '.serverless',
-      'configuration-template-update.yml',
-    );
+      'configuration-template-update.yml');
   });
 
   afterEach(() => {

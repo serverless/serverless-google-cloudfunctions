@@ -46,8 +46,7 @@ describe('CleanupDeploymentBucket', () => {
       .cleanupDeploymentBucket().then(() => {
         expect(getObjectsToRemoveStub.calledOnce).toEqual(true);
         expect(removeObjectsStub.calledAfter(getObjectsToRemoveStub));
-      }),
-    );
+      }));
   });
 
   describe('#getObjectsToRemove()', () => {
@@ -116,8 +115,7 @@ describe('CleanupDeploymentBucket', () => {
           'list',
           {
             bucket: 'sls-my-service-dev',
-          },
-        )).toEqual(true);
+          })).toEqual(true);
       });
     });
 
@@ -153,8 +151,7 @@ describe('CleanupDeploymentBucket', () => {
           'list',
           {
             bucket: 'sls-my-service-dev',
-          },
-        )).toEqual(true);
+          })).toEqual(true);
       });
     });
 
@@ -173,8 +170,7 @@ describe('CleanupDeploymentBucket', () => {
           'list',
           {
             bucket: 'sls-my-service-dev',
-          },
-        )).toEqual(true);
+          })).toEqual(true);
       });
     });
   });

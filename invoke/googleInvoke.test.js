@@ -59,14 +59,12 @@ describe('GoogleInvoke', () => {
         .hooks['before:invoke:invoke']().then(() => {
           expect(validateStub.calledOnce).toEqual(true);
           expect(setDefaultsStub.calledAfter(validateStub)).toEqual(true);
-        }),
-      );
+        }));
 
       it('should run "invoke:invoke" promise chain', () => googleInvoke
         .hooks['invoke:invoke']().then(() => {
           expect(invokeFunctionStub.calledOnce).toEqual(true);
-        }),
-      );
+        }));
     });
   });
 });

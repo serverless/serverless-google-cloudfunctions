@@ -63,15 +63,13 @@ describe('GoogleRemove', () => {
         .hooks['before:remove:remove']().then(() => {
           expect(validateStub.calledOnce).toEqual(true);
           expect(setDefaultsStub.calledAfter(validateStub)).toEqual(true);
-        }),
-      );
+        }));
 
       it('should run "remove:remove" promise chain', () => googleRemove
         .hooks['remove:remove']().then(() => {
           expect(emptyDeploymentBucketStub.calledOnce).toEqual(true);
           expect(removeDeploymentStub.calledAfter(emptyDeploymentBucketStub)).toEqual(true);
-        }),
-      );
+        }));
     });
   });
 });
