@@ -72,7 +72,7 @@ the path to your `keyfile.json` file (this path needs to be absolute!). It shoul
 ```yml
 provider:
   name: google
-  runtime: nodejs4.3
+  runtime: nodejs
   project: my-serverless-project-1234
   credentials: ~/.gcloud/keyfile.json
 ```
