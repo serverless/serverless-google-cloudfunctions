@@ -2,6 +2,7 @@
 
 const sinon = require('sinon');
 const BbPromise = require('bluebird');
+const chalk = require('chalk');
 
 const GoogleProvider = require('../../provider/googleProvider');
 const GoogleInvoke = require('../googleInvoke');
@@ -130,7 +131,7 @@ describe('InvokeFunction', () => {
       };
 
       const expectedOutput =
-        'wasdqwerty: Foo bar';
+        `${chalk.grey('wasdqwerty')} Foo bar`;
 
       return googleInvoke.printResult(result).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);
@@ -140,7 +141,8 @@ describe('InvokeFunction', () => {
     it('should print an error message to the console when no result was received', () => {
       const result = {};
 
-      const expectedOutput = 'error: An error occurred while executing your function...';
+      const expectedOutput =
+        `${chalk.grey('error')} An error occurred while executing your function...`;
 
       return googleInvoke.printResult(result).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);
