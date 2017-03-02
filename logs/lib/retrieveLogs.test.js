@@ -2,6 +2,7 @@
 
 const sinon = require('sinon');
 const BbPromise = require('bluebird');
+const chalk = require('chalk');
 
 const GoogleProvider = require('../../provider/googleProvider');
 const GoogleLogs = require('../googleLogs');
@@ -131,8 +132,10 @@ describe('RetrieveLogs', () => {
         ],
       };
 
+      const logEntry1 = `${chalk.grey('1970-01-01 00:00:')} Entry 1`;
+      const logEntry2 = `${chalk.grey('1970-01-01 00:01:')} Entry 2`;
       const expectedOutput =
-        'Displaying the 2 most recent log(s):\n\n1970-01-01 00:00: Entry 1\n1970-01-01 00:01: Entry 2';
+        `Displaying the 2 most recent log(s):\n\n${logEntry1}\n${logEntry2}`;
 
       return googleLogs.printLogs(logs).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);
@@ -140,9 +143,10 @@ describe('RetrieveLogs', () => {
     });
 
     it('should print a default message to the console when no logs were received', () => {
-      const date = new Date().toISOString().slice(0, 10);
+      const date = `${new Date().toISOString().slice(0, 10)}:`;
+      const logEntry = `${chalk.grey(date)} There is no log data to show...`;
       const expectedOutput =
-        `Displaying the 1 most recent log(s):\n\n${date}: There is no log data to show...`;
+        `Displaying the 1 most recent log(s):\n\n${logEntry}`;
 
       return googleLogs.printLogs({}).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);

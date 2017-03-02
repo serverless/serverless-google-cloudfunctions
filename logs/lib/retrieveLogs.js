@@ -3,6 +3,7 @@
 /* eslint no-use-before-define: 0 */
 
 const BbPromise = require('bluebird');
+const chalk = require('chalk');
 
 module.exports = {
   retrieveLogs() {
@@ -42,7 +43,7 @@ module.exports = {
     }
 
     let output = logs.entries
-      .reduce((p, c, i) => p += `${c.timestamp}: ${c.textPayload}\n`, ''); //eslint-disable-line
+      .reduce((p, c, i) => p += `${chalk.grey(c.timestamp + ':')} ${c.textPayload}\n`, ''); //eslint-disable-line
 
     output = `Displaying the ${logs.entries.length} most recent log(s):\n\n${output}`; // prettify output
     output = output.slice(0, output.length - 1); // remove "\n---\n\n" for the last log entry
