@@ -34,29 +34,24 @@ describe('InvokeFunction', () => {
 
   describe('#invokeFunction()', () => {
     let invokeStub;
-    let getLogsStub;
-    let printLogsStub;
+    let printResultStub;
 
     beforeEach(() => {
       invokeStub = sinon.stub(googleInvoke, 'invoke')
         .returns(BbPromise.resolve());
-      getLogsStub = sinon.stub(googleInvoke, 'getLogs')
-        .returns(BbPromise.resolve());
-      printLogsStub = sinon.stub(googleInvoke, 'printLogs')
+      printResultStub = sinon.stub(googleInvoke, 'printResult')
         .returns(BbPromise.resolve());
     });
 
     afterEach(() => {
       googleInvoke.invoke.restore();
-      googleInvoke.getLogs.restore();
-      googleInvoke.printLogs.restore();
+      googleInvoke.printResult.restore();
     });
 
     it('should run promise chain', () => googleInvoke
       .invokeFunction().then(() => {
         expect(invokeStub.calledOnce).toEqual(true);
-        expect(getLogsStub.calledAfter(invokeStub));
-        expect(printLogsStub.calledAfter(getLogsStub));
+        expect(printResultStub.calledAfter(invokeStub));
       }));
   });
 
@@ -117,44 +112,7 @@ describe('InvokeFunction', () => {
     });
   });
 
-  describe('#getLogs()', () => {
-    let requestStub;
-
-    beforeEach(() => {
-      requestStub = sinon.stub(googleInvoke.provider, 'request').returns(BbPromise.resolve());
-    });
-
-    afterEach(() => {
-      googleInvoke.provider.request.restore();
-    });
-
-    it('should return the recent logs of the previously called function', () => {
-      googleInvoke.options.function = 'func1';
-
-      return googleInvoke.getLogs().then(() => {
-        expect(requestStub.calledWithExactly(
-          'logging',
-          'entries',
-          'list',
-          {
-            filter: 'Function execution foo us-central1',
-            orderBy: 'timestamp desc',
-            resourceNames: [
-              'projects/my-project',
-            ],
-            pageSize: 2,
-          })).toEqual(true);
-      });
-    });
-
-    it('should throw an error if the function could not be found in the service', () => {
-      googleInvoke.options.function = 'missingFunc';
-
-      expect(() => googleInvoke.getLogs()).toThrow(Error);
-    });
-  });
-
-  describe('#printLogs()', () => {
+  describe('#printResult()', () => {
     let consoleLogStub;
 
     beforeEach(() => {
@@ -165,37 +123,26 @@ describe('InvokeFunction', () => {
       googleInvoke.serverless.cli.log.restore();
     });
 
-    it('should print the received execution result log on the console', () => {
-      const logs = {
-        entries: [
-          { timestamp: '1970-01-01 00:00', textPayload: 'Function execution started' },
-          { timestamp: '1970-01-01 00:01', textPayload: 'Function result' },
-        ],
+    it('should print the received execution result on the console', () => {
+      const result = {
+        executionId: 'wasdqwerty',
+        result: 'Foo bar',
       };
 
       const expectedOutput =
-        '1970-01-01 00:01: Function result';
+        'wasdqwerty: Foo bar';
 
-      return googleInvoke.printLogs(logs).then(() => {
+      return googleInvoke.printResult(result).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);
       });
     });
 
-    it('should print a default message to the console when no logs were received', () => {
-      const date = new Date().toISOString().slice(0, 10);
-      const logs = {
-        entries: [
-          {},
-          {
-            timestamp: date,
-            textPayload: 'There is no log data available right now...',
-          },
-        ],
-      };
+    it('should print an error message to the console when no result was received', () => {
+      const result = {};
 
-      const expectedOutput = `${date}: ${logs.entries[1].textPayload}`;
+      const expectedOutput = 'error: An error occurred while executing your function...';
 
-      return googleInvoke.printLogs({}).then(() => {
+      return googleInvoke.printResult(result).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);
       });
     });

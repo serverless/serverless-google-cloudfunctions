@@ -8,8 +8,7 @@ module.exports = {
   invokeFunction() {
     return BbPromise.bind(this)
       .then(this.invoke)
-      .then(this.getLogs)
-      .then(this.printLogs);
+      .then(this.printResult);
   },
 
   invoke() {
@@ -36,37 +35,17 @@ module.exports = {
       params);
   },
 
-  getLogs() {
-    const project = this.serverless.service.provider.project;
-    const region = this.options.region;
-    let func = this.options.function;
+  printResult(result) {
+    let res = result;
 
-    func = getGoogleCloudFunctionName(this.serverless.service.functions, func);
-
-    return this.provider.request('logging', 'entries', 'list', {
-      filter: `Function execution ${func} ${region}`,
-      orderBy: 'timestamp desc',
-      resourceNames: [
-        `projects/${project}`,
-      ],
-      pageSize: 2,
-    });
-  },
-
-  printLogs(logs) {
-    if (!logs.entries || !logs.entries.length) {
-      logs = { //eslint-disable-line
-        entries: [
-          {},
-          { // represents function "result"
-            timestamp: new Date().toISOString().slice(0, 10),
-            textPayload: 'There is no log data available right now...',
-          },
-        ],
+    if (!result || !result.result) {
+      res = {
+        executionId: 'error',
+        result: 'An error occurred while executing your function...',
       };
     }
 
-    const log = `${logs.entries[1].timestamp}: ${logs.entries[1].textPayload}`;
+    const log = `${res.executionId}: ${res.result}`;
 
     this.serverless.cli.log(log);
 
