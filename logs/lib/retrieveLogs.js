@@ -15,7 +15,7 @@ module.exports = {
     const project = this.serverless.service.provider.project;
     const region = this.options.region;
     let func = this.options.function;
-    const pageSize = this.options.count || 1;
+    const pageSize = this.options.count || 10;
 
     func = getGoogleCloudFunctionName(this.serverless.service.functions, func);
 
@@ -44,7 +44,7 @@ module.exports = {
     let output = logs.entries
       .reduce((p, c, i) => p += `${c.timestamp}: ${c.textPayload}\n`, ''); //eslint-disable-line
 
-    output = `Displaying ${logs.entries.length} log(s):\n\n${output}`; // prettify output
+    output = `Displaying the ${logs.entries.length} most recent log(s):\n\n${output}`; // prettify output
     output = output.slice(0, output.length - 1); // remove "\n---\n\n" for the last log entry
 
     this.serverless.cli.log(output);
