@@ -3,6 +3,7 @@
 /* eslint no-use-before-define: 0 */
 
 const BbPromise = require('bluebird');
+const chalk = require('chalk');
 
 module.exports = {
   invokeFunction() {
@@ -45,7 +46,7 @@ module.exports = {
       };
     }
 
-    const log = `${res.executionId}: ${res.result}`;
+    const log = `${chalk.grey(res.executionId)} ${res.result}`;
 
     this.serverless.cli.log(log);
 
