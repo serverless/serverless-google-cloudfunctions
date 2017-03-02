@@ -79,9 +79,11 @@ provider:
 
 ## Workflow
 
+**Note:** The <function-name> is the corresponding name in `serverless.yml`
+
 1. Deploy the service with `serverless deploy`
-2. Invoke a function with `serverless invoke -f hello`
-3. View the function logs with `serverless logs -f hello`
+2. Invoke a function with `serverless invoke -f <function-name>`
+3. View the function logs with `serverless logs -f <function-name>`
 4. See information about the service with `serverless info`
 5. Remove the service with `serverless remove`
 
