@@ -66,7 +66,7 @@ describe('RetrieveLogs', () => {
       googleLogs.provider.request.restore();
     });
 
-    it('should return the last log of the function if the "count" option is not given', () => {
+    it('should return a default amount of logs for the function if the "count" option is not given', () => {
       googleLogs.options.function = 'func1';
 
       return googleLogs.getLogs().then(() => {
@@ -80,7 +80,7 @@ describe('RetrieveLogs', () => {
             resourceNames: [
               'projects/my-project',
             ],
-            pageSize: 1,
+            pageSize: 10,
           })).toEqual(true);
       });
     });
@@ -132,7 +132,7 @@ describe('RetrieveLogs', () => {
       };
 
       const expectedOutput =
-        'Displaying 2 log(s):\n\n1970-01-01 00:00: Entry 1\n1970-01-01 00:01: Entry 2';
+        'Displaying the 2 most recent log(s):\n\n1970-01-01 00:00: Entry 1\n1970-01-01 00:01: Entry 2';
 
       return googleLogs.printLogs(logs).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);
@@ -142,7 +142,7 @@ describe('RetrieveLogs', () => {
     it('should print a default message to the console when no logs were received', () => {
       const date = new Date().toISOString().slice(0, 10);
       const expectedOutput =
-        `Displaying 1 log(s):\n\n${date}: There is no log data to show...`;
+        `Displaying the 1 most recent log(s):\n\n${date}: There is no log data to show...`;
 
       return googleLogs.printLogs({}).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);
