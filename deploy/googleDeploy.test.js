@@ -41,6 +41,7 @@ describe('GoogleDeploy', () => {
       let prepareDeploymentStub;
       let createDeploymentStub;
       let generateArtifactDirectoryNameStub;
+      let mergeServiceResourcesStub;
       let compileFunctionsStub;
       let uploadArtifactsStub;
       let updateDeploymentStub;
@@ -58,6 +59,8 @@ describe('GoogleDeploy', () => {
         generateArtifactDirectoryNameStub = sinon
           .stub(googleDeploy, 'generateArtifactDirectoryName')
           .returns(BbPromise.resolve());
+        mergeServiceResourcesStub = sinon.stub(googleDeploy, 'mergeServiceResources')
+          .returns(BbPromise.resolve());
         compileFunctionsStub = sinon.stub(googleDeploy, 'compileFunctions')
           .returns(BbPromise.resolve());
         uploadArtifactsStub = sinon.stub(googleDeploy, 'uploadArtifacts')
@@ -74,6 +77,7 @@ describe('GoogleDeploy', () => {
         googleDeploy.prepareDeployment.restore();
         googleDeploy.createDeployment.restore();
         googleDeploy.generateArtifactDirectoryName.restore();
+        googleDeploy.mergeServiceResources.restore();
         googleDeploy.compileFunctions.restore();
         googleDeploy.uploadArtifacts.restore();
         googleDeploy.updateDeployment.restore();
@@ -105,7 +109,8 @@ describe('GoogleDeploy', () => {
 
       it('should run "deploy:deploy" promise chain', () => googleDeploy
         .hooks['deploy:deploy']().then(() => {
-          expect(uploadArtifactsStub.calledOnce).toEqual(true);
+          expect(mergeServiceResourcesStub.calledOnce).toEqual(true);
+          expect(uploadArtifactsStub.calledAfter(mergeServiceResourcesStub)).toEqual(true);
           expect(updateDeploymentStub.calledAfter(uploadArtifactsStub)).toEqual(true);
           expect(cleanupDeploymentBucketStub.calledAfter(updateDeploymentStub)).toEqual(true);
         }));
