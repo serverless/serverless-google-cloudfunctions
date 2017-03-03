@@ -8,6 +8,7 @@ const prepareDeployment = require('./lib/prepareDeployment');
 const createDeployment = require('./lib/createDeployment');
 const monitorDeployment = require('../shared/monitorDeployment');
 const generateArtifactDirectoryName = require('./lib/generateArtifactDirectoryName');
+const mergeServiceResources = require('./lib/mergeServiceResources');
 const uploadArtifacts = require('./lib/uploadArtifacts');
 const compileFunctions = require('./lib/compileFunctions');
 const updateDeployment = require('./lib/updateDeployment');
@@ -27,6 +28,7 @@ class GoogleDeploy {
       createDeployment,
       monitorDeployment,
       generateArtifactDirectoryName,
+      mergeServiceResources,
       uploadArtifacts,
       compileFunctions,
       updateDeployment,
@@ -48,6 +50,7 @@ class GoogleDeploy {
         .then(this.compileFunctions),
 
       'deploy:deploy': () => BbPromise.bind(this)
+        .then(this.mergeServiceResources)
         .then(this.uploadArtifacts)
         .then(this.updateDeployment)
         .then(this.cleanupDeploymentBucket),
