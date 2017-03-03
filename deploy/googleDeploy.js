@@ -8,9 +8,9 @@ const prepareDeployment = require('./lib/prepareDeployment');
 const createDeployment = require('./lib/createDeployment');
 const monitorDeployment = require('../shared/monitorDeployment');
 const generateArtifactDirectoryName = require('./lib/generateArtifactDirectoryName');
+const compileFunctions = require('./lib/compileFunctions');
 const mergeServiceResources = require('./lib/mergeServiceResources');
 const uploadArtifacts = require('./lib/uploadArtifacts');
-const compileFunctions = require('./lib/compileFunctions');
 const updateDeployment = require('./lib/updateDeployment');
 const cleanupDeploymentBucket = require('./lib/cleanupDeploymentBucket');
 
@@ -28,9 +28,9 @@ class GoogleDeploy {
       createDeployment,
       monitorDeployment,
       generateArtifactDirectoryName,
+      compileFunctions,
       mergeServiceResources,
       uploadArtifacts,
-      compileFunctions,
       updateDeployment,
       cleanupDeploymentBucket);
 

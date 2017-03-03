@@ -41,8 +41,8 @@ describe('GoogleDeploy', () => {
       let prepareDeploymentStub;
       let createDeploymentStub;
       let generateArtifactDirectoryNameStub;
-      let mergeServiceResourcesStub;
       let compileFunctionsStub;
+      let mergeServiceResourcesStub;
       let uploadArtifactsStub;
       let updateDeploymentStub;
       let cleanupDeploymentBucketStub;
@@ -59,9 +59,9 @@ describe('GoogleDeploy', () => {
         generateArtifactDirectoryNameStub = sinon
           .stub(googleDeploy, 'generateArtifactDirectoryName')
           .returns(BbPromise.resolve());
-        mergeServiceResourcesStub = sinon.stub(googleDeploy, 'mergeServiceResources')
-          .returns(BbPromise.resolve());
         compileFunctionsStub = sinon.stub(googleDeploy, 'compileFunctions')
+          .returns(BbPromise.resolve());
+        mergeServiceResourcesStub = sinon.stub(googleDeploy, 'mergeServiceResources')
           .returns(BbPromise.resolve());
         uploadArtifactsStub = sinon.stub(googleDeploy, 'uploadArtifacts')
           .returns(BbPromise.resolve());
@@ -77,8 +77,8 @@ describe('GoogleDeploy', () => {
         googleDeploy.prepareDeployment.restore();
         googleDeploy.createDeployment.restore();
         googleDeploy.generateArtifactDirectoryName.restore();
-        googleDeploy.mergeServiceResources.restore();
         googleDeploy.compileFunctions.restore();
+        googleDeploy.mergeServiceResources.restore();
         googleDeploy.uploadArtifacts.restore();
         googleDeploy.updateDeployment.restore();
         googleDeploy.cleanupDeploymentBucket.restore();
