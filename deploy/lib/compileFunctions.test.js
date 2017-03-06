@@ -96,6 +96,138 @@ describe('CompileFunctions', () => {
       expect(() => googleDeploy.compileFunctions()).toThrow(Error);
     });
 
+    it('should set the memory size based on the functions configuration', () => {
+      googleDeploy.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          memorySize: 1024,
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          function: 'func1',
+          availableMemoryMb: 1024,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+        },
+      }];
+
+      return googleDeploy.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(googleDeploy.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set the memory size based on the provider configuration', () => {
+      googleDeploy.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+      googleDeploy.serverless.service.provider.memorySize = 1024;
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          function: 'func1',
+          availableMemoryMb: 1024,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+        },
+      }];
+
+      return googleDeploy.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(googleDeploy.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set the timout based on the functions configuration', () => {
+      googleDeploy.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          timeout: '120s',
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          function: 'func1',
+          availableMemoryMb: 256,
+          timeout: '120s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+        },
+      }];
+
+      return googleDeploy.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(googleDeploy.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set the timeout based on the provider configuration', () => {
+      googleDeploy.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+      googleDeploy.serverless.service.provider.timeout = '120s';
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          function: 'func1',
+          availableMemoryMb: 256,
+          timeout: '120s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+        },
+      }];
+
+      return googleDeploy.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(googleDeploy.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
     it('should compile "http" events properly', () => {
       googleDeploy.serverless.service.functions = {
         func1: {
@@ -112,6 +244,8 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           function: 'func1',
+          availableMemoryMb: 256,
+          timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
           httpsTrigger: {
             url: 'foo',
@@ -160,6 +294,8 @@ describe('CompileFunctions', () => {
           properties: {
             location: 'us-central1',
             function: 'func1',
+            availableMemoryMb: 256,
+            timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
             eventTrigger: {
               eventType: 'foo',
@@ -174,6 +310,8 @@ describe('CompileFunctions', () => {
           properties: {
             location: 'us-central1',
             function: 'func2',
+            availableMemoryMb: 256,
+            timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
             eventTrigger: {
               eventType: 'foo',

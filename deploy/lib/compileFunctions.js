@@ -4,6 +4,7 @@
 
 const path = require('path');
 
+const _ = require('lodash');
 const BbPromise = require('bluebird');
 
 module.exports = {
@@ -29,6 +30,13 @@ module.exports = {
         `gs://sls-${
           this.serverless.service.service
         }-${this.options.stage}/${this.serverless.service.package.artifactFilePath}`);
+
+      funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
+        || _.get(this, 'serverless.service.provider.memorySize')
+        || 256;
+      funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
+        || _.get(this, 'serverless.service.provider.timeout')
+        || '60s';
 
       const eventType = Object.keys(funcObject.events[0])[0];
 
@@ -103,6 +111,8 @@ const getFunctionTemplate = (funcObject, region, sourceArchiveUrl) => { //eslint
     name: funcObject.name,
     properties: {
       location: region,
+      availableMemoryMb: 256,
+      timeout: '60s',
       function: funcObject.handler,
       sourceArchiveUrl,
     },
