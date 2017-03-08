@@ -12,7 +12,7 @@ module.exports = {
 
   getObjectsToRemove() {
     const params = {
-      bucket: `sls-${this.serverless.service.service}-${this.options.stage}`,
+      bucket: this.serverless.service.provider.deploymentBucketName,
     };
 
     return this.provider.request('storage', 'objects', 'list', params)

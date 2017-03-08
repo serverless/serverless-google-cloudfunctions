@@ -4,6 +4,7 @@ const BbPromise = require('bluebird');
 
 const validate = require('../shared/validate');
 const setDefaults = require('../shared/utils');
+const setDeploymentBucketName = require('../shared/setDeploymentBucketName');
 const emptyDeploymentBucket = require('./lib/emptyDeploymentBucket');
 const removeDeployment = require('./lib/removeDeployment');
 const monitorDeployment = require('../shared/monitorDeployment');
@@ -18,6 +19,7 @@ class GoogleRemove {
       this,
       validate,
       setDefaults,
+      setDeploymentBucketName,
       emptyDeploymentBucket,
       removeDeployment,
       monitorDeployment);
@@ -25,7 +27,8 @@ class GoogleRemove {
     this.hooks = {
       'before:remove:remove': () => BbPromise.bind(this)
         .then(this.validate)
-        .then(this.setDefaults),
+        .then(this.setDefaults)
+        .then(this.setDeploymentBucketName),
 
       'remove:remove': () => BbPromise.bind(this)
         .then(this.emptyDeploymentBucket)

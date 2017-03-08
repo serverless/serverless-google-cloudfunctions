@@ -19,7 +19,8 @@ module.exports = {
         'core-configuration-template.yml'));
 
     const bucket = deploymentTemplate.resources.find(findDeploymentBucket);
-    const name = `sls-${this.serverless.service.service}-${this.options.stage}`;
+
+    const name = this.serverless.service.provider.deploymentBucketName;
     const updatedBucket = updateBucketName(bucket, name);
 
     const bucketIndex = deploymentTemplate.resources.findIndex(findDeploymentBucket);

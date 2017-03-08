@@ -20,6 +20,9 @@ describe('UploadArtifacts', () => {
     serverless = new Serverless();
     serverless.service = {
       service: 'my-service',
+      provider: {
+        deploymentBucketName: 'sls-my-service-dev-12345678',
+      },
       package: {
         artifactFilePath: '/some-file-path',
         artifact: 'artifact.zip',
@@ -50,7 +53,7 @@ describe('UploadArtifacts', () => {
           'objects',
           'insert',
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             resource: {
               name: '/some-file-path',
               contentType: 'application/octet-stream',
@@ -70,7 +73,7 @@ describe('UploadArtifacts', () => {
           'objects',
           'insert',
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             resource: {
               name: '/some-file-path',
               contentType: 'application/octet-stream',
@@ -90,7 +93,7 @@ describe('UploadArtifacts', () => {
           'objects',
           'insert',
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             resource: {
               name: '/some-file-path',
               contentType: 'application/octet-stream',

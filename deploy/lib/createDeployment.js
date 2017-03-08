@@ -20,21 +20,21 @@ module.exports = {
 
     return this.provider.request('deploymentmanager', 'deployments', 'list', params)
       .then((response) => {
-        let found = false;
+        let foundDeployment;
 
         if (response && response.deployments) {
-          found = !!response.deployments.find((deployment) => {
+          foundDeployment = response.deployments.find((deployment) => {
             const name = `sls-${this.serverless.service.service}-${this.options.stage}`;
             return deployment.name === name;
           });
         }
 
-        return found;
+        return foundDeployment;
       });
   },
 
-  createIfNotExists(existingDeployment) {
-    if (existingDeployment) return BbPromise.resolve();
+  createIfNotExists(foundDeployment) {
+    if (foundDeployment) return BbPromise.resolve();
 
     this.serverless.cli.log('Creating deployment...');
 
