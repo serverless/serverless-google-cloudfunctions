@@ -16,6 +16,9 @@ describe('CleanupDeploymentBucket', () => {
     serverless = new Serverless();
     serverless.service = {
       service: 'my-service',
+      provider: {
+        deploymentBucketName: 'sls-my-service-dev-12345678',
+      },
     };
     serverless.setProvider('google', new GoogleProvider(serverless));
     const options = {
@@ -64,27 +67,27 @@ describe('CleanupDeploymentBucket', () => {
       const response = {
         items: [
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/151224711231-2016-08-18T15:42:00/artifact.zip`,
           },
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/141264711231-2016-08-18T15:43:00/artifact.zip`,
           },
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/141321321541-2016-08-18T11:23:02/artifact.zip`,
           },
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/142003031341-2016-08-18T12:46:04/artifact.zip`,
           },
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/113304333331-2016-08-18T13:40:06/artifact.zip`,
           },
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/903940390431-2016-08-18T23:42:08/artifact.zip`,
           },
         ],
@@ -94,19 +97,19 @@ describe('CleanupDeploymentBucket', () => {
       return googleDeploy.getObjectsToRemove().then((objects) => {
         expect(objects.length).toEqual(2);
         expect(objects).not.toContainEqual({
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/141321321541-2016-08-18T11:23:02/artifact.zip`,
         });
         expect(objects).not.toContainEqual({
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/142003031341-2016-08-18T12:46:04/artifact.zip`,
         });
         expect(objects).not.toContainEqual({
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/151224711231-2016-08-18T15:42:00/artifact.zip`,
         });
         expect(objects).not.toContainEqual({
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/903940390431-2016-08-18T23:42:08/artifact.zip`,
         });
         expect(requestStub.calledWithExactly(
@@ -114,7 +117,7 @@ describe('CleanupDeploymentBucket', () => {
           'objects',
           'list',
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
           })).toEqual(true);
       });
     });
@@ -123,19 +126,19 @@ describe('CleanupDeploymentBucket', () => {
       const response = {
         items: [
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/151224711231-2016-08-18T15:42:00/artifact.zip`,
           },
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/141264711231-2016-08-18T15:43:00/artifact.zip`,
           },
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/141321321541-2016-08-18T11:23:02/artifact.zip`,
           },
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/142003031341-2016-08-18T12:46:04/artifact.zip`,
           },
         ],
@@ -150,7 +153,7 @@ describe('CleanupDeploymentBucket', () => {
           'objects',
           'list',
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
           })).toEqual(true);
       });
     });
@@ -169,7 +172,7 @@ describe('CleanupDeploymentBucket', () => {
           'objects',
           'list',
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
           })).toEqual(true);
       });
     });
@@ -201,19 +204,19 @@ describe('CleanupDeploymentBucket', () => {
     it('should remove all given objects', () => {
       const objectsToRemove = [
         {
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/151224711231-2016-08-18T15:42:00/artifact.zip`,
         },
         {
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/141264711231-2016-08-18T15:43:00/artifact.zip`,
         },
         {
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/141321321541-2016-08-18T11:23:02/artifact.zip`,
         },
         {
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/142003031341-2016-08-18T12:46:04/artifact.zip`,
         },
       ];

@@ -27,9 +27,9 @@ module.exports = {
       const funcTemplate = getFunctionTemplate(
         funcObject,
         this.options.region,
-        `gs://sls-${
-          this.serverless.service.service
-        }-${this.options.stage}/${this.serverless.service.package.artifactFilePath}`);
+        `gs://${
+          this.serverless.service.provider.deploymentBucketName
+        }/${this.serverless.service.package.artifactFilePath}`);
 
       funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
         || _.get(this, 'serverless.service.provider.memorySize')

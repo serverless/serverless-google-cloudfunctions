@@ -38,6 +38,7 @@ describe('GoogleDeploy', () => {
     describe('hooks', () => {
       let validateStub;
       let setDefaultsStub;
+      let setDeploymentBucketNameStub;
       let prepareDeploymentStub;
       let createDeploymentStub;
       let generateArtifactDirectoryNameStub;
@@ -51,6 +52,8 @@ describe('GoogleDeploy', () => {
         validateStub = sinon.stub(googleDeploy, 'validate')
           .returns(BbPromise.resolve());
         setDefaultsStub = sinon.stub(googleDeploy, 'setDefaults')
+          .returns(BbPromise.resolve());
+        setDeploymentBucketNameStub = sinon.stub(googleDeploy, 'setDeploymentBucketName')
           .returns(BbPromise.resolve());
         prepareDeploymentStub = sinon.stub(googleDeploy, 'prepareDeployment')
           .returns(BbPromise.resolve());
@@ -74,6 +77,7 @@ describe('GoogleDeploy', () => {
       afterEach(() => {
         googleDeploy.validate.restore();
         googleDeploy.setDefaults.restore();
+        googleDeploy.setDeploymentBucketName.restore();
         googleDeploy.prepareDeployment.restore();
         googleDeploy.createDeployment.restore();
         googleDeploy.generateArtifactDirectoryName.restore();
@@ -92,7 +96,8 @@ describe('GoogleDeploy', () => {
 
       it('should run "deploy:initialize" promise chain', () => googleDeploy
         .hooks['deploy:initialize']().then(() => {
-          expect(prepareDeploymentStub.calledOnce).toEqual(true);
+          expect(setDeploymentBucketNameStub.calledOnce).toEqual(true);
+          expect(prepareDeploymentStub.calledAfter(setDeploymentBucketNameStub)).toEqual(true);
         }));
 
       it('it should run "deploy:setupProviderConfiguration" promise chain', () => googleDeploy

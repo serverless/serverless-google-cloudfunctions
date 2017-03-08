@@ -22,6 +22,7 @@ describe('CompileFunctions', () => {
       compiledConfigurationTemplate: {
         resources: [],
       },
+      deploymentBucketName: 'sls-my-service-dev-12345678',
     };
     serverless.setProvider('google', new GoogleProvider(serverless));
     const options = {
@@ -115,7 +116,7 @@ describe('CompileFunctions', () => {
           function: 'func1',
           availableMemoryMb: 1024,
           timeout: '60s',
-          sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
           httpsTrigger: {
             url: 'foo',
           },
@@ -148,7 +149,7 @@ describe('CompileFunctions', () => {
           function: 'func1',
           availableMemoryMb: 1024,
           timeout: '60s',
-          sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
           httpsTrigger: {
             url: 'foo',
           },
@@ -181,7 +182,7 @@ describe('CompileFunctions', () => {
           function: 'func1',
           availableMemoryMb: 256,
           timeout: '120s',
-          sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
           httpsTrigger: {
             url: 'foo',
           },
@@ -214,7 +215,7 @@ describe('CompileFunctions', () => {
           function: 'func1',
           availableMemoryMb: 256,
           timeout: '120s',
-          sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
           httpsTrigger: {
             url: 'foo',
           },
@@ -246,7 +247,7 @@ describe('CompileFunctions', () => {
           function: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
-          sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
           httpsTrigger: {
             url: 'foo',
           },
@@ -296,7 +297,7 @@ describe('CompileFunctions', () => {
             function: 'func1',
             availableMemoryMb: 256,
             timeout: '60s',
-            sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
+            sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
             eventTrigger: {
               eventType: 'foo',
               path: 'some-path',
@@ -312,7 +313,7 @@ describe('CompileFunctions', () => {
             function: 'func2',
             availableMemoryMb: 256,
             timeout: '60s',
-            sourceArchiveUrl: 'gs://sls-my-service-dev/some-path/artifact.zip',
+            sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
             eventTrigger: {
               eventType: 'foo',
               resource: 'some-resource',

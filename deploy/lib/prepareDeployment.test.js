@@ -24,6 +24,7 @@ describe('PrepareDeployment', () => {
     serverless.service.service = 'my-service';
     serverless.service.provider = {
       compiledConfigurationTemplate: coreResources,
+      deploymentBucketName: 'sls-my-service-dev-12345678',
     };
     serverless.setProvider('google', new GoogleProvider(serverless));
     const options = {
@@ -49,7 +50,7 @@ describe('PrepareDeployment', () => {
         resources: [
           {
             type: 'storage.v1.bucket',
-            name: 'sls-my-service-dev',
+            name: 'sls-my-service-dev-12345678',
           },
         ],
       };

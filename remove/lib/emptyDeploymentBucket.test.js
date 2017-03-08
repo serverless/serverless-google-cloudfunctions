@@ -16,6 +16,9 @@ describe('EmptyDeploymentBucket', () => {
     serverless = new Serverless();
     serverless.service = {
       service: 'my-service',
+      provider: {
+        deploymentBucketName: 'sls-my-service-dev-12345678',
+      },
     };
     serverless.setProvider('google', new GoogleProvider(serverless));
     const options = {
@@ -74,7 +77,7 @@ describe('EmptyDeploymentBucket', () => {
           'objects',
           'list',
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
           })).toEqual(true);
       });
     });
@@ -83,11 +86,11 @@ describe('EmptyDeploymentBucket', () => {
       const response = {
         items: [
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/151224711231-2016-08-18T15:42:00/artifact.zip`,
           },
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
             name: `${key}/141264711231-2016-08-18T15:43:00/artifact.zip`,
           },
         ],
@@ -97,11 +100,11 @@ describe('EmptyDeploymentBucket', () => {
       return googleRemove.getObjectsToRemove().then((objects) => {
         expect(objects.length).toEqual(2);
         expect(objects).toContainEqual({
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/151224711231-2016-08-18T15:42:00/artifact.zip`,
         });
         expect(objects).toContainEqual({
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/141264711231-2016-08-18T15:43:00/artifact.zip`,
         });
         expect(requestStub.calledWithExactly(
@@ -109,7 +112,7 @@ describe('EmptyDeploymentBucket', () => {
           'objects',
           'list',
           {
-            bucket: 'sls-my-service-dev',
+            bucket: 'sls-my-service-dev-12345678',
           })).toEqual(true);
       });
     });
@@ -141,11 +144,11 @@ describe('EmptyDeploymentBucket', () => {
     it('should remove all given objects', () => {
       const objectsToRemove = [
         {
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/151224711231-2016-08-18T15:42:00/artifact.zip`,
         },
         {
-          bucket: 'sls-my-service-dev',
+          bucket: 'sls-my-service-dev-12345678',
           name: `${key}/141264711231-2016-08-18T15:43:00/artifact.zip`,
         },
       ];

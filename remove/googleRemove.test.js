@@ -38,6 +38,7 @@ describe('GoogleRemove', () => {
     describe('hooks', () => {
       let validateStub;
       let setDefaultsStub;
+      let setDeploymentBucketNameStub;
       let emptyDeploymentBucketStub;
       let removeDeploymentStub;
 
@@ -45,6 +46,8 @@ describe('GoogleRemove', () => {
         validateStub = sinon.stub(googleRemove, 'validate')
           .returns(BbPromise.resolve());
         setDefaultsStub = sinon.stub(googleRemove, 'setDefaults')
+          .returns(BbPromise.resolve());
+        setDeploymentBucketNameStub = sinon.stub(googleRemove, 'setDeploymentBucketName')
           .returns(BbPromise.resolve());
         emptyDeploymentBucketStub = sinon.stub(googleRemove, 'emptyDeploymentBucket')
           .returns(BbPromise.resolve());
@@ -55,6 +58,7 @@ describe('GoogleRemove', () => {
       afterEach(() => {
         googleRemove.validate.restore();
         googleRemove.setDefaults.restore();
+        googleRemove.setDeploymentBucketName.restore();
         googleRemove.emptyDeploymentBucket.restore();
         googleRemove.removeDeployment.restore();
       });
@@ -63,6 +67,7 @@ describe('GoogleRemove', () => {
         .hooks['before:remove:remove']().then(() => {
           expect(validateStub.calledOnce).toEqual(true);
           expect(setDefaultsStub.calledAfter(validateStub)).toEqual(true);
+          expect(setDeploymentBucketNameStub.calledAfter(setDefaultsStub)).toEqual(true);
         }));
 
       it('should run "remove:remove" promise chain', () => googleRemove
