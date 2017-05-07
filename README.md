@@ -79,7 +79,7 @@ provider:
 
 ## Workflow
 
-**Note:** The <function-name> is the corresponding name in `serverless.yml`
+**Note:** The `<function-name>` is the corresponding name in `serverless.yml`
 
 1. Deploy the service with `serverless deploy`
 2. Invoke a function with `serverless invoke -f <function-name>`
