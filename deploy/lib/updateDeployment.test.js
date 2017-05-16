@@ -43,13 +43,10 @@ describe('UpdateDeployment', () => {
   });
 
   describe('#updateDeployment()', () => {
-    let writeUpdateTemplateToDiskStub;
     let getDeploymentStub;
     let updateStub;
 
     beforeEach(() => {
-      writeUpdateTemplateToDiskStub = sinon.stub(googleDeploy, 'writeUpdateTemplateToDisk')
-        .returns(BbPromise.resolve());
       getDeploymentStub = sinon.stub(googleDeploy, 'getDeployment')
         .returns(BbPromise.resolve());
       updateStub = sinon.stub(googleDeploy, 'update')
@@ -57,15 +54,13 @@ describe('UpdateDeployment', () => {
     });
 
     afterEach(() => {
-      googleDeploy.writeUpdateTemplateToDisk.restore();
       googleDeploy.getDeployment.restore();
       googleDeploy.update.restore();
     });
 
     it('should run promise chain', () => googleDeploy
       .updateDeployment().then(() => {
-        expect(writeUpdateTemplateToDiskStub.calledOnce).toEqual(true);
-        expect(getDeploymentStub.calledAfter(writeUpdateTemplateToDiskStub));
+        expect(getDeploymentStub.calledOnce).toEqual(true);
         expect(updateStub.calledAfter(getDeploymentStub));
       }),
     );
@@ -163,38 +158,6 @@ describe('UpdateDeployment', () => {
           'sls-my-service-dev',
           'update',
           5000,
-        )).toEqual(true);
-      });
-    });
-  });
-
-  describe('#writeUpdateTemplateToDisk()', () => {
-    let writeFileSyncStub;
-
-    beforeEach(() => {
-      writeFileSyncStub = sinon.stub(serverless.utils, 'writeFileSync');
-    });
-
-    afterEach(() => {
-      serverless.utils.writeFileSync.restore();
-    });
-
-    it('should write the update deployment template to disk', () => {
-      const compiledConfiguration = {
-        compiledConfigurationTemplate: {
-          resources: [
-            { someResource: 'foo' },
-          ],
-        },
-      };
-      serverless.service.provider = {
-        compiledConfigurationTemplate: compiledConfiguration,
-      };
-
-      return googleDeploy.writeUpdateTemplateToDisk().then(() => {
-        expect(writeFileSyncStub.calledWithExactly(
-          configurationTemplateUpdateFilePath,
-          compiledConfiguration,
         )).toEqual(true);
       });
     });

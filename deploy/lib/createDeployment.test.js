@@ -43,13 +43,10 @@ describe('CreateDeployment', () => {
   });
 
   describe('#createDeployment()', () => {
-    let writeCreateTemplateToDiskStub;
     let checkForExistingDeploymentStub;
     let createIfNotExistsStub;
 
     beforeEach(() => {
-      writeCreateTemplateToDiskStub = sinon.stub(googleDeploy, 'writeCreateTemplateToDisk')
-        .returns(BbPromise.resolve());
       checkForExistingDeploymentStub = sinon.stub(googleDeploy, 'checkForExistingDeployment')
         .returns(BbPromise.resolve());
       createIfNotExistsStub = sinon.stub(googleDeploy, 'createIfNotExists')
@@ -57,15 +54,13 @@ describe('CreateDeployment', () => {
     });
 
     afterEach(() => {
-      googleDeploy.writeCreateTemplateToDisk.restore();
       googleDeploy.checkForExistingDeployment.restore();
       googleDeploy.createIfNotExists.restore();
     });
 
     it('should run promise chain', () => googleDeploy
       .createDeployment().then(() => {
-        expect(writeCreateTemplateToDiskStub.calledOnce).toEqual(true);
-        expect(checkForExistingDeploymentStub.calledAfter(writeCreateTemplateToDiskStub));
+        expect(checkForExistingDeploymentStub.calledOnce).toEqual(true);
         expect(createIfNotExistsStub.calledAfter(checkForExistingDeploymentStub));
       }),
     );
@@ -181,38 +176,6 @@ describe('CreateDeployment', () => {
           'sls-my-service-dev',
           'create',
           5000,
-        )).toEqual(true);
-      });
-    });
-  });
-
-  describe('#writeCreateTemplateToDisk()', () => {
-    let writeFileSyncStub;
-
-    beforeEach(() => {
-      writeFileSyncStub = sinon.stub(serverless.utils, 'writeFileSync');
-    });
-
-    afterEach(() => {
-      serverless.utils.writeFileSync.restore();
-    });
-
-    it('should write the create deployment template to disk', () => {
-      const compiledConfiguration = {
-        compiledConfigurationTemplate: {
-          resources: [
-            { someResource: 'foo' },
-          ],
-        },
-      };
-      serverless.service.provider = {
-        compiledConfigurationTemplate: compiledConfiguration,
-      };
-
-      return googleDeploy.writeCreateTemplateToDisk().then(() => {
-        expect(writeFileSyncStub.calledWithExactly(
-          configurationTemplateCreateFilePath,
-          compiledConfiguration,
         )).toEqual(true);
       });
     });
