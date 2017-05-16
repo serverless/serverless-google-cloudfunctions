@@ -7,6 +7,7 @@ whole provider implementation.
 */
 
 const GoogleProvider = require('./provider/googleProvider');
+const GooglePackage = require('./package/googlePackage');
 const GoogleDeploy = require('./deploy/googleDeploy');
 const GoogleRemove = require('./remove/googleRemove');
 const GoogleInvoke = require('./invoke/googleInvoke');
@@ -19,6 +20,7 @@ class GoogleIndex {
     this.options = options;
 
     this.serverless.pluginManager.addPlugin(GoogleProvider);
+    this.serverless.pluginManager.addPlugin(GooglePackage);
     this.serverless.pluginManager.addPlugin(GoogleDeploy);
     this.serverless.pluginManager.addPlugin(GoogleRemove);
     this.serverless.pluginManager.addPlugin(GoogleInvoke);

@@ -2,6 +2,7 @@
 
 const GoogleIndex = require('./index');
 const GoogleProvider = require('./provider/googleProvider');
+const GooglePackage = require('./package/googlePackage');
 const GoogleDeploy = require('./deploy/googleDeploy');
 const GoogleRemove = require('./remove/googleRemove');
 const GoogleInvoke = require('./invoke/googleInvoke');
@@ -36,6 +37,7 @@ describe('GoogleIndex', () => {
       const addedPlugins = serverless.plugins;
 
       expect(addedPlugins).toContain(GoogleProvider);
+      expect(addedPlugins).toContain(GooglePackage);
       expect(addedPlugins).toContain(GoogleDeploy);
       expect(addedPlugins).toContain(GoogleRemove);
       expect(addedPlugins).toContain(GoogleInvoke);
