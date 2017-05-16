@@ -8,7 +8,6 @@ const BbPromise = require('bluebird');
 module.exports = {
   updateDeployment() {
     return BbPromise.bind(this)
-      .then(this.writeUpdateTemplateToDisk)
       .then(this.getDeployment)
       .then(this.update);
   },
@@ -53,15 +52,5 @@ module.exports = {
 
     return this.provider.request('deploymentmanager', 'deployments', 'update', params)
       .then(() => this.monitorDeployment(deploymentName, 'update', 5000));
-  },
-
-  writeUpdateTemplateToDisk() {
-    const filePath = path.join(this.serverless.config.servicePath,
-      '.serverless', 'configuration-template-update.yml');
-
-    this.serverless.utils.writeFileSync(filePath,
-      this.serverless.service.provider.compiledConfigurationTemplate);
-
-    return BbPromise.resolve();
   },
 };

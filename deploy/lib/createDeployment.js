@@ -8,7 +8,6 @@ const BbPromise = require('bluebird');
 module.exports = {
   createDeployment() {
     return BbPromise.bind(this)
-      .then(this.writeCreateTemplateToDisk)
       .then(this.checkForExistingDeployment)
       .then(this.createIfNotExists);
   },
@@ -57,15 +56,5 @@ module.exports = {
 
     return this.provider.request('deploymentmanager', 'deployments', 'insert', params)
       .then(() => this.monitorDeployment(deploymentName, 'create', 5000));
-  },
-
-  writeCreateTemplateToDisk() {
-    const filePath = path.join(this.serverless.config.servicePath,
-      '.serverless', 'configuration-template-create.yml');
-
-    this.serverless.utils.writeFileSync(filePath,
-      this.serverless.service.provider.compiledConfigurationTemplate);
-
-    return BbPromise.resolve();
   },
 };

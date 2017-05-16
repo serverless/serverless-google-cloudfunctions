@@ -1,3 +1,0 @@
-resources:
-- type: storage.v1.bucket
-  name: will-be-replaced-by-serverless

@@ -39,11 +39,7 @@ describe('GoogleDeploy', () => {
       let validateStub;
       let setDefaultsStub;
       let setDeploymentBucketNameStub;
-      let prepareDeploymentStub;
       let createDeploymentStub;
-      let generateArtifactDirectoryNameStub;
-      let compileFunctionsStub;
-      let mergeServiceResourcesStub;
       let uploadArtifactsStub;
       let updateDeploymentStub;
       let cleanupDeploymentBucketStub;
@@ -55,16 +51,7 @@ describe('GoogleDeploy', () => {
           .returns(BbPromise.resolve());
         setDeploymentBucketNameStub = sinon.stub(googleDeploy, 'setDeploymentBucketName')
           .returns(BbPromise.resolve());
-        prepareDeploymentStub = sinon.stub(googleDeploy, 'prepareDeployment')
-          .returns(BbPromise.resolve());
         createDeploymentStub = sinon.stub(googleDeploy, 'createDeployment')
-          .returns(BbPromise.resolve());
-        generateArtifactDirectoryNameStub = sinon
-          .stub(googleDeploy, 'generateArtifactDirectoryName')
-          .returns(BbPromise.resolve());
-        compileFunctionsStub = sinon.stub(googleDeploy, 'compileFunctions')
-          .returns(BbPromise.resolve());
-        mergeServiceResourcesStub = sinon.stub(googleDeploy, 'mergeServiceResources')
           .returns(BbPromise.resolve());
         uploadArtifactsStub = sinon.stub(googleDeploy, 'uploadArtifacts')
           .returns(BbPromise.resolve());
@@ -78,46 +65,29 @@ describe('GoogleDeploy', () => {
         googleDeploy.validate.restore();
         googleDeploy.setDefaults.restore();
         googleDeploy.setDeploymentBucketName.restore();
-        googleDeploy.prepareDeployment.restore();
         googleDeploy.createDeployment.restore();
-        googleDeploy.generateArtifactDirectoryName.restore();
-        googleDeploy.compileFunctions.restore();
-        googleDeploy.mergeServiceResources.restore();
         googleDeploy.uploadArtifacts.restore();
         googleDeploy.updateDeployment.restore();
         googleDeploy.cleanupDeploymentBucket.restore();
       });
 
-      it('should run "before:deploy:initialize" promise chain', () => googleDeploy
-        .hooks['before:deploy:initialize']().then(() => {
+      it('should run "before:deploy:deploy" promise chain', () => googleDeploy
+        .hooks['before:deploy:deploy']().then(() => {
           expect(validateStub.calledOnce).toEqual(true);
           expect(setDefaultsStub.calledAfter(validateStub)).toEqual(true);
         }));
 
-      it('should run "deploy:initialize" promise chain', () => googleDeploy
-        .hooks['deploy:initialize']().then(() => {
-          expect(setDeploymentBucketNameStub.calledOnce).toEqual(true);
-          expect(prepareDeploymentStub.calledAfter(setDeploymentBucketNameStub)).toEqual(true);
-        }));
-
-      it('it should run "deploy:setupProviderConfiguration" promise chain', () => googleDeploy
-        .hooks['deploy:setupProviderConfiguration']().then(() => {
-          expect(createDeploymentStub.calledOnce).toEqual(true);
-        }),
-      );
-
-      it('should run "before:deploy:compileFunctions" promise chain', () => googleDeploy
-        .hooks['before:deploy:compileFunctions']().then(() => {
-          expect(generateArtifactDirectoryNameStub.calledOnce).toEqual(true);
-          expect(compileFunctionsStub.calledAfter(generateArtifactDirectoryNameStub)).toEqual(true);
-        }));
-
       it('should run "deploy:deploy" promise chain', () => googleDeploy
         .hooks['deploy:deploy']().then(() => {
-          expect(mergeServiceResourcesStub.calledOnce).toEqual(true);
-          expect(uploadArtifactsStub.calledAfter(mergeServiceResourcesStub)).toEqual(true);
+          expect(setDeploymentBucketNameStub.calledOnce).toEqual(true);
+          expect(createDeploymentStub.calledAfter(setDeploymentBucketNameStub)).toEqual(true);
+          expect(uploadArtifactsStub.calledAfter(createDeploymentStub)).toEqual(true);
           expect(updateDeploymentStub.calledAfter(uploadArtifactsStub)).toEqual(true);
-          expect(cleanupDeploymentBucketStub.calledAfter(updateDeploymentStub)).toEqual(true);
+        }));
+
+      it('should run "after:deploy:deploy" promise chain', () => googleDeploy
+        .hooks['after:deploy:deploy']().then(() => {
+          expect(cleanupDeploymentBucketStub.calledOnce).toEqual(true);
         }));
     });
   });
