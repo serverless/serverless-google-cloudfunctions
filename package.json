@@ -10,6 +10,7 @@
   },
   "scripts": {
     "test": "jest --maxWorkers=5",
+    "coverage": "jest --maxWorkers=5 --coverage",
     "lint": "eslint . --cache"
   },
   "homepage": "https://github.com/serverless/serverless-google-cloudfunctions",
