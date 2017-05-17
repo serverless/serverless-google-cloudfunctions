@@ -16,7 +16,7 @@ module.exports = {
 
     return this.provider.request('storage', 'objects', 'list', params)
       .then((response) => {
-        if (!response.items.length) return BbPromise.resolve([]);
+        if (!response.items || !response.items.length) return BbPromise.resolve([]);
 
         return BbPromise.resolve(response.items);
       });
