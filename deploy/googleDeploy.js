@@ -4,8 +4,8 @@ const BbPromise = require('bluebird');
 
 const validate = require('../shared/validate');
 const utils = require('../shared/utils');
-const setDeploymentBucketName = require('../shared/setDeploymentBucketName');
 const createDeployment = require('./lib/createDeployment');
+const setDeploymentBucketName = require('../shared/setDeploymentBucketName');
 const monitorDeployment = require('../shared/monitorDeployment');
 const uploadArtifacts = require('./lib/uploadArtifacts');
 const updateDeployment = require('./lib/updateDeployment');
@@ -21,8 +21,8 @@ class GoogleDeploy {
       this,
       validate,
       utils,
-      setDeploymentBucketName,
       createDeployment,
+      setDeploymentBucketName,
       monitorDeployment,
       uploadArtifacts,
       updateDeployment,
@@ -34,8 +34,8 @@ class GoogleDeploy {
         .then(this.setDefaults),
 
       'deploy:deploy': () => BbPromise.bind(this)
-        .then(this.setDeploymentBucketName)
         .then(this.createDeployment)
+        .then(this.setDeploymentBucketName)
         .then(this.uploadArtifacts)
         .then(this.updateDeployment),
 
