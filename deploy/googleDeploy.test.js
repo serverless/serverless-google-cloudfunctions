@@ -38,8 +38,8 @@ describe('GoogleDeploy', () => {
     describe('hooks', () => {
       let validateStub;
       let setDefaultsStub;
-      let setDeploymentBucketNameStub;
       let createDeploymentStub;
+      let setDeploymentBucketNameStub;
       let uploadArtifactsStub;
       let updateDeploymentStub;
       let cleanupDeploymentBucketStub;
@@ -49,9 +49,9 @@ describe('GoogleDeploy', () => {
           .returns(BbPromise.resolve());
         setDefaultsStub = sinon.stub(googleDeploy, 'setDefaults')
           .returns(BbPromise.resolve());
-        setDeploymentBucketNameStub = sinon.stub(googleDeploy, 'setDeploymentBucketName')
-          .returns(BbPromise.resolve());
         createDeploymentStub = sinon.stub(googleDeploy, 'createDeployment')
+          .returns(BbPromise.resolve());
+        setDeploymentBucketNameStub = sinon.stub(googleDeploy, 'setDeploymentBucketName')
           .returns(BbPromise.resolve());
         uploadArtifactsStub = sinon.stub(googleDeploy, 'uploadArtifacts')
           .returns(BbPromise.resolve());
@@ -64,8 +64,8 @@ describe('GoogleDeploy', () => {
       afterEach(() => {
         googleDeploy.validate.restore();
         googleDeploy.setDefaults.restore();
-        googleDeploy.setDeploymentBucketName.restore();
         googleDeploy.createDeployment.restore();
+        googleDeploy.setDeploymentBucketName.restore();
         googleDeploy.uploadArtifacts.restore();
         googleDeploy.updateDeployment.restore();
         googleDeploy.cleanupDeploymentBucket.restore();
@@ -79,8 +79,8 @@ describe('GoogleDeploy', () => {
 
       it('should run "deploy:deploy" promise chain', () => googleDeploy
         .hooks['deploy:deploy']().then(() => {
-          expect(setDeploymentBucketNameStub.calledOnce).toEqual(true);
-          expect(createDeploymentStub.calledAfter(setDeploymentBucketNameStub)).toEqual(true);
+          expect(createDeploymentStub.calledOnce).toEqual(true);
+          expect(setDeploymentBucketNameStub.calledAfter(createDeploymentStub)).toEqual(true);
           expect(uploadArtifactsStub.calledAfter(createDeploymentStub)).toEqual(true);
           expect(updateDeploymentStub.calledAfter(uploadArtifactsStub)).toEqual(true);
         }));
