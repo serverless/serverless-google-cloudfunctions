@@ -22,7 +22,11 @@ module.exports = {
 
     // should not contain 'goog'
     if (name.match(/goog/)) {
-      throw Error('Your service should not contain the string "goog"');
+      throw new Error('Your service should not contain the string "goog"');
+    }
+
+    if (name.match(/_+/)) {
+      throw new Error('Your service name should not include underscores');
     }
 
     return BbPromise.resolve();
