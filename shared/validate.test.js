@@ -68,7 +68,13 @@ describe('Validate', () => {
       expect(() => googleCommand.validateServiceName()).toThrow(Error);
     });
 
-    it('should not throw an error if the service name does not contain the string "goog"', () => {
+    it('should throw an error if the service name contains underscores', () => {
+      serverless.service.service = 'service_name';
+
+      expect(() => googleCommand.validateServiceName()).toThrow(Error);
+    });
+
+    it('should not throw an error if the service name is valid', () => {
       serverless.service.service = 'service-name';
 
       expect(() => googleCommand.validateServiceName()).not.toThrow(Error);
