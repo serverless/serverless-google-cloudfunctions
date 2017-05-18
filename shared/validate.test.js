@@ -27,23 +27,28 @@ describe('Validate', () => {
   describe('#validate()', () => {
     let validateServicePathStub;
     let validateServiceNameStub;
+    let validateHandlersStub;
 
     beforeEach(() => {
       validateServicePathStub = sinon.stub(googleCommand, 'validateServicePath')
         .returns(BbPromise.resolve());
       validateServiceNameStub = sinon.stub(googleCommand, 'validateServiceName')
         .returns(BbPromise.resolve());
+      validateHandlersStub = sinon.stub(googleCommand, 'validateHandlers')
+        .returns(BbPromise.resolve());
     });
 
     afterEach(() => {
       googleCommand.validateServicePath.restore();
       googleCommand.validateServiceName.restore();
+      googleCommand.validateHandlers.restore();
     });
 
     it('should run promise chain', () => googleCommand
       .validate().then(() => {
         expect(validateServicePathStub.calledOnce).toEqual(true);
         expect(validateServiceNameStub.calledAfter(validateServicePathStub));
+        expect(validateHandlersStub.calledAfter(validateServiceNameStub));
       }));
   });
 
@@ -78,6 +83,31 @@ describe('Validate', () => {
       serverless.service.service = 'service-name';
 
       expect(() => googleCommand.validateServiceName()).not.toThrow(Error);
+    });
+  });
+
+  describe('#validateHandlers()', () => {
+    it('should throw an error if the handler name contains an invalid character', () => {
+      googleCommand.serverless.service.functions = {
+        foo: {
+          handler: 'invalid.handler',
+        },
+        bar: {
+          handler: 'invalid/handler',
+        },
+      };
+
+      expect(() => googleCommand.validateHandlers()).toThrow(Error);
+    });
+
+    it('should not throw an error if the function handler is valid', () => {
+      googleCommand.serverless.service.functions = {
+        foo: {
+          handler: 'validHandler',
+        },
+      };
+
+      expect(() => googleCommand.validateHandlers()).not.toThrow(Error);
     });
   });
 });
