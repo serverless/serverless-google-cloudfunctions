@@ -1,6 +1,8 @@
 'use strict';
 
+const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
 const BbPromise = require('bluebird');
 const _ = require('lodash');
@@ -72,7 +74,15 @@ class GoogleProvider {
   }
 
   getAuthClient() {
-    const keyFileContent = fs.readFileSync(this.serverless.service.provider.credentials).toString();
+    let credentials = this.serverless.service.provider.credentials;
+    const credParts = credentials.split(path.sep);
+
+    if (credParts[0] === '~') {
+      credParts[0] = os.homedir();
+      credentials = credParts.reduce((memo, part) => path.join(memo, part), '');
+    }
+
+    const keyFileContent = fs.readFileSync(credentials).toString();
     const key = JSON.parse(keyFileContent);
 
     return new google.auth
