@@ -64,7 +64,11 @@ class GoogleProvider {
           } else {
             // support for API calls with arbitraty deepness
             filArgs.reduce((p, c) => p[c], this.sdk)(requestParams, (error, response) => {
-              if (error) reject(new Error(error));
+              if (error && error.errors && error.errors[0].message && error.errors[0].message.includes('project 1043443644444')) {
+                reject(new Error("Incorrect configuration. Please change the 'project' key in the 'provider' block in your Serverless config file."));
+              } else if (error) {
+                reject(new Error(error));
+              }
               return resolve(response);
             });
           }
