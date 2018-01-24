@@ -120,6 +120,7 @@ describe('CompileFunctions', () => {
           httpsTrigger: {
             url: 'foo',
           },
+          labels: {},
         },
       }];
 
@@ -153,6 +154,7 @@ describe('CompileFunctions', () => {
           httpsTrigger: {
             url: 'foo',
           },
+          labels: {},
         },
       }];
 
@@ -186,6 +188,7 @@ describe('CompileFunctions', () => {
           httpsTrigger: {
             url: 'foo',
           },
+          labels: {},
         },
       }];
 
@@ -219,6 +222,126 @@ describe('CompileFunctions', () => {
           httpsTrigger: {
             url: 'foo',
           },
+          labels: {},
+        },
+      }];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set the labels based on the functions configuration', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          labels: {
+            test: 'label'
+          },
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          function: 'func1',
+          availableMemoryMb: 256,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {
+            test: 'label'
+          },
+        },
+      }];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set the labels based on the provider configuration', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+      googlePackage.serverless.service.provider.labels = {
+        test: 'label'
+      };
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          function: 'func1',
+          availableMemoryMb: 256,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {
+            test: 'label'
+          },
+        },
+      }];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set the labels based on the merged provider and function configuration', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          events: [
+            { http: 'foo' },
+          ],
+          labels: {
+            test: 'functionLabel'
+          }
+        },
+      };
+      googlePackage.serverless.service.provider.labels = {
+        test: 'providerLabel',
+        secondTest: 'tested',
+      };
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          function: 'func1',
+          availableMemoryMb: 256,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {
+            test: 'functionLabel',
+            secondTest: 'tested',
+          },
         },
       }];
 
@@ -251,6 +374,7 @@ describe('CompileFunctions', () => {
           httpsTrigger: {
             url: 'foo',
           },
+          labels: {},
         },
       }];
 
@@ -303,6 +427,7 @@ describe('CompileFunctions', () => {
               path: 'some-path',
               resource: 'some-resource',
             },
+            labels: {},
           },
         },
         {
@@ -318,6 +443,7 @@ describe('CompileFunctions', () => {
               eventType: 'foo',
               resource: 'some-resource',
             },
+            labels: {},
           },
         },
       ];
