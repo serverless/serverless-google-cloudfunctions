@@ -238,7 +238,7 @@ describe('CompileFunctions', () => {
         func1: {
           handler: 'func1',
           labels: {
-            test: 'label'
+            test: 'label',
           },
           events: [
             { http: 'foo' },
@@ -259,7 +259,7 @@ describe('CompileFunctions', () => {
             url: 'foo',
           },
           labels: {
-            test: 'label'
+            test: 'label',
           },
         },
       }];
@@ -281,7 +281,7 @@ describe('CompileFunctions', () => {
         },
       };
       googlePackage.serverless.service.provider.labels = {
-        test: 'label'
+        test: 'label',
       };
 
       const compiledResources = [{
@@ -297,7 +297,7 @@ describe('CompileFunctions', () => {
             url: 'foo',
           },
           labels: {
-            test: 'label'
+            test: 'label',
           },
         },
       }];
@@ -317,8 +317,8 @@ describe('CompileFunctions', () => {
             { http: 'foo' },
           ],
           labels: {
-            test: 'functionLabel'
-          }
+            test: 'functionLabel',
+          },
         },
       };
       googlePackage.serverless.service.provider.labels = {
