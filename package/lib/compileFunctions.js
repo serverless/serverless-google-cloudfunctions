@@ -37,6 +37,10 @@ module.exports = {
       funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
         || _.get(this, 'serverless.service.provider.timeout')
         || '60s';
+      funcTemplate.properties.labels = _.assign({},
+        _.get(this, 'serverless.service.provider.labels') || {},
+        _.get(funcObject, 'labels') || {},
+      );
 
       const eventType = Object.keys(funcObject.events[0])[0];
 
