@@ -113,7 +113,8 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
-          function: 'func1',
+          entryPoint: 'func1',
+          function: 'my-service-dev-func1',
           availableMemoryMb: 1024,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -147,7 +148,8 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
-          function: 'func1',
+          entryPoint: 'func1',
+          function: 'my-service-dev-func1',
           availableMemoryMb: 1024,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -181,7 +183,8 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
-          function: 'func1',
+          entryPoint: 'func1',
+          function: 'my-service-dev-func1',
           availableMemoryMb: 256,
           timeout: '120s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -215,7 +218,8 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
-          function: 'func1',
+          entryPoint: 'func1',
+          function: 'my-service-dev-func1',
           availableMemoryMb: 256,
           timeout: '120s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -251,7 +255,8 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
-          function: 'func1',
+          entryPoint: 'func1',
+          function: 'my-service-dev-func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -289,7 +294,8 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
-          function: 'func1',
+          entryPoint: 'func1',
+          function: 'my-service-dev-func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -331,7 +337,8 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
-          function: 'func1',
+          entryPoint: 'func1',
+          function: 'my-service-dev-func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -367,7 +374,8 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
-          function: 'func1',
+          entryPoint: 'func1',
+          function: 'my-service-dev-func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -418,7 +426,8 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             location: 'us-central1',
-            function: 'func1',
+            entryPoint: 'func1',
+            function: 'my-service-dev-func1',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -435,7 +444,8 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func2',
           properties: {
             location: 'us-central1',
-            function: 'func2',
+            entryPoint: 'func2',
+            function: 'my-service-dev-func2',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
