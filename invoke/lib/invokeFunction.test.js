@@ -78,7 +78,7 @@ describe('InvokeFunction', () => {
           'functions',
           'call',
           {
-            name: 'projects/my-project/locations/us-central1/functions/foo',
+            name: 'projects/my-project/locations/us-central1/functions/my-service-dev-foo',
             resource: {
               data: '',
             },
@@ -98,7 +98,7 @@ describe('InvokeFunction', () => {
           'functions',
           'call',
           {
-            name: 'projects/my-project/locations/us-central1/functions/foo',
+            name: 'projects/my-project/locations/us-central1/functions/my-service-dev-foo',
             resource: {
               data: googleInvoke.options.data,
             },

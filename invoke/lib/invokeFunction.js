@@ -14,14 +14,16 @@ module.exports = {
 
   invoke() {
     const project = this.serverless.service.provider.project;
+    const service = this.serverless.service.service;
     const region = this.options.region;
+    const stage = this.options.stage || 'dev';
     let func = this.options.function;
     const data = this.options.data || '';
 
     func = getGoogleCloudFunctionName(this.serverless.service.functions, func);
 
     const params = {
-      name: `projects/${project}/locations/${region}/functions/${func}`,
+      name: `projects/${project}/locations/${region}/functions/${service}-${stage}-${func}`,
       resource: {
         data,
       },
