@@ -117,7 +117,7 @@ describe('DisplayServiceInfo', () => {
           functions: [
             {
               name: 'func1',
-              resource: 'https://us-central1-my-project.cloudfunctions.net/handler',
+              resource: 'https://us-central1-my-project.cloudfunctions.net/my-service-dev-func1',
             },
             {
               name: 'func2',
