@@ -114,6 +114,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           function: 'func1',
+          entryPoint: 'func1',
           availableMemoryMb: 1024,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -148,6 +149,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           function: 'func1',
+          entryPoint: 'func1',
           availableMemoryMb: 1024,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -165,7 +167,43 @@ describe('CompileFunctions', () => {
       });
     });
 
-    it('should set the timout based on the functions configuration', () => {
+    it('should set entryPoint based on the functions configuration', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          entryPoint: 'entry1',
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+      googlePackage.serverless.service.provider.memorySize = 1024;
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          function: 'func1',
+          entryPoint: 'entry1',
+          availableMemoryMb: 1024,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+        },
+      }];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set the timeout based on the functions configuration', () => {
       googlePackage.serverless.service.functions = {
         func1: {
           handler: 'func1',
@@ -182,6 +220,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           function: 'func1',
+          entryPoint: 'func1',
           availableMemoryMb: 256,
           timeout: '120s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -216,6 +255,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           function: 'func1',
+          entryPoint: 'func1',
           availableMemoryMb: 256,
           timeout: '120s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -252,6 +292,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           function: 'func1',
+          entryPoint: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -290,6 +331,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           function: 'func1',
+          entryPoint: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -332,6 +374,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           function: 'func1',
+          entryPoint: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -368,6 +411,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           function: 'func1',
+          entryPoint: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -419,6 +463,7 @@ describe('CompileFunctions', () => {
           properties: {
             location: 'us-central1',
             function: 'func1',
+            entryPoint: 'func1',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -436,6 +481,7 @@ describe('CompileFunctions', () => {
           properties: {
             location: 'us-central1',
             function: 'func2',
+            entryPoint: 'func2',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
