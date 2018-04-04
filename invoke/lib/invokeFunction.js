@@ -14,16 +14,20 @@ module.exports = {
 
   invoke() {
     const project = this.serverless.service.provider.project;
-    const service = this.serverless.service.service;
     const region = this.options.region;
-    const stage = this.options.stage || 'dev';
+    const stage = this.options.stage ? this.options.stage : 'dev';
     let func = this.options.function;
     const data = this.options.data || '';
 
-    func = getGoogleCloudFunctionName(this.serverless.service.functions, func);
+    func = getGoogleCloudFunctionName(
+      this.serverless.service.functions,
+      func,
+      stage,
+      this.serverless.service.service,
+    );
 
     const params = {
-      name: `projects/${project}/locations/${region}/functions/${service}-${stage}-${func}`,
+      name: `projects/${project}/locations/${region}/functions/${func}`,
       resource: {
         data,
       },
@@ -57,7 +61,7 @@ module.exports = {
 };
 
 // retrieve the functions name (Google uses our handler property as the function name)
-const getGoogleCloudFunctionName = (serviceFunctions, func) => {
+const getGoogleCloudFunctionName = (serviceFunctions, func, stage, service) => {
   if (!serviceFunctions[func]) {
     const errorMessage = [
       `Function "${func}" not found. `,
@@ -66,5 +70,15 @@ const getGoogleCloudFunctionName = (serviceFunctions, func) => {
     throw new Error(errorMessage);
   }
 
-  return serviceFunctions[func].handler;
+  let funcName = serviceFunctions[func].handler;
+
+  if (serviceFunctions[func].prependStage) {
+    funcName = `${stage}-${funcName}`;
+  }
+
+  if (serviceFunctions[func].prependService) {
+    funcName = `${service}-${funcName}`;
+  }
+
+  return funcName;
 };

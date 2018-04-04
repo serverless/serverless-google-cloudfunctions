@@ -114,7 +114,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           entryPoint: 'func1',
-          function: 'my-service-dev-func1',
+          function: 'func1',
           availableMemoryMb: 1024,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -149,7 +149,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           entryPoint: 'func1',
-          function: 'my-service-dev-func1',
+          function: 'func1',
           availableMemoryMb: 1024,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -184,7 +184,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           entryPoint: 'func1',
-          function: 'my-service-dev-func1',
+          function: 'func1',
           availableMemoryMb: 256,
           timeout: '120s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -219,7 +219,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           entryPoint: 'func1',
-          function: 'my-service-dev-func1',
+          function: 'func1',
           availableMemoryMb: 256,
           timeout: '120s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -256,7 +256,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           entryPoint: 'func1',
-          function: 'my-service-dev-func1',
+          function: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -295,7 +295,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           entryPoint: 'func1',
-          function: 'my-service-dev-func1',
+          function: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -338,7 +338,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           entryPoint: 'func1',
-          function: 'my-service-dev-func1',
+          function: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -375,7 +375,7 @@ describe('CompileFunctions', () => {
         properties: {
           location: 'us-central1',
           entryPoint: 'func1',
-          function: 'my-service-dev-func1',
+          function: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
           sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -427,7 +427,7 @@ describe('CompileFunctions', () => {
           properties: {
             location: 'us-central1',
             entryPoint: 'func1',
-            function: 'my-service-dev-func1',
+            function: 'func1',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -445,7 +445,7 @@ describe('CompileFunctions', () => {
           properties: {
             location: 'us-central1',
             entryPoint: 'func2',
-            function: 'my-service-dev-func2',
+            function: 'func2',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -460,6 +460,112 @@ describe('CompileFunctions', () => {
 
       return googlePackage.compileFunctions().then(() => {
         expect(consoleLogStub.called).toEqual(true);
+        expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set stage in function name with prependStage', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          prependStage: true,
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          entryPoint: 'func1',
+          function: 'dev-func1',
+          availableMemoryMb: 256,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+        },
+      }];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set service in function name with prependService', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          prependService: true,
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          entryPoint: 'func1',
+          function: 'my-service-func1',
+          availableMemoryMb: 256,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+        },
+      }];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set service and stage in function name with prependService and prependStage', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          prependStage: true,
+          prependService: true,
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          entryPoint: 'func1',
+          function: 'my-service-dev-func1',
+          availableMemoryMb: 256,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+        },
+      }];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
         expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources)
           .toEqual(compiledResources);
       });
