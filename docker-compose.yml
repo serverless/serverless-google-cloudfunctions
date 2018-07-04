@@ -1,9 +1,7 @@
 version: '2'
 services:
   node:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: node:latest
     working_dir: /app
     volumes:
       - .:/app
