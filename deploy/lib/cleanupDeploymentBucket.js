@@ -48,7 +48,7 @@ module.exports = {
     const removePromises = objectsToRemove.map((object) => {
       const params = {
         bucket: object.bucket,
-        object: encodeURIComponent(object.name),
+        object: object.name,
       };
       return this.provider.request('storage', 'objects', 'delete', params);
     });
