@@ -27,16 +27,12 @@ module.exports = {
 
     this.serverless.cli.log('Removing artifacts in deployment bucket...');
 
-    const removePromises = [];
-
-    objectsToRemove.forEach((object) => {
+    const removePromises = objectsToRemove.map((object) => {
       const params = {
         bucket: object.bucket,
-        object: encodeURIComponent(object.name),
+        object: object.name,
       };
-      const request = this.provider.request('storage', 'objects', 'delete', params);
-
-      removePromises.push(request);
+      return this.provider.request('storage', 'objects', 'delete', params);
     });
 
     return BbPromise.all(removePromises);

@@ -4,7 +4,7 @@ const fs = require('fs');
 const os = require('os');
 
 const sinon = require('sinon');
-const google = require('googleapis');
+const google = require('googleapis').google;
 
 const GoogleProvider = require('./googleProvider');
 const Serverless = require('../test/serverless');
@@ -63,6 +63,67 @@ describe('GoogleProvider', () => {
 
       expect(googleProvider.sdk.storage)
         .toBeDefined();
+
+      expect(googleProvider.sdk.logging)
+        .toBeDefined();
+
+      expect(googleProvider.sdk.cloudfunctions)
+        .toBeDefined();
+    });
+  });
+
+  describe('#request()', () => {
+    // NOTE: we're using our own custom services here to make
+    // the tests SDK independent
+    let savedSdk;
+
+    beforeEach(() => {
+      savedSdk = googleProvider.sdk;
+      googleProvider.sdk = {
+        service: {
+          resource: {
+            method: {
+              // will be replaced for each individual test
+              bind: null,
+            },
+          },
+        },
+      };
+      sinon.stub(googleProvider, 'getAuthClient').returns({
+        authorize: sinon.stub().resolves(),
+      });
+      sinon.stub(googleProvider, 'isServiceSupported').returns();
+    });
+
+    afterEach(() => {
+      googleProvider.sdk = savedSdk;
+      googleProvider.getAuthClient.restore();
+      googleProvider.isServiceSupported.restore();
+    });
+
+    it('should perform the given request', () => {
+      googleProvider.sdk.service.resource.method.bind = () =>
+        sinon.stub().resolves({ data: 'result' });
+
+      return googleProvider.request('service', 'resource', 'method', {}).then((result) => {
+        expect(result).toEqual('result');
+      });
+    });
+
+    it('should throw a custom error message when the project configuration is wrong', () => {
+      googleProvider.sdk.service.resource.method.bind = () =>
+        sinon.stub().rejects({ errors: [{ message: 'project 1043443644444' }] });
+
+      return expect(googleProvider.request('service', 'resource', 'method', {}))
+        .rejects.toThrow(/Incorrect configuration/);
+    });
+
+    it('should re-throw other errors', () => {
+      googleProvider.sdk.service.resource.method.bind = () =>
+        sinon.stub().rejects(new Error('some error message'));
+
+      return expect(googleProvider.request('service', 'resource', 'method', {}))
+        .rejects.toThrow('some error message');
     });
   });
 
