@@ -51,7 +51,7 @@ class GoogleProvider {
       return filArgs.reduce(((p, c) => p[c]), this.sdk).bind(serviceInstance)(requestParams)
         .then(result => result.data)
         .catch((error) => {
-          if (error && error.errors && error.errors[0].message && error.errors[0].message.includes('project 1043443644444')) {
+          if (error && error.errors && error.errors[0].message && _.includes(error.errors[0].message, 'project 1043443644444')) {
             throw new Error("Incorrect configuration. Please change the 'project' key in the 'provider' block in your Serverless config file.");
           } else if (error) {
             throw error;
@@ -77,7 +77,7 @@ class GoogleProvider {
   }
 
   isServiceSupported(service) {
-    if (!Object.keys(this.sdk).includes(service)) {
+    if (!_.includes(Object.keys(this.sdk), service)) {
       const errorMessage = [
         `Unsupported service API "${service}".`,
         ` Supported service APIs are: ${Object.keys(this.sdk).join(', ')}`,

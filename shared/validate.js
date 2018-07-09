@@ -38,7 +38,7 @@ module.exports = {
     const functions = this.serverless.service.functions;
 
     _.forEach(functions, (funcVal, funcKey) => {
-      if (funcVal.handler.includes('/') || funcVal.handler.includes('.')) {
+      if (_.includes(funcVal.handler, '/') || _.includes(funcVal.handler, '.')) {
         const errorMessage = [
           `The "handler" property for the function "${funcKey}" is invalid.`,
           ' Handlers should be plain strings referencing only the exported function name',
