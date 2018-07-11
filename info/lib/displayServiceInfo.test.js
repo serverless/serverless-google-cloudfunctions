@@ -34,6 +34,20 @@ describe('DisplayServiceInfo', () => {
           },
         ],
       },
+      func3: {
+        handler: 'handler',
+        prependStage: true,
+        events: [
+          { http: 'foo3' },
+        ],
+      },
+      func4: {
+        handler: 'handler',
+        prependService: true,
+        events: [
+          { http: 'foo4' },
+        ],
+      },
     };
     serverless.service.provider = {
       project: 'my-project',
@@ -105,6 +119,8 @@ describe('DisplayServiceInfo', () => {
           { type: 'resource.which.should.be.filterered', name: 'someResource' },
           { type: 'cloudfunctions.v1beta2.function', name: 'my-service-dev-func1' },
           { type: 'cloudfunctions.v1beta2.function', name: 'my-service-dev-func2' },
+          { type: 'cloudfunctions.v1beta2.function', name: 'my-service-dev-func3' },
+          { type: 'cloudfunctions.v1beta2.function', name: 'my-service-dev-func4' },
         ],
       };
 
@@ -122,6 +138,14 @@ describe('DisplayServiceInfo', () => {
             {
               name: 'func2',
               resource: 'projects/*/topics/my-test-topic',
+            },
+            {
+              name: 'func3',
+              resource: 'https://us-central1-my-project.cloudfunctions.net/dev-handler',
+            },
+            {
+              name: 'func4',
+              resource: 'https://us-central1-my-project.cloudfunctions.net/my-service-handler',
             },
           ],
         },

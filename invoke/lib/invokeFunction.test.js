@@ -24,6 +24,19 @@ describe('InvokeFunction', () => {
       func1: {
         handler: 'foo',
       },
+      func2: {
+        handler: 'foo2',
+        prependService: true,
+      },
+      func3: {
+        handler: 'foo3',
+        prependStage: true,
+      },
+      func4: {
+        handler: 'foo4',
+        prependStage: true,
+        prependService: true,
+      },
     };
     serverless.setProvider('google', new GoogleProvider(serverless));
     const options = {
@@ -79,6 +92,63 @@ describe('InvokeFunction', () => {
           'call',
           {
             name: 'projects/my-project/locations/us-central1/functions/foo',
+            resource: {
+              data: '',
+            },
+          })).toEqual(true);
+      });
+    });
+
+    it('should invoke the provided function with prependService', () => {
+      googleInvoke.options.function = 'func2';
+
+      return googleInvoke.invoke().then(() => {
+        expect(requestStub.calledWithExactly(
+          'cloudfunctions',
+          'projects',
+          'locations',
+          'functions',
+          'call',
+          {
+            name: 'projects/my-project/locations/us-central1/functions/my-service-foo2',
+            resource: {
+              data: '',
+            },
+          })).toEqual(true);
+      });
+    });
+
+    it('should invoke the provided function with prependStage', () => {
+      googleInvoke.options.function = 'func3';
+
+      return googleInvoke.invoke().then(() => {
+        expect(requestStub.calledWithExactly(
+          'cloudfunctions',
+          'projects',
+          'locations',
+          'functions',
+          'call',
+          {
+            name: 'projects/my-project/locations/us-central1/functions/dev-foo3',
+            resource: {
+              data: '',
+            },
+          })).toEqual(true);
+      });
+    });
+
+    it('should invoke the provided function with all prepend', () => {
+      googleInvoke.options.function = 'func4';
+
+      return googleInvoke.invoke().then(() => {
+        expect(requestStub.calledWithExactly(
+          'cloudfunctions',
+          'projects',
+          'locations',
+          'functions',
+          'call',
+          {
+            name: 'projects/my-project/locations/us-central1/functions/my-service-dev-foo4',
             resource: {
               data: '',
             },

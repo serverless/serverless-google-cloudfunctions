@@ -45,12 +45,21 @@ module.exports = {
         const funcEventConfig = serviceFunc.events[0][eventType];
 
         let funcResource = funcEventConfig.resource || null;
+        let funcName = serviceFunc.handler;
+
+        if (serviceFunc.prependStage) {
+          funcName = `${this.options.stage}-${funcName}`;
+        }
+
+        if (serviceFunc.prependService) {
+          funcName = `${this.serverless.service.service}-${funcName}`;
+        }
 
         if (eventType === 'http') {
           const region = this.options.region;
           const project = this.serverless.service.provider.project;
           const baseUrl = `https://${region}-${project}.cloudfunctions.net`;
-          const path = serviceFunc.handler; // NOTE this might change
+          const path = funcName; // NOTE this might change
           funcResource = `${baseUrl}/${path}`;
         }
 
@@ -99,5 +108,6 @@ const getFunctionNameInService = (funcName, service, stage) => {
   funcNameInService = funcNameInService.replace(service, '');
   funcNameInService = funcNameInService.replace(stage, '');
   funcNameInService = funcNameInService.slice(2, funcNameInService.length);
+
   return funcNameInService;
 };

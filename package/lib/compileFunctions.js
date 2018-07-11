@@ -23,13 +23,15 @@ module.exports = {
 
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);
-
       const funcTemplate = getFunctionTemplate(
         funcObject,
         this.options.region,
+        this.options.stage,
+        this.serverless.service.service,
         `gs://${
-          this.serverless.service.provider.deploymentBucketName
-        }/${this.serverless.service.package.artifactFilePath}`);
+        this.serverless.service.provider.deploymentBucketName
+        }/${this.serverless.service.package.artifactFilePath}`,
+      );
 
       funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
         || _.get(this, 'serverless.service.provider.memorySize')
@@ -109,7 +111,17 @@ const validateEventsProperty = (funcObject, functionName) => {
   }
 };
 
-const getFunctionTemplate = (funcObject, region, sourceArchiveUrl) => { //eslint-disable-line
+const getFunctionTemplate = (funcObject, region, stage, service, sourceArchiveUrl) => { //eslint-disable-line
+  let funcName = funcObject.handler;
+
+  if (funcObject.prependStage) {
+    funcName = `${stage}-${funcName}`;
+  }
+
+  if (funcObject.prependService) {
+    funcName = `${service}-${funcName}`;
+  }
+
   return {
     type: 'cloudfunctions.v1beta2.function',
     name: funcObject.name,
@@ -117,7 +129,8 @@ const getFunctionTemplate = (funcObject, region, sourceArchiveUrl) => { //eslint
       location: region,
       availableMemoryMb: 256,
       timeout: '60s',
-      function: funcObject.handler,
+      entryPoint: funcObject.handler,
+      function: funcName,
       sourceArchiveUrl,
     },
   };
