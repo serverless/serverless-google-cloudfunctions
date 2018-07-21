@@ -7,13 +7,13 @@ module.exports = {
   setDefaults() {
     this.options.stage = _.get(this, 'options.stage')
       || 'dev';
-    
-    // serverless framework is hard-coding us-east-1 region from aws 
+
+    // serverless framework is hard-coding us-east-1 region from aws
     // this is temporary fix for multiple regions
     const region = _.get(this, 'options.region')
       || _.get(this, 'serverless.service.provider.region');
 
-    this.options.region = (!region || region === 'us-east-1') 
+    this.options.region = (!region || region === 'us-east-1')
       ? 'us-central1' : region;
 
     return BbPromise.resolve();

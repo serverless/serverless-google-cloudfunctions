@@ -42,6 +42,5 @@ describe('Utils', () => {
         expect(googleCommand.options.region).toEqual('my-region');
       });
     });
-
   });
 });
