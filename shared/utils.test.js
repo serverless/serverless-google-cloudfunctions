@@ -31,5 +31,17 @@ describe('Utils', () => {
         expect(googleCommand.options.region).toEqual('my-region');
       });
     });
+
+
+    it('should set the provider values for stage and region if provided', () => {
+      googleCommand.serverless.service.provider = {
+        region: 'my-region',
+      };
+
+      return googleCommand.setDefaults().then(() => {
+        expect(googleCommand.options.region).toEqual('my-region');
+      });
+    });
+
   });
 });
