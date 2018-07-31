@@ -102,6 +102,7 @@ describe('CompileFunctions', () => {
         func1: {
           handler: 'func1',
           memorySize: 1024,
+          runtime: 'nodejs8',
           events: [
             { http: 'foo' },
           ],
@@ -113,6 +114,7 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
+          runtime: 'nodejs8',
           function: 'func1',
           availableMemoryMb: 1024,
           timeout: '60s',
@@ -147,6 +149,7 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
+          runtime: 'nodejs8',
           function: 'func1',
           availableMemoryMb: 1024,
           timeout: '60s',
@@ -181,6 +184,7 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
+          runtime: 'nodejs8',
           function: 'func1',
           availableMemoryMb: 256,
           timeout: '120s',
@@ -215,6 +219,7 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
+          runtime: 'nodejs8',
           function: 'func1',
           availableMemoryMb: 256,
           timeout: '120s',
@@ -251,6 +256,7 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
+          runtime: 'nodejs8',
           function: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
@@ -289,6 +295,7 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
+          runtime: 'nodejs8',
           function: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
@@ -331,6 +338,7 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
+          runtime: 'nodejs8',
           function: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
@@ -367,6 +375,7 @@ describe('CompileFunctions', () => {
         name: 'my-service-dev-func1',
         properties: {
           location: 'us-central1',
+          runtime: 'nodejs8',
           function: 'func1',
           availableMemoryMb: 256,
           timeout: '60s',
@@ -418,6 +427,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             location: 'us-central1',
+            runtime: 'nodejs8',
             function: 'func1',
             availableMemoryMb: 256,
             timeout: '60s',
@@ -435,6 +445,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func2',
           properties: {
             location: 'us-central1',
+            runtime: 'nodejs8',
             function: 'func2',
             availableMemoryMb: 256,
             timeout: '60s',

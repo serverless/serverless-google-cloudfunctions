@@ -24,16 +24,26 @@ module.exports = {
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);
 
+      console.log('----------------------------------------------------------')
+      console.log(this.options)
+      console.log('----------------------------------------------------------')
+
       const funcTemplate = getFunctionTemplate(
         funcObject,
         this.options.region,
         `gs://${
-          this.serverless.service.provider.deploymentBucketName
+        this.serverless.service.provider.deploymentBucketName
         }/${this.serverless.service.package.artifactFilePath}`);
 
       funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
         || _.get(this, 'serverless.service.provider.memorySize')
         || 256;
+      funcTemplate.properties.location = _.get(funcObject, 'location')
+        || _.get(this, 'serverless.service.provider.region')
+        || 'us-central1';
+      funcTemplate.properties.runtime = _.get(funcObject, 'runtime')
+        || _.get(this, 'serverless.service.provider.runtime')
+        || 'nodejs8';
       funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
         || _.get(this, 'serverless.service.provider.timeout')
         || '60s';
