@@ -34,6 +34,9 @@ module.exports = {
       funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
         || _.get(this, 'serverless.service.provider.memorySize')
         || 256;
+      funcTemplate.properties.runtime = _.get(funcObject, 'runtime')
+        || _.get(this, 'serverless.service.provider.runtime')
+        || 'nodejs';
       funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
         || _.get(this, 'serverless.service.provider.timeout')
         || '60s';
