@@ -9,6 +9,8 @@ module.exports = {
       || 'dev';
     this.options.region = _.get(this, 'options.region')
       || 'us-central1';
+    this.options.runtime = _.get(this, 'options.runtime')
+      || 'nodejs8';
 
     return BbPromise.resolve();
   },
