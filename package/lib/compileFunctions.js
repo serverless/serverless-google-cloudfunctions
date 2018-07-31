@@ -24,13 +24,9 @@ module.exports = {
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);
 
-      console.log('----------------------------------------------------------')
-      console.log(this.options)
-      console.log('----------------------------------------------------------')
-
       const funcTemplate = getFunctionTemplate(
         funcObject,
-        this.options.region,
+        this.serverless.service.provider.region,
         `gs://${
         this.serverless.service.provider.deploymentBucketName
         }/${this.serverless.service.package.artifactFilePath}`);
