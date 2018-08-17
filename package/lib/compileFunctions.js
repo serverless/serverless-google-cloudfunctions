@@ -43,6 +43,15 @@ module.exports = {
       funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
         || _.get(this, 'serverless.service.provider.timeout')
         || '60s';
+      funcTemplate.properties.environmentVariables = _.merge(
+        _.get(this, 'serverless.service.provider.environment'),
+        funcObject.environment,
+      );
+
+      if (!_.size(funcTemplate.properties.environmentVariables)) {
+        delete funcTemplate.properties.environmentVariables;
+      }
+
       funcTemplate.properties.labels = _.assign({},
         _.get(this, 'serverless.service.provider.labels') || {},
         _.get(funcObject, 'labels') || {},
