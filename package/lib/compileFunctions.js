@@ -45,7 +45,7 @@ module.exports = {
         || '60s';
       funcTemplate.properties.labels = _.assign({},
         _.get(this, 'serverless.service.provider.labels') || {},
-        _.get(funcObject, 'labels') || {},
+        _.get(funcObject, 'labels') || {}
       );
 
       const eventType = Object.keys(funcObject.events[0])[0];
