@@ -48,7 +48,7 @@ module.exports = {
                 return callback();
               })
               .catch((error) => {
-                reject(new Error(error.message));
+                reject(error);
               });
           }, frequency);
         },
@@ -66,8 +66,7 @@ module.exports = {
 const throwErrorIfDeploymentFails = (deployment) => {
   if (deployment.operation.error && deployment.operation.error.errors.length) {
     const errorCode = deployment.operation.error.errors[0].code;
-    const parsedMessage = JSON.parse(deployment.operation.error.errors[0].message);
-    const parsedDetails = JSON.stringify(parsedMessage);
+    const parsedDetails = deployment.operation.error.errors[0].message;
     const errorMessage = [
       `Deployment failed: ${errorCode}\n\n`,
       `     ${parsedDetails}`,
