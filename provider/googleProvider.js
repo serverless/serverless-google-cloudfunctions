@@ -61,7 +61,7 @@ class GoogleProvider {
   }
 
   getAuthClient() {
-    let credentials = this.serverless.service.provider.credentials;
+    let credentials = this.serverless.service.provider.credentials || process.env.GOOGLE_APPLICATION_CREDENTIALS;
     const credParts = credentials.split(path.sep);
 
     if (credParts[0] === '~') {
