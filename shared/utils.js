@@ -7,6 +7,8 @@ module.exports = {
   setDefaults() {
     this.options.stage = _.get(this, 'options.stage')
       || 'dev';
+    this.options.runtime = _.get(this, 'options.runtime')
+      || 'nodejs8';
 
     // serverless framework is hard-coding us-east-1 region from aws
     // this is temporary fix for multiple regions

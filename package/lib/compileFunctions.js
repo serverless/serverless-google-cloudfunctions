@@ -26,20 +26,35 @@ module.exports = {
 
       const funcTemplate = getFunctionTemplate(
         funcObject,
-        this.options.region,
+        this.serverless.service.provider.region,
         `gs://${
-          this.serverless.service.provider.deploymentBucketName
+        this.serverless.service.provider.deploymentBucketName
         }/${this.serverless.service.package.artifactFilePath}`);
 
       funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
         || _.get(this, 'serverless.service.provider.memorySize')
         || 256;
+      funcTemplate.properties.location = _.get(funcObject, 'location')
+        || _.get(this, 'serverless.service.provider.region')
+        || 'us-central1';
+      funcTemplate.properties.runtime = _.get(funcObject, 'runtime')
+        || _.get(this, 'serverless.service.provider.runtime')
+        || 'nodejs8';
       funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
         || _.get(this, 'serverless.service.provider.timeout')
         || '60s';
+      funcTemplate.properties.environmentVariables = _.merge(
+        _.get(this, 'serverless.service.provider.environment'),
+        funcObject.environment,
+      );
+
+      if (!_.size(funcTemplate.properties.environmentVariables)) {
+        delete funcTemplate.properties.environmentVariables;
+      }
+
       funcTemplate.properties.labels = _.assign({},
         _.get(this, 'serverless.service.provider.labels') || {},
-        _.get(funcObject, 'labels') || {},
+        _.get(funcObject, 'labels') || {} // eslint-disable-line comma-dangle
       );
 
       const eventType = Object.keys(funcObject.events[0])[0];
@@ -116,6 +131,7 @@ const getFunctionTemplate = (funcObject, region, sourceArchiveUrl) => { //eslint
     properties: {
       location: region,
       availableMemoryMb: 256,
+      runtime: 'nodejs8',
       timeout: '60s',
       function: funcObject.handler,
       sourceArchiveUrl,
