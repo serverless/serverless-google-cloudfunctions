@@ -54,7 +54,7 @@ module.exports = {
 
       funcTemplate.properties.labels = _.assign({},
         _.get(this, 'serverless.service.provider.labels') || {},
-        _.get(funcObject, 'labels') || {},
+        _.get(funcObject, 'labels') || {} // eslint-disable-line comma-dangle
       );
 
       const eventType = Object.keys(funcObject.events[0])[0];
