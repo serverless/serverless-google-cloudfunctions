@@ -13,6 +13,10 @@ describe('Utils', () => {
     serverless = new Serverless();
     serverless.setProvider('google', new GoogleProvider(serverless));
     googleCommand = new GoogleCommand(serverless, {}, setDefaults);
+    // mocking the standard value passed in from Serverless here
+    googleCommand.serverless.service.provider = {
+      region: 'us-east-1',
+    };
   });
 
   describe('#setDefaults()', () => {
@@ -45,5 +49,10 @@ describe('Utils', () => {
         expect(googleCommand.options.region).toEqual('my-region');
       });
     });
+
+    it('shoud default to the us-central1 region when no region is provided', () => googleCommand
+      .setDefaults().then(() => {
+        expect(googleCommand.options.region).toEqual('us-central1');
+      }));
   });
 });
