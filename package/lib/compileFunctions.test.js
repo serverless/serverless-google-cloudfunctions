@@ -376,6 +376,8 @@ describe('CompileFunctions', () => {
           handler: 'func1',
           environment: {
             TEST_VAR: 'test',
+            TEST_VAR_NUMBER: 123,
+            TEST_VAR_BOOL: false,
           },
           events: [{ http: 'foo' }],
         },
@@ -393,6 +395,8 @@ describe('CompileFunctions', () => {
             availableMemoryMb: 256,
             environmentVariables: {
               TEST_VAR: 'test',
+              TEST_VAR_NUMBER: '123',
+              TEST_VAR_BOOL: 'false',
             },
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
