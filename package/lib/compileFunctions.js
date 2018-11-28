@@ -45,7 +45,7 @@ module.exports = {
         || '60s';
       funcTemplate.properties.environmentVariables = _.merge(
         _.get(this, 'serverless.service.provider.environment'),
-        funcObject.environment,
+        funcObject.environment // eslint-disable-line comma-dangle
       );
 
       if (!_.size(funcTemplate.properties.environmentVariables)) {
