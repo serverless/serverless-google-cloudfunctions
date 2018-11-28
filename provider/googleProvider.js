@@ -7,6 +7,8 @@ const os = require('os');
 const _ = require('lodash');
 const google = require('googleapis').google;
 
+const packageJson = require('../package.json');
+
 const constants = {
   providerName: 'google',
 };
@@ -21,7 +23,18 @@ class GoogleProvider {
     this.provider = this; // only load plugin in a Google service context
     this.serverless.setProvider(constants.providerName, this);
 
+    const serverlessVersion = this.serverless.version;
+    const pluginVersion = packageJson.version;
+    const googleApisVersion = packageJson.dependencies.googleapis;
+
+    google.options({
+      headers: {
+        'User-Agent': `Serverless/${serverlessVersion} Serverless-Google-Provider/${pluginVersion} Googleapis/${googleApisVersion}`,
+      },
+    });
+
     this.sdk = {
+      google,
       deploymentmanager: google.deploymentmanager('v2'),
       storage: google.storage('v1'),
       logging: google.logging('v2'),
