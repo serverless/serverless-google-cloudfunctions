@@ -18,6 +18,7 @@ describe('GoogleProvider', () => {
 
   beforeEach(() => {
     serverless = new Serverless();
+    serverless.version = '1.0.0';
     serverless.service = {
       provider: {
         project: 'example-project',
@@ -58,6 +59,8 @@ describe('GoogleProvider', () => {
     });
 
     it('should set the used SDKs', () => {
+      expect(googleProvider.sdk.google).toBeDefined();
+
       expect(googleProvider.sdk.deploymentmanager)
         .toBeDefined();
 
@@ -69,6 +72,11 @@ describe('GoogleProvider', () => {
 
       expect(googleProvider.sdk.cloudfunctions)
         .toBeDefined();
+    });
+
+    it('should set the google options', () => {
+      expect(google._options.headers['User-Agent']) // eslint-disable-line no-underscore-dangle
+        .toMatch(/Serverless\/.+ Serverless-Google-Provider\/.+ Googleapis\/.+/);
     });
   });
 
