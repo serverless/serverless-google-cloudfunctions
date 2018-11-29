@@ -7,7 +7,8 @@ const os = require('os');
 const _ = require('lodash');
 const google = require('googleapis').google;
 
-const packageJson = require('../package.json');
+const pluginPackageJson = require('../package.json'); // eslint-disable-line import/newline-after-import
+const googleApisPackageJson = require(require.resolve('googleapis/package.json')); // eslint-disable-line import/no-dynamic-require
 
 const constants = {
   providerName: 'google',
@@ -24,8 +25,8 @@ class GoogleProvider {
     this.serverless.setProvider(constants.providerName, this);
 
     const serverlessVersion = this.serverless.version;
-    const pluginVersion = packageJson.version;
-    const googleApisVersion = packageJson.dependencies.googleapis;
+    const pluginVersion = pluginPackageJson.version;
+    const googleApisVersion = googleApisPackageJson.version;
 
     google.options({
       headers: {
