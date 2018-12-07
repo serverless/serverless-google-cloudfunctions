@@ -43,10 +43,12 @@ describe('Utils', () => {
     it('should set the provider values for stage and region if provided', () => {
       googleCommand.serverless.service.provider = {
         region: 'my-region',
+        stage: 'my-stage',
       };
 
       return googleCommand.setDefaults().then(() => {
         expect(googleCommand.options.region).toEqual('my-region');
+        expect(googleCommand.options.stage).toEqual('my-stage');
       });
     });
 
