@@ -238,6 +238,23 @@ describe('CompileFunctions', () => {
       });
     });
 
+    it('should handle an integer timeout value and convert it to a gcp string ending in "s"', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          timeout: '120',
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources[0]
+          .properties.timeout).toEqual('120s');
+      });
+    });
+
     it('should set the labels based on the functions configuration', () => {
       googlePackage.serverless.service.functions = {
         func1: {
