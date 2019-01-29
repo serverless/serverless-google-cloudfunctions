@@ -37,6 +37,20 @@ describe('Utils', () => {
         expect(googleCommand.options.region).toEqual('my-region');
         expect(googleCommand.options.runtime).toEqual('nodejs6');
       });
+
+    });
+
+    it('should handle AWS runtime values where applicable', () => {
+      var runtimes = [['nodejs8.10', 'nodejs8'],
+                      ['python3.7', 'python37'],
+                      ['go1.x', 'go111']];
+      for(var r = 0; r < runtimes.length; r++) {
+        var runtime = runtimes[r];
+        googleCommand.options.runtime = runtime[0];
+        return googleCommand.setDefaults().then(() => {
+          expect(googleCommand.options.runtime).toEqual(runtime[1]);
+        });
+      }
     });
 
 
