@@ -72,7 +72,8 @@ describe('MonitorDeployment', () => {
               'deploymentmanager',
               'deployments',
               'list',
-              { project: 'my-project' })).toEqual(true);
+              { project: 'my-project' },
+            )).toEqual(true);
             expect(deploymentStatus).toEqual('DONE');
           });
       });
@@ -105,7 +106,8 @@ describe('MonitorDeployment', () => {
             'deploymentmanager',
             'deployments',
             'list',
-            { project: 'my-project' })).toEqual(true);
+            { project: 'my-project' },
+          )).toEqual(true);
           expect(error.toString()).toMatch(/Error detail/);
         });
       });
@@ -125,7 +127,8 @@ describe('MonitorDeployment', () => {
               'deploymentmanager',
               'deployments',
               'list',
-              { project: 'my-project' })).toEqual(true);
+              { project: 'my-project' },
+            )).toEqual(true);
             expect(deploymentStatus).toEqual('DONE');
           });
       });
@@ -147,7 +150,8 @@ describe('MonitorDeployment', () => {
               'deploymentmanager',
               'deployments',
               'list',
-              { project: 'my-project' })).toEqual(true);
+              { project: 'my-project' },
+            )).toEqual(true);
             expect(deploymentStatus).toEqual('DONE');
           });
       });

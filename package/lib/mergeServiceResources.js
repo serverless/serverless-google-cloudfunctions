@@ -7,14 +7,15 @@ const BbPromise = require('bluebird');
 
 module.exports = {
   mergeServiceResources() {
-    const resources = this.serverless.service.resources;
+    const { resources } = this.serverless.service;
 
     if ((typeof resources === 'undefined') || _.isEmpty(resources)) return BbPromise.resolve();
 
     _.mergeWith(
       this.serverless.service.provider.compiledConfigurationTemplate,
       resources,
-      mergeCustomizer);
+      mergeCustomizer,
+    );
 
     return BbPromise.resolve();
   },

@@ -82,7 +82,8 @@ describe('InvokeFunction', () => {
             resource: {
               data: '',
             },
-          })).toEqual(true);
+          },
+        )).toEqual(true);
       });
     });
 
@@ -102,7 +103,8 @@ describe('InvokeFunction', () => {
             resource: {
               data: googleInvoke.options.data,
             },
-          })).toEqual(true);
+          },
+        )).toEqual(true);
       });
     });
 
@@ -130,8 +132,7 @@ describe('InvokeFunction', () => {
         result: 'Foo bar',
       };
 
-      const expectedOutput =
-        `${chalk.grey('wasdqwerty')} Foo bar`;
+      const expectedOutput = `${chalk.grey('wasdqwerty')} Foo bar`;
 
       return googleInvoke.printResult(result).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);
@@ -141,8 +142,7 @@ describe('InvokeFunction', () => {
     it('should print an error message to the console when no result was received', () => {
       const result = {};
 
-      const expectedOutput =
-        `${chalk.grey('error')} An error occurred while executing your function...`;
+      const expectedOutput = `${chalk.grey('error')} An error occurred while executing your function...`;
 
       return googleInvoke.printResult(result).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);

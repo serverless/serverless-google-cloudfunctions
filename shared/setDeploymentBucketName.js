@@ -6,8 +6,8 @@ const _ = require('lodash');
 module.exports = {
   setDeploymentBucketName() {
     // set a default name for the deployment bucket
-    const service = this.serverless.service.service;
-    const stage = this.options.stage;
+    const { service } = this.serverless.service;
+    const { stage } = this.options;
     const timestamp = (+new Date());
     const name = `sls-${service}-${stage}-${timestamp}`;
 

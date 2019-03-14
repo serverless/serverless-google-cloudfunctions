@@ -28,8 +28,9 @@ module.exports = {
         funcObject,
         this.serverless.service.provider.region,
         `gs://${
-        this.serverless.service.provider.deploymentBucketName
-        }/${this.serverless.service.package.artifactFilePath}`);
+          this.serverless.service.provider.deploymentBucketName
+        }/${this.serverless.service.package.artifactFilePath}`,
+      );
 
       funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
         || _.get(this, 'serverless.service.provider.memorySize')
@@ -54,8 +55,7 @@ module.exports = {
 
       funcTemplate.properties.labels = _.assign({},
         _.get(this, 'serverless.service.provider.labels') || {},
-        _.get(funcObject, 'labels') || {} // eslint-disable-line comma-dangle
-      );
+        _.get(funcObject, 'labels') || {});
 
       const eventType = Object.keys(funcObject.events[0])[0];
 
@@ -68,7 +68,7 @@ module.exports = {
       if (eventType === 'event') {
         const type = funcObject.events[0].event.eventType;
         const path = funcObject.events[0].event.path; //eslint-disable-line
-        const resource = funcObject.events[0].event.resource;
+        const { resource } = funcObject.events[0].event;
 
         funcTemplate.properties.eventTrigger = {};
         funcTemplate.properties.eventTrigger.eventType = type;

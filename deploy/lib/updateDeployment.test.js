@@ -35,7 +35,8 @@ describe('UpdateDeployment', () => {
     configurationTemplateUpdateFilePath = path.join(
       serverless.config.servicePath,
       '.serverless',
-      'configuration-template-update.yml');
+      'configuration-template-update.yml',
+    );
   });
 
   afterEach(() => {
@@ -62,8 +63,7 @@ describe('UpdateDeployment', () => {
       .updateDeployment().then(() => {
         expect(getDeploymentStub.calledOnce).toEqual(true);
         expect(updateStub.calledAfter(getDeploymentStub));
-      }),
-    );
+      }));
   });
 
   describe('#getDeployment()', () => {

@@ -5,7 +5,7 @@ const fs = require('fs');
 const os = require('os');
 
 const _ = require('lodash');
-const google = require('googleapis').google;
+const { google } = require('googleapis');
 
 const pluginPackageJson = require('../package.json'); // eslint-disable-line import/newline-after-import
 const googleApisPackageJson = require(require.resolve('googleapis/package.json')); // eslint-disable-line import/no-dynamic-require

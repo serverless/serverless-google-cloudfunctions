@@ -15,7 +15,7 @@ module.exports = {
   },
 
   getResources() {
-    const project = this.serverless.service.provider.project;
+    const { project } = this.serverless.service.provider;
 
     return this.provider.request('deploymentmanager', 'resources', 'list', {
       project,
@@ -39,7 +39,8 @@ module.exports = {
     _.forEach(resources.resources, (resource) => {
       if (resource.type === 'cloudfunctions.v1beta2.function') {
         const serviceFuncName = getFunctionNameInService(
-          resource.name, this.serverless.service.service, this.options.stage);
+          resource.name, this.serverless.service.service, this.options.stage,
+        );
         const serviceFunc = this.serverless.service.getFunction(serviceFuncName);
         const eventType = Object.keys(serviceFunc.events[0])[0];
         const funcEventConfig = serviceFunc.events[0][eventType];
@@ -47,8 +48,8 @@ module.exports = {
         let funcResource = funcEventConfig.resource || null;
 
         if (eventType === 'http') {
-          const region = this.options.region;
-          const project = this.serverless.service.provider.project;
+          const { region } = this.options;
+          const { project } = this.serverless.service.provider;
           const baseUrl = `https://${region}-${project}.cloudfunctions.net`;
           const path = serviceFunc.handler; // NOTE this might change
           funcResource = `${baseUrl}/${path}`;

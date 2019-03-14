@@ -4,7 +4,7 @@ const fs = require('fs');
 const os = require('os');
 
 const sinon = require('sinon');
-const google = require('googleapis').google;
+const { google } = require('googleapis');
 
 const GoogleProvider = require('./googleProvider');
 const Serverless = require('../test/serverless');
@@ -110,8 +110,7 @@ describe('GoogleProvider', () => {
     });
 
     it('should perform the given request', () => {
-      googleProvider.sdk.service.resource.method.bind = () =>
-        sinon.stub().resolves({ data: 'result' });
+      googleProvider.sdk.service.resource.method.bind = () => sinon.stub().resolves({ data: 'result' });
 
       return googleProvider.request('service', 'resource', 'method', {}).then((result) => {
         expect(result).toEqual('result');
@@ -119,16 +118,14 @@ describe('GoogleProvider', () => {
     });
 
     it('should throw a custom error message when the project configuration is wrong', () => {
-      googleProvider.sdk.service.resource.method.bind = () =>
-        sinon.stub().rejects({ errors: [{ message: 'project 1043443644444' }] });
+      googleProvider.sdk.service.resource.method.bind = () => sinon.stub().rejects({ errors: [{ message: 'project 1043443644444' }] });
 
       return expect(googleProvider.request('service', 'resource', 'method', {}))
         .rejects.toThrow(/Incorrect configuration/);
     });
 
     it('should re-throw other errors', () => {
-      googleProvider.sdk.service.resource.method.bind = () =>
-        sinon.stub().rejects(new Error('some error message'));
+      googleProvider.sdk.service.resource.method.bind = () => sinon.stub().rejects(new Error('some error message'));
 
       return expect(googleProvider.request('service', 'resource', 'method', {}))
         .rejects.toThrow('some error message');

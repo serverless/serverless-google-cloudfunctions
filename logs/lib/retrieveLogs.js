@@ -13,8 +13,8 @@ module.exports = {
   },
 
   getLogs() {
-    const project = this.serverless.service.provider.project;
-    const region = this.options.region;
+    const { project } = this.serverless.service.provider;
+    const { region } = this.options;
     let func = this.options.function;
     const pageSize = this.options.count || 10;
 

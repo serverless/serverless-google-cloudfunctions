@@ -16,7 +16,9 @@ module.exports = {
         __dirname,
         '..',
         'templates',
-        'core-configuration-template.yml'));
+        'core-configuration-template.yml',
+      ),
+    );
 
     const bucket = deploymentTemplate.resources.find(findDeploymentBucket);
 

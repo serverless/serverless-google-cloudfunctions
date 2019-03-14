@@ -59,11 +59,13 @@ describe('RemoveDeployment', () => {
           'deploymentmanager',
           'deployments',
           'delete',
-          params)).toEqual(true);
+          params,
+        )).toEqual(true);
         expect(monitorDeploymentStub.calledWithExactly(
           'sls-my-service-dev',
           'remove',
-          5000)).toEqual(true);
+          5000,
+        )).toEqual(true);
       });
     });
   });

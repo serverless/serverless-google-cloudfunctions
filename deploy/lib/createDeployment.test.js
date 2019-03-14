@@ -35,7 +35,8 @@ describe('CreateDeployment', () => {
     configurationTemplateCreateFilePath = path.join(
       serverless.config.servicePath,
       '.serverless',
-      'configuration-template-create.yml');
+      'configuration-template-create.yml',
+    );
   });
 
   afterEach(() => {
@@ -62,8 +63,7 @@ describe('CreateDeployment', () => {
       .createDeployment().then(() => {
         expect(checkForExistingDeploymentStub.calledOnce).toEqual(true);
         expect(createIfNotExistsStub.calledAfter(checkForExistingDeploymentStub));
-      }),
-    );
+      }));
   });
 
   describe('#checkForExistingDeployment()', () => {

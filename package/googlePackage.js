@@ -30,7 +30,8 @@ class GooglePackage {
       generateArtifactDirectoryName,
       compileFunctions,
       mergeServiceResources,
-      saveUpdateTemplateFile);
+      saveUpdateTemplateFile,
+    );
 
     this.hooks = {
       'package:cleanup': () => BbPromise.bind(this)

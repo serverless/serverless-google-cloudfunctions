@@ -118,7 +118,8 @@ describe('CleanupDeploymentBucket', () => {
           'list',
           {
             bucket: 'sls-my-service-dev-12345678',
-          })).toEqual(true);
+          },
+        )).toEqual(true);
       });
     });
 
@@ -154,7 +155,8 @@ describe('CleanupDeploymentBucket', () => {
           'list',
           {
             bucket: 'sls-my-service-dev-12345678',
-          })).toEqual(true);
+          },
+        )).toEqual(true);
       });
     });
 
@@ -173,7 +175,8 @@ describe('CleanupDeploymentBucket', () => {
           'list',
           {
             bucket: 'sls-my-service-dev-12345678',
-          })).toEqual(true);
+          },
+        )).toEqual(true);
       });
     });
   });

@@ -94,7 +94,8 @@ describe('DisplayServiceInfo', () => {
           {
             project: 'my-project',
             deployment: 'sls-my-service-dev',
-          })).toEqual(true);
+          },
+        )).toEqual(true);
       }));
   });
 

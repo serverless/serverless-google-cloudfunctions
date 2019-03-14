@@ -58,7 +58,8 @@ module.exports = {
           this.serverless.cli.consoleLog('');
           this.serverless.cli.log('Done...');
           resolve(deploymentStatus);
-        });
+        },
+      );
     });
   },
 };

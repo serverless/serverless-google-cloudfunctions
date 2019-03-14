@@ -30,7 +30,8 @@ class GoogleLogs {
       this,
       validate,
       setDefaults,
-      retrieveLogs);
+      retrieveLogs,
+    );
 
     this.hooks = {
       'before:logs:logs': () => BbPromise.bind(this)
