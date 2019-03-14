@@ -26,10 +26,10 @@ describe('GoogleProvider', () => {
       },
     };
     setProviderStub = sinon.stub(serverless, 'setProvider').returns();
-    readFileSyncStub = sinon.stub(fs, 'readFileSync')
+    readFileSyncStub = sinon
+      .stub(fs, 'readFileSync')
       .returns('{"client_email": "foo@bar.de","private_key": "wasdqwerty"}');
-    homedirStub = sinon.stub(os, 'homedir')
-      .returns('/root');
+    homedirStub = sinon.stub(os, 'homedir').returns('/root');
     googleProvider = new GoogleProvider(serverless);
   });
 
@@ -61,17 +61,13 @@ describe('GoogleProvider', () => {
     it('should set the used SDKs', () => {
       expect(googleProvider.sdk.google).toBeDefined();
 
-      expect(googleProvider.sdk.deploymentmanager)
-        .toBeDefined();
+      expect(googleProvider.sdk.deploymentmanager).toBeDefined();
 
-      expect(googleProvider.sdk.storage)
-        .toBeDefined();
+      expect(googleProvider.sdk.storage).toBeDefined();
 
-      expect(googleProvider.sdk.logging)
-        .toBeDefined();
+      expect(googleProvider.sdk.logging).toBeDefined();
 
-      expect(googleProvider.sdk.cloudfunctions)
-        .toBeDefined();
+      expect(googleProvider.sdk.cloudfunctions).toBeDefined();
     });
 
     it('should set the google options', () => {
@@ -120,15 +116,17 @@ describe('GoogleProvider', () => {
     it('should throw a custom error message when the project configuration is wrong', () => {
       googleProvider.sdk.service.resource.method.bind = () => sinon.stub().rejects({ errors: [{ message: 'project 1043443644444' }] });
 
-      return expect(googleProvider.request('service', 'resource', 'method', {}))
-        .rejects.toThrow(/Incorrect configuration/);
+      return expect(googleProvider.request('service', 'resource', 'method', {})).rejects.toThrow(
+        /Incorrect configuration/,
+      );
     });
 
     it('should re-throw other errors', () => {
       googleProvider.sdk.service.resource.method.bind = () => sinon.stub().rejects(new Error('some error message'));
 
-      return expect(googleProvider.request('service', 'resource', 'method', {}))
-        .rejects.toThrow('some error message');
+      return expect(googleProvider.request('service', 'resource', 'method', {})).rejects.toThrow(
+        'some error message',
+      );
     });
   });
 
@@ -136,8 +134,7 @@ describe('GoogleProvider', () => {
     it('should return a new authClient', () => {
       const authClient = googleProvider.getAuthClient();
 
-      expect(readFileSyncStub.calledWithExactly('/root/.gcloud/project-1234.json'))
-        .toEqual(true);
+      expect(readFileSyncStub.calledWithExactly('/root/.gcloud/project-1234.json')).toEqual(true);
       expect(authClient).toBeInstanceOf(google.auth.JWT);
     });
 
@@ -147,8 +144,7 @@ describe('GoogleProvider', () => {
       const authClient = googleProvider.getAuthClient();
 
       expect(homedirStub.calledOnce).toEqual(true);
-      expect(readFileSyncStub.calledWithExactly('/root/.gcloud/project-1234.json'))
-        .toEqual(true);
+      expect(readFileSyncStub.calledWithExactly('/root/.gcloud/project-1234.json')).toEqual(true);
       expect(authClient).toBeInstanceOf(google.auth.JWT);
     });
   });

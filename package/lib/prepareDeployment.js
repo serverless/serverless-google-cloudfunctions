@@ -12,12 +12,7 @@ module.exports = {
     let deploymentTemplate = this.serverless.service.provider.compiledConfigurationTemplate;
 
     deploymentTemplate = this.serverless.utils.readFileSync(
-      path.join(
-        __dirname,
-        '..',
-        'templates',
-        'core-configuration-template.yml',
-      ),
+      path.join(__dirname, '..', 'templates', 'core-configuration-template.yml'),
     );
 
     const bucket = deploymentTemplate.resources.find(findDeploymentBucket);

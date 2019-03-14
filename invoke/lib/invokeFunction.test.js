@@ -38,10 +38,8 @@ describe('InvokeFunction', () => {
     let printResultStub;
 
     beforeEach(() => {
-      invokeStub = sinon.stub(googleInvoke, 'invoke')
-        .returns(BbPromise.resolve());
-      printResultStub = sinon.stub(googleInvoke, 'printResult')
-        .returns(BbPromise.resolve());
+      invokeStub = sinon.stub(googleInvoke, 'invoke').returns(BbPromise.resolve());
+      printResultStub = sinon.stub(googleInvoke, 'printResult').returns(BbPromise.resolve());
     });
 
     afterEach(() => {
@@ -49,11 +47,10 @@ describe('InvokeFunction', () => {
       googleInvoke.printResult.restore();
     });
 
-    it('should run promise chain', () => googleInvoke
-      .invokeFunction().then(() => {
-        expect(invokeStub.calledOnce).toEqual(true);
-        expect(printResultStub.calledAfter(invokeStub));
-      }));
+    it('should run promise chain', () => googleInvoke.invokeFunction().then(() => {
+      expect(invokeStub.calledOnce).toEqual(true);
+      expect(printResultStub.calledAfter(invokeStub));
+    }));
   });
 
   describe('#invoke()', () => {
@@ -71,19 +68,21 @@ describe('InvokeFunction', () => {
       googleInvoke.options.function = 'func1';
 
       return googleInvoke.invoke().then(() => {
-        expect(requestStub.calledWithExactly(
-          'cloudfunctions',
-          'projects',
-          'locations',
-          'functions',
-          'call',
-          {
-            name: 'projects/my-project/locations/us-central1/functions/foo',
-            resource: {
-              data: '',
+        expect(
+          requestStub.calledWithExactly(
+            'cloudfunctions',
+            'projects',
+            'locations',
+            'functions',
+            'call',
+            {
+              name: 'projects/my-project/locations/us-central1/functions/foo',
+              resource: {
+                data: '',
+              },
             },
-          },
-        )).toEqual(true);
+          ),
+        ).toEqual(true);
       });
     });
 
@@ -92,19 +91,21 @@ describe('InvokeFunction', () => {
       googleInvoke.options.data = '{ "some": "json" }';
 
       return googleInvoke.invoke().then(() => {
-        expect(requestStub.calledWithExactly(
-          'cloudfunctions',
-          'projects',
-          'locations',
-          'functions',
-          'call',
-          {
-            name: 'projects/my-project/locations/us-central1/functions/foo',
-            resource: {
-              data: googleInvoke.options.data,
+        expect(
+          requestStub.calledWithExactly(
+            'cloudfunctions',
+            'projects',
+            'locations',
+            'functions',
+            'call',
+            {
+              name: 'projects/my-project/locations/us-central1/functions/foo',
+              resource: {
+                data: googleInvoke.options.data,
+              },
             },
-          },
-        )).toEqual(true);
+          ),
+        ).toEqual(true);
       });
     });
 
@@ -142,7 +143,9 @@ describe('InvokeFunction', () => {
     it('should print an error message to the console when no result was received', () => {
       const result = {};
 
-      const expectedOutput = `${chalk.grey('error')} An error occurred while executing your function...`;
+      const expectedOutput = `${chalk.grey(
+        'error',
+      )} An error occurred while executing your function...`;
 
       return googleInvoke.printResult(result).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);

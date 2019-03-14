@@ -40,8 +40,7 @@ class GoogleDeploy {
         .then(this.uploadArtifacts)
         .then(this.updateDeployment),
 
-      'after:deploy:deploy': () => BbPromise.bind(this)
-        .then(this.cleanupDeploymentBucket),
+      'after:deploy:deploy': () => BbPromise.bind(this).then(this.cleanupDeploymentBucket),
     };
   }
 }

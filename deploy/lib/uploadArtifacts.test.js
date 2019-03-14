@@ -46,66 +46,54 @@ describe('UploadArtifacts', () => {
   });
 
   describe('#uploadArtifacts()', () => {
-    it('should upload corresponding objects to deployment bucket', () => googleDeploy
-      .uploadArtifacts().then(() => {
-        expect(requestStub.calledWithExactly(
-          'storage',
-          'objects',
-          'insert',
-          {
-            bucket: 'sls-my-service-dev-12345678',
-            resource: {
-              name: '/some-file-path',
-              contentType: 'application/octet-stream',
-            },
-            media: {
-              mimeType: 'application/octet-stream',
-              body: fs.createReadStream('artifact.zip'),
-            },
+    it('should upload corresponding objects to deployment bucket', () => googleDeploy.uploadArtifacts().then(() => {
+      expect(
+        requestStub.calledWithExactly('storage', 'objects', 'insert', {
+          bucket: 'sls-my-service-dev-12345678',
+          resource: {
+            name: '/some-file-path',
+            contentType: 'application/octet-stream',
           },
-        )).toEqual(true);
-      }));
+          media: {
+            mimeType: 'application/octet-stream',
+            body: fs.createReadStream('artifact.zip'),
+          },
+        }),
+      ).toEqual(true);
+    }));
 
-    it('should log info messages', () => googleDeploy
-      .uploadArtifacts().then(() => {
-        expect(consoleLogStub.called).toEqual(true);
-        expect(requestStub.calledWithExactly(
-          'storage',
-          'objects',
-          'insert',
-          {
-            bucket: 'sls-my-service-dev-12345678',
-            resource: {
-              name: '/some-file-path',
-              contentType: 'application/octet-stream',
-            },
-            media: {
-              mimeType: 'application/octet-stream',
-              body: fs.createReadStream('artifact.zip'),
-            },
+    it('should log info messages', () => googleDeploy.uploadArtifacts().then(() => {
+      expect(consoleLogStub.called).toEqual(true);
+      expect(
+        requestStub.calledWithExactly('storage', 'objects', 'insert', {
+          bucket: 'sls-my-service-dev-12345678',
+          resource: {
+            name: '/some-file-path',
+            contentType: 'application/octet-stream',
           },
-        )).toEqual(true);
-      }));
+          media: {
+            mimeType: 'application/octet-stream',
+            body: fs.createReadStream('artifact.zip'),
+          },
+        }),
+      ).toEqual(true);
+    }));
 
-    it('should read artifact file as read stream', () => googleDeploy
-      .uploadArtifacts().then(() => {
-        expect(createReadStreamStub.calledOnce).toEqual(true);
-        expect(requestStub.calledWithExactly(
-          'storage',
-          'objects',
-          'insert',
-          {
-            bucket: 'sls-my-service-dev-12345678',
-            resource: {
-              name: '/some-file-path',
-              contentType: 'application/octet-stream',
-            },
-            media: {
-              mimeType: 'application/octet-stream',
-              body: fs.createReadStream('artifact.zip'),
-            },
+    it('should read artifact file as read stream', () => googleDeploy.uploadArtifacts().then(() => {
+      expect(createReadStreamStub.calledOnce).toEqual(true);
+      expect(
+        requestStub.calledWithExactly('storage', 'objects', 'insert', {
+          bucket: 'sls-my-service-dev-12345678',
+          resource: {
+            name: '/some-file-path',
+            contentType: 'application/octet-stream',
           },
-        )).toEqual(true);
-      }));
+          media: {
+            mimeType: 'application/octet-stream',
+            body: fs.createReadStream('artifact.zip'),
+          },
+        }),
+      ).toEqual(true);
+    }));
   });
 });

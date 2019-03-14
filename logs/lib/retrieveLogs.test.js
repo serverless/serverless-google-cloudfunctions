@@ -38,10 +38,8 @@ describe('RetrieveLogs', () => {
     let printLogsStub;
 
     beforeEach(() => {
-      getLogsStub = sinon.stub(googleLogs, 'getLogs')
-        .returns(BbPromise.resolve());
-      printLogsStub = sinon.stub(googleLogs, 'printLogs')
-        .returns(BbPromise.resolve());
+      getLogsStub = sinon.stub(googleLogs, 'getLogs').returns(BbPromise.resolve());
+      printLogsStub = sinon.stub(googleLogs, 'printLogs').returns(BbPromise.resolve());
     });
 
     afterEach(() => {
@@ -49,11 +47,10 @@ describe('RetrieveLogs', () => {
       googleLogs.printLogs.restore();
     });
 
-    it('should run promise chain', () => googleLogs
-      .retrieveLogs().then(() => {
-        expect(getLogsStub.calledOnce).toEqual(true);
-        expect(printLogsStub.calledAfter(getLogsStub));
-      }));
+    it('should run promise chain', () => googleLogs.retrieveLogs().then(() => {
+      expect(getLogsStub.calledOnce).toEqual(true);
+      expect(printLogsStub.calledAfter(getLogsStub));
+    }));
   });
 
   describe('#getLogs()', () => {
@@ -71,19 +68,14 @@ describe('RetrieveLogs', () => {
       googleLogs.options.function = 'func1';
 
       return googleLogs.getLogs().then(() => {
-        expect(requestStub.calledWithExactly(
-          'logging',
-          'entries',
-          'list',
-          {
+        expect(
+          requestStub.calledWithExactly('logging', 'entries', 'list', {
             filter: 'Function execution foo us-central1',
             orderBy: 'timestamp desc',
-            resourceNames: [
-              'projects/my-project',
-            ],
+            resourceNames: ['projects/my-project'],
             pageSize: 10,
-          },
-        )).toEqual(true);
+          }),
+        ).toEqual(true);
       });
     });
 
@@ -92,19 +84,14 @@ describe('RetrieveLogs', () => {
       googleLogs.options.count = 100;
 
       return googleLogs.getLogs().then(() => {
-        expect(requestStub.calledWithExactly(
-          'logging',
-          'entries',
-          'list',
-          {
+        expect(
+          requestStub.calledWithExactly('logging', 'entries', 'list', {
             filter: 'Function execution foo us-central1',
             orderBy: 'timestamp desc',
-            resourceNames: [
-              'projects/my-project',
-            ],
+            resourceNames: ['projects/my-project'],
             pageSize: googleLogs.options.count,
-          },
-        )).toEqual(true);
+          }),
+        ).toEqual(true);
       });
     });
 

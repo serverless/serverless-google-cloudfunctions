@@ -9,7 +9,7 @@ module.exports = {
   mergeServiceResources() {
     const { resources } = this.serverless.service;
 
-    if ((typeof resources === 'undefined') || _.isEmpty(resources)) return BbPromise.resolve();
+    if (typeof resources === 'undefined' || _.isEmpty(resources)) return BbPromise.resolve();
 
     _.mergeWith(
       this.serverless.service.provider.compiledConfigurationTemplate,

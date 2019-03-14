@@ -20,12 +20,11 @@ describe('Utils', () => {
   });
 
   describe('#setDefaults()', () => {
-    it('should set default values for options if not provided', () => googleCommand
-      .setDefaults().then(() => {
-        expect(googleCommand.options.stage).toEqual('dev');
-        expect(googleCommand.options.region).toEqual('us-central1');
-        expect(googleCommand.options.runtime).toEqual('nodejs8');
-      }));
+    it('should set default values for options if not provided', () => googleCommand.setDefaults().then(() => {
+      expect(googleCommand.options.stage).toEqual('dev');
+      expect(googleCommand.options.region).toEqual('us-central1');
+      expect(googleCommand.options.runtime).toEqual('nodejs8');
+    }));
 
     it('should set the options when they are provided', () => {
       googleCommand.options.stage = 'my-stage';
@@ -39,7 +38,6 @@ describe('Utils', () => {
       });
     });
 
-
     it('should set the provider values for stage and region if provided', () => {
       googleCommand.serverless.service.provider = {
         region: 'my-region',
@@ -52,9 +50,8 @@ describe('Utils', () => {
       });
     });
 
-    it('shoud default to the us-central1 region when no region is provided', () => googleCommand
-      .setDefaults().then(() => {
-        expect(googleCommand.options.region).toEqual('us-central1');
-      }));
+    it('shoud default to the us-central1 region when no region is provided', () => googleCommand.setDefaults().then(() => {
+      expect(googleCommand.options.region).toEqual('us-central1');
+    }));
   });
 });

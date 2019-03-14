@@ -48,9 +48,11 @@ describe('CreateDeployment', () => {
     let createIfNotExistsStub;
 
     beforeEach(() => {
-      checkForExistingDeploymentStub = sinon.stub(googleDeploy, 'checkForExistingDeployment')
+      checkForExistingDeploymentStub = sinon
+        .stub(googleDeploy, 'checkForExistingDeployment')
         .returns(BbPromise.resolve());
-      createIfNotExistsStub = sinon.stub(googleDeploy, 'createIfNotExists')
+      createIfNotExistsStub = sinon
+        .stub(googleDeploy, 'createIfNotExists')
         .returns(BbPromise.resolve());
     });
 
@@ -59,11 +61,10 @@ describe('CreateDeployment', () => {
       googleDeploy.createIfNotExists.restore();
     });
 
-    it('should run promise chain', () => googleDeploy
-      .createDeployment().then(() => {
-        expect(checkForExistingDeploymentStub.calledOnce).toEqual(true);
-        expect(createIfNotExistsStub.calledAfter(checkForExistingDeploymentStub));
-      }));
+    it('should run promise chain', () => googleDeploy.createDeployment().then(() => {
+      expect(checkForExistingDeploymentStub.calledOnce).toEqual(true);
+      expect(createIfNotExistsStub.calledAfter(checkForExistingDeploymentStub));
+    }));
   });
 
   describe('#checkForExistingDeployment()', () => {
@@ -72,51 +73,43 @@ describe('CreateDeployment', () => {
 
       return googleDeploy.checkForExistingDeployment().then((foundDeployment) => {
         expect(foundDeployment).toEqual(undefined);
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'deployments',
-          'list',
-          { project: 'my-project' },
-        )).toEqual(true);
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
+            project: 'my-project',
+          }),
+        ).toEqual(true);
       });
     });
 
     it('should return "undefined" if deployments do not contain deployment', () => {
       const response = {
-        deployments: [
-          { name: 'some-other-deployment' },
-        ],
+        deployments: [{ name: 'some-other-deployment' }],
       };
       requestStub.returns(BbPromise.resolve(response));
 
       return googleDeploy.checkForExistingDeployment().then((foundDeployment) => {
         expect(foundDeployment).toEqual(undefined);
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'deployments',
-          'list',
-          { project: 'my-project' },
-        )).toEqual(true);
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
+            project: 'my-project',
+          }),
+        ).toEqual(true);
       });
     });
 
     it('should find the existing deployment', () => {
       const response = {
-        deployments: [
-          { name: 'sls-my-service-dev' },
-          { name: 'some-other-deployment' },
-        ],
+        deployments: [{ name: 'sls-my-service-dev' }, { name: 'some-other-deployment' }],
       };
       requestStub.returns(BbPromise.resolve(response));
 
       return googleDeploy.checkForExistingDeployment().then((foundDeployment) => {
         expect(foundDeployment).toEqual(response.deployments[0]);
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'deployments',
-          'list',
-          { project: 'my-project' },
-        )).toEqual(true);
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
+            project: 'my-project',
+          }),
+        ).toEqual(true);
       });
     });
   });
@@ -129,7 +122,8 @@ describe('CreateDeployment', () => {
     beforeEach(() => {
       consoleLogStub = sinon.stub(googleDeploy.serverless.cli, 'log').returns();
       readFileSyncStub = sinon.stub(fs, 'readFileSync').returns('some content');
-      monitorDeploymentStub = sinon.stub(googleDeploy, 'monitorDeployment')
+      monitorDeploymentStub = sinon
+        .stub(googleDeploy, 'monitorDeployment')
         .returns(BbPromise.resolve());
     });
 
@@ -166,17 +160,12 @@ describe('CreateDeployment', () => {
       return googleDeploy.createIfNotExists(foundDeployment).then(() => {
         expect(consoleLogStub.calledOnce).toEqual(true);
         expect(readFileSyncStub.called).toEqual(true);
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'deployments',
-          'insert',
-          params,
-        )).toEqual(true);
-        expect(monitorDeploymentStub.calledWithExactly(
-          'sls-my-service-dev',
-          'create',
-          5000,
-        )).toEqual(true);
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'deployments', 'insert', params),
+        ).toEqual(true);
+        expect(
+          monitorDeploymentStub.calledWithExactly('sls-my-service-dev', 'create', 5000),
+        ).toEqual(true);
       });
     });
   });
