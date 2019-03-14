@@ -26,7 +26,8 @@ class GoogleDeploy {
       monitorDeployment,
       uploadArtifacts,
       updateDeployment,
-      cleanupDeploymentBucket);
+      cleanupDeploymentBucket,
+    );
 
     this.hooks = {
       'before:deploy:deploy': () => BbPromise.bind(this)
@@ -39,8 +40,7 @@ class GoogleDeploy {
         .then(this.uploadArtifacts)
         .then(this.updateDeployment),
 
-      'after:deploy:deploy': () => BbPromise.bind(this)
-        .then(this.cleanupDeploymentBucket),
+      'after:deploy:deploy': () => BbPromise.bind(this).then(this.cleanupDeploymentBucket),
     };
   }
 }

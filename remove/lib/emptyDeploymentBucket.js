@@ -14,12 +14,11 @@ module.exports = {
       bucket: this.serverless.service.provider.deploymentBucketName,
     };
 
-    return this.provider.request('storage', 'objects', 'list', params)
-      .then((response) => {
-        if (!response.items || !response.items.length) return BbPromise.resolve([]);
+    return this.provider.request('storage', 'objects', 'list', params).then((response) => {
+      if (!response.items || !response.items.length) return BbPromise.resolve([]);
 
-        return BbPromise.resolve(response.items);
-      });
+      return BbPromise.resolve(response.items);
+    });
   },
 
   removeObjects(objectsToRemove) {

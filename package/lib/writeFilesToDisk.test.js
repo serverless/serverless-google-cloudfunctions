@@ -46,10 +46,12 @@ describe('WriteFilesToDisk', () => {
       );
 
       return googlePackage.saveCreateTemplateFile().then(() => {
-        expect(writeFileSyncStub.calledWithExactly(
-          createFilePath,
-          googlePackage.serverless.service.provider.compiledConfigurationTemplate,
-        )).toEqual(true);
+        expect(
+          writeFileSyncStub.calledWithExactly(
+            createFilePath,
+            googlePackage.serverless.service.provider.compiledConfigurationTemplate,
+          ),
+        ).toEqual(true);
       });
     });
   });
@@ -63,10 +65,12 @@ describe('WriteFilesToDisk', () => {
       );
 
       return googlePackage.saveUpdateTemplateFile().then(() => {
-        expect(writeFileSyncStub.calledWithExactly(
-          updateFilePath,
-          googlePackage.serverless.service.provider.compiledConfigurationTemplate,
-        )).toEqual(true);
+        expect(
+          writeFileSyncStub.calledWithExactly(
+            updateFilePath,
+            googlePackage.serverless.service.provider.compiledConfigurationTemplate,
+          ),
+        ).toEqual(true);
       });
     });
   });

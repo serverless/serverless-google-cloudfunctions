@@ -18,9 +18,7 @@ describe('DisplayServiceInfo', () => {
     serverless.service.functions = {
       func1: {
         handler: 'handler',
-        events: [
-          { http: 'foo' },
-        ],
+        events: [{ http: 'foo' }],
       },
       func2: {
         handler: 'handler',
@@ -52,12 +50,9 @@ describe('DisplayServiceInfo', () => {
     let printInfoStub;
 
     beforeEach(() => {
-      getResourcesStub = sinon.stub(googleInfo, 'getResources')
-        .returns(BbPromise.resolve());
-      gatherDataStub = sinon.stub(googleInfo, 'gatherData')
-        .returns(BbPromise.resolve());
-      printInfoStub = sinon.stub(googleInfo, 'printInfo')
-        .returns(BbPromise.resolve());
+      getResourcesStub = sinon.stub(googleInfo, 'getResources').returns(BbPromise.resolve());
+      gatherDataStub = sinon.stub(googleInfo, 'gatherData').returns(BbPromise.resolve());
+      printInfoStub = sinon.stub(googleInfo, 'printInfo').returns(BbPromise.resolve());
     });
 
     afterEach(() => {
@@ -66,12 +61,11 @@ describe('DisplayServiceInfo', () => {
       googleInfo.printInfo.restore();
     });
 
-    it('should run promise chain', () => googleInfo
-      .displayServiceInfo().then(() => {
-        expect(getResourcesStub.calledOnce).toEqual(true);
-        expect(gatherDataStub.calledAfter(getResourcesStub));
-        expect(printInfoStub.calledAfter(gatherDataStub));
-      }));
+    it('should run promise chain', () => googleInfo.displayServiceInfo().then(() => {
+      expect(getResourcesStub.calledOnce).toEqual(true);
+      expect(gatherDataStub.calledAfter(getResourcesStub));
+      expect(printInfoStub.calledAfter(gatherDataStub));
+    }));
   });
 
   describe('#getResources()', () => {
@@ -85,17 +79,14 @@ describe('DisplayServiceInfo', () => {
       googleInfo.provider.request.restore();
     });
 
-    it('should return a list with resources from the deployment', () => googleInfo
-      .getResources().then(() => {
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'resources',
-          'list',
-          {
-            project: 'my-project',
-            deployment: 'sls-my-service-dev',
-          })).toEqual(true);
-      }));
+    it('should return a list with resources from the deployment', () => googleInfo.getResources().then(() => {
+      expect(
+        requestStub.calledWithExactly('deploymentmanager', 'resources', 'list', {
+          project: 'my-project',
+          deployment: 'sls-my-service-dev',
+        }),
+      ).toEqual(true);
+    }));
   });
 
   describe('#gatherData()', () => {
@@ -134,9 +125,7 @@ describe('DisplayServiceInfo', () => {
 
     it('should resolve with empty data if resource type is not matching', () => {
       const resources = {
-        resources: [
-          { type: 'resource.which.should.be.filterered', name: 'someResource' },
-        ],
+        resources: [{ type: 'resource.which.should.be.filterered', name: 'someResource' }],
       };
 
       const expectedData = {

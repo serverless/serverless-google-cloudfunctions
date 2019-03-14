@@ -35,7 +35,7 @@ module.exports = {
   },
 
   validateHandlers() {
-    const functions = this.serverless.service.functions;
+    const { functions } = this.serverless.service;
 
     _.forEach(functions, (funcVal, funcKey) => {
       if (_.includes(funcVal.handler, '/') || _.includes(funcVal.handler, '.')) {

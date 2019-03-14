@@ -13,8 +13,8 @@ module.exports = {
   },
 
   invoke() {
-    const project = this.serverless.service.provider.project;
-    const region = this.options.region;
+    const { project } = this.serverless.service.provider;
+    const { region } = this.options;
     let func = this.options.function;
     const data = this.options.data || '';
 
@@ -33,7 +33,8 @@ module.exports = {
       'locations',
       'functions',
       'call',
-      params);
+      params,
+    );
   },
 
   printResult(result) {

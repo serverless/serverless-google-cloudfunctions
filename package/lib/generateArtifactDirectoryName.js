@@ -8,8 +8,7 @@ module.exports = {
     const serviceWithStage = `${this.serverless.service.service}/${this.options.stage}`;
     const dateString = `${date.getTime().toString()}-${date.toISOString()}`;
 
-    this.serverless.service.package
-      .artifactDirectoryName = `serverless/${serviceWithStage}/${dateString}`;
+    this.serverless.service.package.artifactDirectoryName = `serverless/${serviceWithStage}/${dateString}`;
 
     return BbPromise.resolve();
   },
