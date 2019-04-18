@@ -1,6 +1,7 @@
 'use strict';
 
 const BbPromise = require('bluebird');
+const path = require('path');
 
 const cleanupServerlessDir = require('./lib/cleanupServerlessDir');
 const validate = require('../shared/validate');
@@ -17,6 +18,10 @@ class GooglePackage {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
+    this.servicePath = this.serverless.config.servicePath || '';
+    this.packagePath = this.options.package ||
+      this.serverless.service.package.path ||
+      path.join(this.servicePath || '.', '.serverless');
     this.provider = this.serverless.getProvider('google');
 
     Object.assign(
