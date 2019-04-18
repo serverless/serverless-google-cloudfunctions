@@ -8,78 +8,83 @@ const _ = require('lodash');
 const BbPromise = require('bluebird');
 
 module.exports = {
+  compileFunction(functionName) {
+    const funcObject = this.serverless.service.getFunction(functionName);
+
+    this.serverless.cli
+      .log(`Compiling function "${functionName}"...`);
+
+    validateHandlerProperty(funcObject, functionName);
+    validateEventsProperty(funcObject, functionName);
+
+    const funcTemplate = getFunctionTemplate(
+      funcObject,
+      this.serverless.service.provider.region,
+      `gs://${
+      this.serverless.service.provider.deploymentBucketName
+      }/${this.serverless.service.package.artifactDirectoryName}/${functionName}.zip`);
+
+    funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
+      || _.get(this, 'serverless.service.provider.memorySize')
+      || 256;
+    funcTemplate.properties.location = _.get(funcObject, 'location')
+      || _.get(this, 'serverless.service.provider.region')
+      || 'us-central1';
+    funcTemplate.properties.runtime = _.get(funcObject, 'runtime')
+      || _.get(this, 'serverless.service.provider.runtime')
+      || 'nodejs8';
+    funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
+      || _.get(this, 'serverless.service.provider.timeout')
+      || '60s';
+    funcTemplate.properties.environmentVariables = _.merge(
+      _.get(this, 'serverless.service.provider.environment'),
+      funcObject.environment // eslint-disable-line comma-dangle
+    );
+
+    if (!_.size(funcTemplate.properties.environmentVariables)) {
+      delete funcTemplate.properties.environmentVariables;
+    }
+
+    funcTemplate.properties.labels = _.assign({},
+      _.get(this, 'serverless.service.provider.labels') || {},
+      _.get(funcObject, 'labels') || {} // eslint-disable-line comma-dangle
+    );
+
+    const eventType = Object.keys(funcObject.events[0])[0];
+
+    if (eventType === 'http') {
+      const url = funcObject.events[0].http;
+
+      funcTemplate.properties.httpsTrigger = {};
+      funcTemplate.properties.httpsTrigger.url = url;
+    }
+    if (eventType === 'event') {
+      const type = funcObject.events[0].event.eventType;
+      const path = funcObject.events[0].event.path; //eslint-disable-line
+      const resource = funcObject.events[0].event.resource;
+
+      funcTemplate.properties.eventTrigger = {};
+      funcTemplate.properties.eventTrigger.eventType = type;
+      if (path) funcTemplate.properties.eventTrigger.path = path;
+      funcTemplate.properties.eventTrigger.resource = resource;
+    }
+
+    this.serverless.service.provider.compiledConfigurationTemplate.resources.push(funcTemplate);
+  },
   compileFunctions() {
     const artifactFilePath = this.serverless.service.package.artifact;
-    const fileName = artifactFilePath.split(path.sep).pop();
+    if (artifactFilePath) {
+      const fileName = artifactFilePath.split(path.sep).pop();
 
-    this.serverless.service.package
-      .artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
-
-    this.serverless.service.getAllFunctions().forEach((functionName) => {
-      const funcObject = this.serverless.service.getFunction(functionName);
-
-      this.serverless.cli
-        .log(`Compiling function "${functionName}"...`);
-
-      validateHandlerProperty(funcObject, functionName);
-      validateEventsProperty(funcObject, functionName);
-
-      const funcTemplate = getFunctionTemplate(
-        funcObject,
-        this.serverless.service.provider.region,
-        `gs://${
-        this.serverless.service.provider.deploymentBucketName
-        }/${this.serverless.service.package.artifactFilePath}`);
-
-      funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
-        || _.get(this, 'serverless.service.provider.memorySize')
-        || 256;
-      funcTemplate.properties.location = _.get(funcObject, 'location')
-        || _.get(this, 'serverless.service.provider.region')
-        || 'us-central1';
-      funcTemplate.properties.runtime = _.get(funcObject, 'runtime')
-        || _.get(this, 'serverless.service.provider.runtime')
-        || 'nodejs8';
-      funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
-        || _.get(this, 'serverless.service.provider.timeout')
-        || '60s';
-      funcTemplate.properties.environmentVariables = _.merge(
-        _.get(this, 'serverless.service.provider.environment'),
-        funcObject.environment // eslint-disable-line comma-dangle
-      );
-
-      if (!_.size(funcTemplate.properties.environmentVariables)) {
-        delete funcTemplate.properties.environmentVariables;
-      }
-
-      funcTemplate.properties.labels = _.assign({},
-        _.get(this, 'serverless.service.provider.labels') || {},
-        _.get(funcObject, 'labels') || {} // eslint-disable-line comma-dangle
-      );
-
-      const eventType = Object.keys(funcObject.events[0])[0];
-
-      if (eventType === 'http') {
-        const url = funcObject.events[0].http;
-
-        funcTemplate.properties.httpsTrigger = {};
-        funcTemplate.properties.httpsTrigger.url = url;
-      }
-      if (eventType === 'event') {
-        const type = funcObject.events[0].event.eventType;
-        const path = funcObject.events[0].event.path; //eslint-disable-line
-        const resource = funcObject.events[0].event.resource;
-
-        funcTemplate.properties.eventTrigger = {};
-        funcTemplate.properties.eventTrigger.eventType = type;
-        if (path) funcTemplate.properties.eventTrigger.path = path;
-        funcTemplate.properties.eventTrigger.resource = resource;
-      }
-
-      this.serverless.service.provider.compiledConfigurationTemplate.resources.push(funcTemplate);
-    });
-
-    return BbPromise.resolve();
+      this.serverless.service.package
+        .artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
+    }
+    
+    const allFunctions = this.serverless.service.getAllFunctions();
+    return BbPromise.each(
+      allFunctions,
+      functionName => this.compileFunction(functionName)
+    );
   },
 };
 
