@@ -25,7 +25,7 @@ module.exports = {
             const artifactFileName = functionArtifactFileName;
             return path.join(this.packagePath, artifactFileName);
           }
-          return path.join(this.packagePath, this.provider.naming.getServiceArtifactName());
+          return path.join(this.packagePath, `${this.provider.serverless.service.service}.zip`);
         }
 
         return artifactFilePath;
