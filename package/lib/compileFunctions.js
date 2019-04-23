@@ -11,6 +11,7 @@ module.exports = {
   compileFunctions() {
     const artifactFilePath = this.serverless.service.package.artifact;
     const fileName = artifactFilePath.split(path.sep).pop();
+    const projectName = _.get(this, 'serverless.service.provider.project');
 
     this.serverless.service.package
       .artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
@@ -26,6 +27,7 @@ module.exports = {
 
       const funcTemplate = getFunctionTemplate(
         funcObject,
+        projectName,
         this.serverless.service.provider.region,
         `gs://${
         this.serverless.service.provider.deploymentBucketName
@@ -34,9 +36,6 @@ module.exports = {
       funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
         || _.get(this, 'serverless.service.provider.memorySize')
         || 256;
-      funcTemplate.properties.location = _.get(funcObject, 'location')
-        || _.get(this, 'serverless.service.provider.region')
-        || 'us-central1';
       funcTemplate.properties.runtime = _.get(funcObject, 'runtime')
         || _.get(this, 'serverless.service.provider.runtime')
         || 'nodejs8';
@@ -124,16 +123,17 @@ const validateEventsProperty = (funcObject, functionName) => {
   }
 };
 
-const getFunctionTemplate = (funcObject, region, sourceArchiveUrl) => { //eslint-disable-line
+const getFunctionTemplate = (funcObject, projectName, region, sourceArchiveUrl) => { //eslint-disable-line
   return {
-    type: 'cloudfunctions.v1beta2.function',
+    type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
     name: funcObject.name,
     properties: {
-      location: region,
+      parent: `projects/${projectName}/locations/${region}`,
       availableMemoryMb: 256,
       runtime: 'nodejs8',
       timeout: '60s',
-      function: funcObject.handler,
+      entryPoint: funcObject.handler,
+      function: funcObject.name,
       sourceArchiveUrl,
     },
   };
