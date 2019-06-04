@@ -21,13 +21,24 @@ module.exports = {
 
         const files = response.items;
 
-        // 4 old ones + the one which will be uploaded after the cleanup = 5
-        const objectsToKeepCount = 4;
+        const oldFileRegex = /(serverless)\/(.+)\/(.+)\/(\d+)-(.+)\/(.+\.zip)/;
 
-        const orderedObjects = _.orderBy(files, (file) => {
-          const timestamp = file.name.match(/(serverless)\/(.+)\/(.+)\/(\d+)-(.+)\/(.+\.zip)/)[4];
+        // filter out files that are in the bucket but don't match files created by the plugin
+        const filteredFiles = _.filter(files, (file) => {
+          if (file.name.match(oldFileRegex)) {
+            // the file matches the ones we want to clean up
+            return true;
+          }
+          return false;
+        });
+
+        const orderedObjects = _.orderBy(filteredFiles, (file) => {
+          const timestamp = file.name.match(oldFileRegex)[4];
           return timestamp;
         }, ['asc']);
+
+        // 4 old ones + the one which will be uploaded after the cleanup = 5
+        const objectsToKeepCount = 4;
 
         const objectsToKeep = _.takeRight(orderedObjects, objectsToKeepCount);
         const objectsToRemove = _.pullAllWith(files, objectsToKeep, _.isEqual);
