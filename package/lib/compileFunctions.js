@@ -43,11 +43,18 @@ module.exports = {
       funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
         || _.get(this, 'serverless.service.provider.timeout')
         || '60s';
+      funcTemplate.properties.serviceAccount = _.get(funcObject, 'serviceAccount')
+        || _.get(this, 'serverless.service.provider.serviceAccount')
+        || '';
       funcTemplate.properties.environmentVariables = _.merge(
         {},
         _.get(this, 'serverless.service.provider.environment'),
         funcObject.environment // eslint-disable-line comma-dangle
       );
+
+      if (!funcTemplate.properties.serviceAccount) {
+        delete funcTemplate.properties.serviceAccount;
+      }
 
       if (!_.size(funcTemplate.properties.environmentVariables)) {
         delete funcTemplate.properties.environmentVariables;
