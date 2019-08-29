@@ -40,3 +40,5 @@ jest*
 
 # ESLint
 .eslintcache
+
+package-lock.json
