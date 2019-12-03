@@ -23,7 +23,7 @@ module.exports = {
 
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);
-      validateVpcConnectorProprety(funcObject, functionName);
+      validateVpcConnectorProperty(funcObject, functionName);
 
       const funcTemplate = getFunctionTemplate(
         funcObject,
@@ -131,13 +131,13 @@ const validateEventsProperty = (funcObject, functionName) => {
   }
 };
 
-const validateVpcConnectorProprety = (funcObject, functionName) => {
+const validateVpcConnectorProperty = (funcObject, functionName) => {
   if (funcObject.vpc && typeof funcObject.vpc === 'string') {
     const vpcNamePattern = /projects\/[\s\S]*\/locations\/[\s\S]*\/connectors\/[\s\S]*/i;
     if (!vpcNamePattern.test(funcObject.vpc)) {
       const errorMessage = [
         `The function "${functionName}" has invalid vpc connection name`,
-        'VPC Connector name should follow projects/{project_id}/locations/{region}/connectors/{connector_name}',
+        ' VPC Connector name should follow projects/{project_id}/locations/{region}/connectors/{connector_name}',
         ' Please check the docs for more info.',
       ].join('');
       throw new Error(errorMessage);
