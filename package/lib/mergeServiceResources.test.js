@@ -1,4 +1,4 @@
-'use stict';
+'use strict';
 
 const GoogleProvider = require('../../provider/googleProvider');
 const GooglePackage = require('../googlePackage');
