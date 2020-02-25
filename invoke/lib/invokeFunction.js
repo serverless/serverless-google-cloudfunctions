@@ -33,7 +33,8 @@ module.exports = {
       'locations',
       'functions',
       'call',
-      params);
+      params
+    );
   },
 
   printResult(result) {

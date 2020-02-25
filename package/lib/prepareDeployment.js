@@ -12,11 +12,8 @@ module.exports = {
     let deploymentTemplate = this.serverless.service.provider.compiledConfigurationTemplate;
 
     deploymentTemplate = this.serverless.utils.readFileSync(
-      path.join(
-        __dirname,
-        '..',
-        'templates',
-        'core-configuration-template.yml'));
+      path.join(__dirname, '..', 'templates', 'core-configuration-template.yml')
+    );
 
     const bucket = deploymentTemplate.resources.find(findDeploymentBucket);
 
@@ -39,7 +36,7 @@ const updateBucketName = (bucket, name) => {
   return newBucket;
 };
 
-const findDeploymentBucket = (resource) => {
+const findDeploymentBucket = resource => {
   const type = 'storage.v1.bucket';
   const name = 'will-be-replaced-by-serverless';
 

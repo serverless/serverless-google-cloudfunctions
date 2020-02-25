@@ -57,8 +57,9 @@ describe('PrepareDeployment', () => {
 
       return googlePackage.prepareDeployment().then(() => {
         expect(readFileSyncStub.calledOnce).toEqual(true);
-        expect(serverless.service.provider
-          .compiledConfigurationTemplate).toEqual(expectedCompiledConfiguration);
+        expect(serverless.service.provider.compiledConfigurationTemplate).toEqual(
+          expectedCompiledConfiguration
+        );
       });
     });
   });
