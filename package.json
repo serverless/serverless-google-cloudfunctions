@@ -41,6 +41,7 @@
     "coveralls": "^3.0.9",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.1",
+    "git-list-updated": "^1.2.1",
     "husky": "^4.2.3",
     "jest": "^24.9.0",
     "lint-staged": "^10.0.8",
@@ -54,8 +55,11 @@
   "scripts": {
     "coverage": "jest --coverage",
     "lint": "eslint . --cache",
+    "lint:updated": "pipe-git-updated --ext=js -- eslint --cache",
     "prettier-check": "prettier -c --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\"",
+    "prettier-check:updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier -c",
     "prettify": "prettier --write --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\"",
+    "prettify:updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier --write",
     "test": "jest"
   },
   "license": "MIT"
