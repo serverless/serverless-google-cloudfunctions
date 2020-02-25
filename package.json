@@ -3,15 +3,7 @@
   "version": "2.4.0",
   "description": "Provider plugin for the Serverless Framework v1.x which adds support for Google Cloud Functions.",
   "author": "serverless.com",
-  "license": "MIT",
   "repository": "serverless/serverless-google-cloudfunctions",
-  "scripts": {
-    "test": "jest",
-    "coverage": "jest --coverage",
-    "lint": "eslint . --cache",
-    "prettier-check": "prettier -c --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\"",
-    "prettify": "prettier --write --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\""
-  },
   "homepage": "https://github.com/serverless/serverless-google-cloudfunctions",
   "keywords": [
     "serverless",
@@ -43,5 +35,13 @@
   "eslintConfig": {
     "extends": "@serverless/eslint-config/node",
     "root": true
-  }
+  },
+  "scripts": {
+    "coverage": "jest --coverage",
+    "lint": "eslint . --cache",
+    "prettier-check": "prettier -c --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\"",
+    "prettify": "prettier --write --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\"",
+    "test": "jest"
+  },
+  "license": "MIT"
 }
