@@ -17,9 +17,6 @@ install:
   - travis_retry npm install
 
 script:
-  - npm test
-
-script:
   - if [[ ! -z "$DISABLE_TESTS" && ! -z "$LINTING" ]]; then npm run lint; fi
 
 after_success:
