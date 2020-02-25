@@ -37,11 +37,14 @@
   "devDependencies": {
     "@serverless/eslint-config": "^1.2.1",
     "coveralls": "^3.0.9",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "^11.3.2",
+    "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.1",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
     "sinon": "^7.5.0"
+  },
+  "eslintConfig": {
+    "extends": "@serverless/eslint-config/node",
+    "root": true
   }
 }
