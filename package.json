@@ -15,6 +15,10 @@
     "internet of things",
     "serverless.com"
   ],
+  "eslintConfig": {
+    "extends": "@serverless/eslint-config/node",
+    "root": true
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -47,10 +51,6 @@
     "lint-staged": "^10.0.8",
     "prettier": "^1.19.1",
     "sinon": "^7.5.0"
-  },
-  "eslintConfig": {
-    "extends": "@serverless/eslint-config/node",
-    "root": true
   },
   "scripts": {
     "coverage": "jest --coverage",
