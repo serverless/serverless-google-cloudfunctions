@@ -4,9 +4,7 @@
   "description": "Provider plugin for the Serverless Framework v1.x which adds support for Google Cloud Functions.",
   "author": "serverless.com",
   "license": "MIT",
-  "repository": {
-    "git": "https://github.com/serverless/serverless-google-cloudfunctions"
-  },
+  "repository": "serverless/serverless-google-cloudfunctions",
   "scripts": {
     "test": "jest",
     "coverage": "jest --coverage",
