@@ -26,18 +26,18 @@
   ],
   "dependencies": {
     "async": "^2.6.3",
-    "bluebird": "^3.5.5",
+    "bluebird": "^3.7.2",
     "chalk": "^2.4.2",
     "fs-extra": "^8.1.0",
     "googleapis": "^41.0.1",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "coveralls": "^3.0.5",
+    "coveralls": "^3.0.9",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.3.2",
-    "eslint-plugin-import": "^2.18.1",
-    "jest": "^24.8.0",
-    "sinon": "^7.3.2"
+    "eslint-plugin-import": "^2.20.1",
+    "jest": "^24.9.0",
+    "sinon": "^7.5.0"
   }
 }
