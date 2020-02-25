@@ -55,6 +55,10 @@ module.exports = {
          || _.get(this, 'serverless.service.provider.vpc') });
       }
 
+      if (funcObject.maxInstances) {
+        _.assign(funcTemplate.properties, { maxInstances: _.get(funcObject, 'maxInstances')})
+      }
+      
       if (!_.size(funcTemplate.properties.environmentVariables)) {
         delete funcTemplate.properties.environmentVariables;
       }
