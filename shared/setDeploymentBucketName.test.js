@@ -39,14 +39,13 @@ describe('SetDeploymentBucketName', () => {
       requestStub.returns(BbPromise.reject());
 
       return googleCommand.setDeploymentBucketName().then(() => {
-        expect(serverless.service.provider.deploymentBucketName)
-          .toMatch(/sls-my-service-dev-.+/);
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'resources',
-          'list',
-          { project: 'my-project', deployment: 'sls-my-service-dev' },
-        )).toEqual(true);
+        expect(serverless.service.provider.deploymentBucketName).toMatch(/sls-my-service-dev-.+/);
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'resources', 'list', {
+            project: 'my-project',
+            deployment: 'sls-my-service-dev',
+          })
+        ).toEqual(true);
       });
     });
 
@@ -55,14 +54,13 @@ describe('SetDeploymentBucketName', () => {
       requestStub.returns(BbPromise.resolve(response));
 
       return googleCommand.setDeploymentBucketName().then(() => {
-        expect(serverless.service.provider.deploymentBucketName)
-          .toMatch(/sls-my-service-dev-.+/);
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'resources',
-          'list',
-          { project: 'my-project', deployment: 'sls-my-service-dev' },
-        )).toEqual(true);
+        expect(serverless.service.provider.deploymentBucketName).toMatch(/sls-my-service-dev-.+/);
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'resources', 'list', {
+            project: 'my-project',
+            deployment: 'sls-my-service-dev',
+          })
+        ).toEqual(true);
       });
     });
 
@@ -77,14 +75,15 @@ describe('SetDeploymentBucketName', () => {
       requestStub.returns(BbPromise.resolve(response));
 
       return googleCommand.setDeploymentBucketName().then(() => {
-        expect(serverless.service.provider.deploymentBucketName)
-          .toEqual('sls-my-service-dev-12345678');
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'resources',
-          'list',
-          { project: 'my-project', deployment: 'sls-my-service-dev' },
-        )).toEqual(true);
+        expect(serverless.service.provider.deploymentBucketName).toEqual(
+          'sls-my-service-dev-12345678'
+        );
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'resources', 'list', {
+            project: 'my-project',
+            deployment: 'sls-my-service-dev',
+          })
+        ).toEqual(true);
       });
     });
   });

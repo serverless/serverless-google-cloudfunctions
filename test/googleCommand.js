@@ -8,9 +8,7 @@ class GoogleCommand {
     this.serverless = serverless;
     this.provider = this.serverless.getProvider('google');
 
-    Object.assign(
-      this,
-      testSubject);
+    Object.assign(this, testSubject);
   }
 }
 
