@@ -42,7 +42,7 @@ module.exports = {
     }
 
     let output = logs.entries.reduce(
-      (p, c, i) => (p += `${chalk.grey(c.timestamp + ':')} ${c.textPayload}\n`),
+      (p, c) => (p += `${chalk.grey(`${c.timestamp}:`)} ${c.textPayload}\n`),
       ''
     ); //eslint-disable-line
 
