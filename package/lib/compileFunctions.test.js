@@ -440,6 +440,58 @@ describe('CompileFunctions', () => {
       });
     });
 
+    it('should merge the environment variables on the provider configuration and function definition', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          environment: {
+            TEST_VAR: 'test_var',
+            TEST_VALUE: 'foobar',
+          },
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+      googlePackage.serverless.service.provider.environment = {
+        TEST_VAR: 'test',
+        TEST_FOO: 'foo',
+      };
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          runtime: 'nodejs8',
+          function: 'func1',
+          availableMemoryMb: 256,
+          environmentVariables: {
+            TEST_VAR: 'test_var',
+            TEST_VALUE: 'foobar',
+            TEST_FOO: 'foo',
+          },
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+        },
+      }];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+        expect(googlePackage.serverless.service.provider.environment)
+          .toEqual({
+            TEST_VAR: 'test',
+            TEST_FOO: 'foo',
+          });
+      });
+    });
+
     it('should compile "http" events properly', () => {
       googlePackage.serverless.service.functions = {
         func1: {
@@ -572,6 +624,84 @@ describe('CompileFunctions', () => {
           },
         },
       ];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.called).toEqual(true);
+        expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set vpc connection base on the function configuration', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          memorySize: 128,
+          runtime: 'nodejs8',
+          vpc: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          runtime: 'nodejs8',
+          function: 'func1',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+        },
+      }];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.called).toEqual(true);
+        expect(googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources)
+          .toEqual(compiledResources);
+      });
+    });
+
+    it('should set max instances on the function configuration', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          memorySize: 128,
+          runtime: 'nodejs8',
+          maxInstances: 10,
+          vpc: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          events: [
+            { http: 'foo' },
+          ],
+        },
+      };
+
+      const compiledResources = [{
+        type: 'cloudfunctions.v1beta2.function',
+        name: 'my-service-dev-func1',
+        properties: {
+          location: 'us-central1',
+          runtime: 'nodejs8',
+          function: 'func1',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          maxInstances: 10,
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+        },
+      }];
 
       return googlePackage.compileFunctions().then(() => {
         expect(consoleLogStub.called).toEqual(true);

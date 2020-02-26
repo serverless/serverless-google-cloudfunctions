@@ -23,6 +23,7 @@ module.exports = {
 
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);
+      validateVpcConnectorProperty(funcObject, functionName);
 
       const funcTemplate = getFunctionTemplate(
         funcObject,
@@ -44,9 +45,17 @@ module.exports = {
         || _.get(this, 'serverless.service.provider.timeout')
         || '60s';
       funcTemplate.properties.environmentVariables = _.merge(
+        {},
         _.get(this, 'serverless.service.provider.environment'),
-        funcObject.environment,
+        funcObject.environment // eslint-disable-line comma-dangle
       );
+
+      if (funcObject.vpc) {
+        _.assign(funcTemplate.properties, { vpcConnector: _.get(funcObject, 'vpc')
+         || _.get(this, 'serverless.service.provider.vpc') });
+      }
+
+      funcTemplate.properties.maxInstances = funcObject.maxInstances;
 
       if (!_.size(funcTemplate.properties.environmentVariables)) {
         delete funcTemplate.properties.environmentVariables;
@@ -123,6 +132,20 @@ const validateEventsProperty = (funcObject, functionName) => {
       ` supported event types are: ${supportedEvents.join(', ')}`,
     ].join('');
     throw new Error(errorMessage);
+  }
+};
+
+const validateVpcConnectorProperty = (funcObject, functionName) => {
+  if (funcObject.vpc && typeof funcObject.vpc === 'string') {
+    const vpcNamePattern = /projects\/[\s\S]*\/locations\/[\s\S]*\/connectors\/[\s\S]*/i;
+    if (!vpcNamePattern.test(funcObject.vpc)) {
+      const errorMessage = [
+        `The function "${functionName}" has invalid vpc connection name`,
+        ' VPC Connector name should follow projects/{project_id}/locations/{region}/connectors/{connector_name}',
+        ' Please check the docs for more info.',
+      ].join('');
+      throw new Error(errorMessage);
+    }
   }
 };
 

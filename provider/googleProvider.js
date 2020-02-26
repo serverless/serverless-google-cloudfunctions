@@ -7,6 +7,9 @@ const os = require('os');
 const _ = require('lodash');
 const google = require('googleapis').google;
 
+const pluginPackageJson = require('../package.json'); // eslint-disable-line import/newline-after-import
+const googleApisPackageJson = require(require.resolve('googleapis/package.json')); // eslint-disable-line import/no-dynamic-require
+
 const constants = {
   providerName: 'google',
 };
@@ -21,7 +24,18 @@ class GoogleProvider {
     this.provider = this; // only load plugin in a Google service context
     this.serverless.setProvider(constants.providerName, this);
 
+    const serverlessVersion = this.serverless.version;
+    const pluginVersion = pluginPackageJson.version;
+    const googleApisVersion = googleApisPackageJson.version;
+
+    google.options({
+      headers: {
+        'User-Agent': `Serverless/${serverlessVersion} Serverless-Google-Provider/${pluginVersion} Googleapis/${googleApisVersion}`,
+      },
+    });
+
     this.sdk = {
+      google,
       deploymentmanager: google.deploymentmanager('v2'),
       storage: google.storage('v1'),
       logging: google.logging('v2'),
