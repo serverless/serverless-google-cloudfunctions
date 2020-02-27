@@ -55,7 +55,9 @@ module.exports = {
         });
       }
 
-      funcTemplate.properties.maxInstances = funcObject.maxInstances;
+      if (funcObject.maxInstances) {
+        funcTemplate.properties.maxInstances = funcObject.maxInstances;
+      }
 
       if (!_.size(funcTemplate.properties.environmentVariables)) {
         delete funcTemplate.properties.environmentVariables;
