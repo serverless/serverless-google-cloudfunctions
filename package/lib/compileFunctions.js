@@ -41,7 +41,12 @@ module.exports = {
       funcTemplate.properties.runtime = _.get(funcObject, 'runtime')
         || _.get(this, 'serverless.service.provider.runtime')
         || 'nodejs8';
-      funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
+      // AWS format assumes seconds, so if the timeout is specified at the function assume seconds
+      let userDefinedTimeout = _.get(funcObject, 'timeout');
+      if (userDefinedTimeout && !isNaN(parseInt(userDefinedTimeout.substr(-1), 10))) {
+        userDefinedTimeout += 's';
+      }
+      funcTemplate.properties.timeout = userDefinedTimeout
         || _.get(this, 'serverless.service.provider.timeout')
         || '60s';
       funcTemplate.properties.environmentVariables = _.merge(
