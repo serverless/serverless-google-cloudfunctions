@@ -42,14 +42,16 @@ describe('WriteFilesToDisk', () => {
       const createFilePath = path.join(
         googlePackage.serverless.config.servicePath,
         '.serverless',
-        'configuration-template-create.yml',
+        'configuration-template-create.yml'
       );
 
       return googlePackage.saveCreateTemplateFile().then(() => {
-        expect(writeFileSyncStub.calledWithExactly(
-          createFilePath,
-          googlePackage.serverless.service.provider.compiledConfigurationTemplate,
-        )).toEqual(true);
+        expect(
+          writeFileSyncStub.calledWithExactly(
+            createFilePath,
+            googlePackage.serverless.service.provider.compiledConfigurationTemplate
+          )
+        ).toEqual(true);
       });
     });
   });
@@ -59,14 +61,16 @@ describe('WriteFilesToDisk', () => {
       const updateFilePath = path.join(
         googlePackage.serverless.config.servicePath,
         '.serverless',
-        'configuration-template-update.yml',
+        'configuration-template-update.yml'
       );
 
       return googlePackage.saveUpdateTemplateFile().then(() => {
-        expect(writeFileSyncStub.calledWithExactly(
-          updateFilePath,
-          googlePackage.serverless.service.provider.compiledConfigurationTemplate,
-        )).toEqual(true);
+        expect(
+          writeFileSyncStub.calledWithExactly(
+            updateFilePath,
+            googlePackage.serverless.service.provider.compiledConfigurationTemplate
+          )
+        ).toEqual(true);
       });
     });
   });

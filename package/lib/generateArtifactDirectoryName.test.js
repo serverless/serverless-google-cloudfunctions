@@ -26,8 +26,7 @@ describe('GenerateArtifactDirectoryName', () => {
     const expectedRegex = new RegExp('serverless/my-service/dev/.*');
 
     return googlePackage.generateArtifactDirectoryName().then(() => {
-      expect(serverless.service.package.artifactDirectoryName)
-        .toMatch(expectedRegex);
+      expect(serverless.service.package.artifactDirectoryName).toMatch(expectedRegex);
     });
   });
 });
