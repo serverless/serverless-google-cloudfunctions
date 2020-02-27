@@ -39,6 +39,21 @@ describe('Utils', () => {
       });
     });
 
+    describe('Iterating through AWS runtime values', () => {
+      const runtimes = [['nodejs8.10', 'nodejs8'],
+                        ['python3.7', 'python37'],
+                        ['go1.x', 'go111']];
+      for (let r = 0; r < runtimes.length; r += 1) {
+        const runtime = runtimes[r];
+        it(`should return the appropriate GCP value for ${runtime[0]}`, () => {
+          googleCommand.options.runtime = runtime[0];
+          return googleCommand.setDefaults().then(() => {
+            expect(googleCommand.options.runtime).toEqual(runtime[1]);
+          });
+        });
+      }
+    });
+
 
     it('should set the provider values for stage and region if provided', () => {
       googleCommand.serverless.service.provider = {
