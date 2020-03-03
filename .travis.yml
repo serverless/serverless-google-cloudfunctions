@@ -123,7 +123,7 @@ jobs:
           if [ -n "$tagName" ];
           then
             git tag v$tagName
-            git push -q https://$GITHUB_TOKEN@github.com/serverless/test --tags
+            git push -q https://$GITHUB_TOKEN@github.com/serverless/serverless-google-cloudfunctions --tags
           fi
 
     # version tag
