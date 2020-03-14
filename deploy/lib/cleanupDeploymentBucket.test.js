@@ -34,10 +34,10 @@ describe('CleanupDeploymentBucket', () => {
     let removeObjectsStub;
 
     beforeEach(() => {
-      getObjectsToRemoveStub = sinon.stub(googleDeploy, 'getObjectsToRemove')
+      getObjectsToRemoveStub = sinon
+        .stub(googleDeploy, 'getObjectsToRemove')
         .returns(BbPromise.resolve());
-      removeObjectsStub = sinon.stub(googleDeploy, 'removeObjects')
-        .returns(BbPromise.resolve());
+      removeObjectsStub = sinon.stub(googleDeploy, 'removeObjects').returns(BbPromise.resolve());
     });
 
     afterEach(() => {
@@ -45,8 +45,8 @@ describe('CleanupDeploymentBucket', () => {
       googleDeploy.removeObjects.restore();
     });
 
-    it('should run promise chain', () => googleDeploy
-      .cleanupDeploymentBucket().then(() => {
+    it('should run promise chain', () =>
+      googleDeploy.cleanupDeploymentBucket().then(() => {
         expect(getObjectsToRemoveStub.calledOnce).toEqual(true);
         expect(removeObjectsStub.calledAfter(getObjectsToRemoveStub));
       }));
@@ -94,7 +94,7 @@ describe('CleanupDeploymentBucket', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleDeploy.getObjectsToRemove().then((objects) => {
+      return googleDeploy.getObjectsToRemove().then(objects => {
         expect(objects.length).toEqual(2);
         expect(objects).not.toContainEqual({
           bucket: 'sls-my-service-dev-12345678',
@@ -112,13 +112,11 @@ describe('CleanupDeploymentBucket', () => {
           bucket: 'sls-my-service-dev-12345678',
           name: `${key}/903940390431-2016-08-18T23:42:08/artifact.zip`,
         });
-        expect(requestStub.calledWithExactly(
-          'storage',
-          'objects',
-          'list',
-          {
+        expect(
+          requestStub.calledWithExactly('storage', 'objects', 'list', {
             bucket: 'sls-my-service-dev-12345678',
-          })).toEqual(true);
+          })
+        ).toEqual(true);
       });
     });
 
@@ -145,16 +143,14 @@ describe('CleanupDeploymentBucket', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleDeploy.getObjectsToRemove().then((objects) => {
+      return googleDeploy.getObjectsToRemove().then(objects => {
         expect(objects.length).toEqual(0);
         expect(objects).toEqual([]);
-        expect(requestStub.calledWithExactly(
-          'storage',
-          'objects',
-          'list',
-          {
+        expect(
+          requestStub.calledWithExactly('storage', 'objects', 'list', {
             bucket: 'sls-my-service-dev-12345678',
-          })).toEqual(true);
+          })
+        ).toEqual(true);
       });
     });
 
@@ -164,16 +160,14 @@ describe('CleanupDeploymentBucket', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleDeploy.getObjectsToRemove().then((objects) => {
+      return googleDeploy.getObjectsToRemove().then(objects => {
         expect(objects.length).toEqual(0);
         expect(objects).toEqual([]);
-        expect(requestStub.calledWithExactly(
-          'storage',
-          'objects',
-          'list',
-          {
+        expect(
+          requestStub.calledWithExactly('storage', 'objects', 'list', {
             bucket: 'sls-my-service-dev-12345678',
-          })).toEqual(true);
+          })
+        ).toEqual(true);
       });
     });
   });
@@ -223,7 +217,7 @@ describe('CleanupDeploymentBucket', () => {
 
       requestStub.returns(BbPromise.resolve('removePromise'));
 
-      return googleDeploy.removeObjects(objectsToRemove).then((removePromises) => {
+      return googleDeploy.removeObjects(objectsToRemove).then(removePromises => {
         expect(requestStub.called).toEqual(true);
         expect(consoleLogStub.calledOnce).toEqual(true);
         expect(removePromises).toEqual([

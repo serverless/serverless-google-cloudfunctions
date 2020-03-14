@@ -14,12 +14,11 @@ module.exports = {
       bucket: this.serverless.service.provider.deploymentBucketName,
     };
 
-    return this.provider.request('storage', 'objects', 'list', params)
-      .then((response) => {
-        if (!response.items || !response.items.length) return BbPromise.resolve([]);
+    return this.provider.request('storage', 'objects', 'list', params).then(response => {
+      if (!response.items || !response.items.length) return BbPromise.resolve([]);
 
-        return BbPromise.resolve(response.items);
-      });
+      return BbPromise.resolve(response.items);
+    });
   },
 
   removeObjects(objectsToRemove) {
@@ -27,7 +26,7 @@ module.exports = {
 
     this.serverless.cli.log('Removing artifacts in deployment bucket...');
 
-    const removePromises = objectsToRemove.map((object) => {
+    const removePromises = objectsToRemove.map(object => {
       const params = {
         bucket: object.bucket,
         object: object.name,

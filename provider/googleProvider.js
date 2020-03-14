@@ -46,7 +46,7 @@ class GoogleProvider {
   request() {
     // grab necessary stuff from arguments array
     const lastArg = arguments[Object.keys(arguments).pop()]; //eslint-disable-line
-    const hasParams = (typeof lastArg === 'object');
+    const hasParams = typeof lastArg === 'object';
     const filArgs = _.filter(arguments, v => typeof v === 'string'); //eslint-disable-line
     const params = hasParams ? lastArg : {};
 
@@ -62,11 +62,20 @@ class GoogleProvider {
       // merge the params from the request call into the base functionParams
       _.merge(requestParams, params);
 
-      return filArgs.reduce(((p, c) => p[c]), this.sdk).bind(serviceInstance)(requestParams)
+      return filArgs
+        .reduce((p, c) => p[c], this.sdk)
+        .bind(serviceInstance)(requestParams)
         .then(result => result.data)
-        .catch((error) => {
-          if (error && error.errors && error.errors[0].message && _.includes(error.errors[0].message, 'project 1043443644444')) {
-            throw new Error("Incorrect configuration. Please change the 'project' key in the 'provider' block in your Serverless config file.");
+        .catch(error => {
+          if (
+            error &&
+            error.errors &&
+            error.errors[0].message &&
+            _.includes(error.errors[0].message, 'project 1043443644444')
+          ) {
+            throw new Error(
+              "Incorrect configuration. Please change the 'project' key in the 'provider' block in your Serverless config file."
+            );
           } else if (error) {
             throw error;
           }
@@ -75,8 +84,8 @@ class GoogleProvider {
   }
 
   getAuthClient() {
-    let credentials = this.serverless.service.provider.credentials
-      || process.env.GOOGLE_APPLICATION_CREDENTIALS;
+    let credentials =
+      this.serverless.service.provider.credentials || process.env.GOOGLE_APPLICATION_CREDENTIALS;
     const credParts = credentials.split(path.sep);
 
     if (credParts[0] === '~') {
@@ -87,8 +96,9 @@ class GoogleProvider {
     const keyFileContent = fs.readFileSync(credentials).toString();
     const key = JSON.parse(keyFileContent);
 
-    return new google.auth
-      .JWT(key.client_email, null, key.private_key, ['https://www.googleapis.com/auth/cloud-platform']);
+    return new google.auth.JWT(key.client_email, null, key.private_key, [
+      'https://www.googleapis.com/auth/cloud-platform',
+    ]);
   }
 
   isServiceSupported(service) {

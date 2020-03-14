@@ -30,11 +30,14 @@ describe('Validate', () => {
     let validateHandlersStub;
 
     beforeEach(() => {
-      validateServicePathStub = sinon.stub(googleCommand, 'validateServicePath')
+      validateServicePathStub = sinon
+        .stub(googleCommand, 'validateServicePath')
         .returns(BbPromise.resolve());
-      validateServiceNameStub = sinon.stub(googleCommand, 'validateServiceName')
+      validateServiceNameStub = sinon
+        .stub(googleCommand, 'validateServiceName')
         .returns(BbPromise.resolve());
-      validateHandlersStub = sinon.stub(googleCommand, 'validateHandlers')
+      validateHandlersStub = sinon
+        .stub(googleCommand, 'validateHandlers')
         .returns(BbPromise.resolve());
     });
 
@@ -44,8 +47,8 @@ describe('Validate', () => {
       googleCommand.validateHandlers.restore();
     });
 
-    it('should run promise chain', () => googleCommand
-      .validate().then(() => {
+    it('should run promise chain', () =>
+      googleCommand.validate().then(() => {
         expect(validateServicePathStub.calledOnce).toEqual(true);
         expect(validateServiceNameStub.calledAfter(validateServicePathStub));
         expect(validateHandlersStub.calledAfter(validateServiceNameStub));

@@ -48,25 +48,31 @@ describe('GooglePackage', () => {
       let saveUpdateTemplateFileStub;
 
       beforeEach(() => {
-        cleanupServerlessDirStub = sinon.stub(googlePackage, 'cleanupServerlessDir')
+        cleanupServerlessDirStub = sinon
+          .stub(googlePackage, 'cleanupServerlessDir')
           .returns(BbPromise.resolve());
-        validateStub = sinon.stub(googlePackage, 'validate')
+        validateStub = sinon.stub(googlePackage, 'validate').returns(BbPromise.resolve());
+        setDefaultsStub = sinon.stub(googlePackage, 'setDefaults').returns(BbPromise.resolve());
+        setDeploymentBucketNameStub = sinon
+          .stub(googlePackage, 'setDeploymentBucketName')
           .returns(BbPromise.resolve());
-        setDefaultsStub = sinon.stub(googlePackage, 'setDefaults')
+        prepareDeploymentStub = sinon
+          .stub(googlePackage, 'prepareDeployment')
           .returns(BbPromise.resolve());
-        setDeploymentBucketNameStub = sinon.stub(googlePackage, 'setDeploymentBucketName')
+        saveCreateTemplateFileStub = sinon
+          .stub(googlePackage, 'saveCreateTemplateFile')
           .returns(BbPromise.resolve());
-        prepareDeploymentStub = sinon.stub(googlePackage, 'prepareDeployment')
+        generateArtifactDirectoryNameStub = sinon
+          .stub(googlePackage, 'generateArtifactDirectoryName')
           .returns(BbPromise.resolve());
-        saveCreateTemplateFileStub = sinon.stub(googlePackage, 'saveCreateTemplateFile')
+        compileFunctionsStub = sinon
+          .stub(googlePackage, 'compileFunctions')
           .returns(BbPromise.resolve());
-        generateArtifactDirectoryNameStub = sinon.stub(googlePackage, 'generateArtifactDirectoryName')
+        mergeServiceResourcesStub = sinon
+          .stub(googlePackage, 'mergeServiceResources')
           .returns(BbPromise.resolve());
-        compileFunctionsStub = sinon.stub(googlePackage, 'compileFunctions')
-          .returns(BbPromise.resolve());
-        mergeServiceResourcesStub = sinon.stub(googlePackage, 'mergeServiceResources')
-          .returns(BbPromise.resolve());
-        saveUpdateTemplateFileStub = sinon.stub(googlePackage, 'saveUpdateTemplateFile')
+        saveUpdateTemplateFileStub = sinon
+          .stub(googlePackage, 'saveUpdateTemplateFile')
           .returns(BbPromise.resolve());
       });
 
@@ -83,36 +89,36 @@ describe('GooglePackage', () => {
         googlePackage.saveUpdateTemplateFile.restore();
       });
 
-      it('should run "package:cleanup" promise chain', () => googlePackage
-        .hooks['package:cleanup']().then(() => {
+      it('should run "package:cleanup" promise chain', () =>
+        googlePackage.hooks['package:cleanup']().then(() => {
           expect(cleanupServerlessDirStub.calledOnce).toEqual(true);
         }));
 
-      it('should run "before:package:initialize" promise chain', () => googlePackage
-        .hooks['before:package:initialize']().then(() => {
+      it('should run "before:package:initialize" promise chain', () =>
+        googlePackage.hooks['before:package:initialize']().then(() => {
           expect(validateStub.calledOnce).toEqual(true);
           expect(setDefaultsStub.calledAfter(validateStub)).toEqual(true);
         }));
 
-      it('should run "package:initialize" promise chain', () => googlePackage
-        .hooks['package:initialize']().then(() => {
+      it('should run "package:initialize" promise chain', () =>
+        googlePackage.hooks['package:initialize']().then(() => {
           expect(setDeploymentBucketNameStub.calledOnce).toEqual(true);
           expect(prepareDeploymentStub.calledAfter(setDeploymentBucketNameStub)).toEqual(true);
           expect(saveCreateTemplateFileStub.calledAfter(prepareDeploymentStub)).toEqual(true);
         }));
 
-      it('should run "before:package:compileFunctions" promise chain', () => googlePackage
-        .hooks['before:package:compileFunctions']().then(() => {
+      it('should run "before:package:compileFunctions" promise chain', () =>
+        googlePackage.hooks['before:package:compileFunctions']().then(() => {
           expect(generateArtifactDirectoryNameStub.calledOnce).toEqual(true);
         }));
 
-      it('should run "package:compileFunctions" promise chain', () => googlePackage
-        .hooks['package:compileFunctions']().then(() => {
+      it('should run "package:compileFunctions" promise chain', () =>
+        googlePackage.hooks['package:compileFunctions']().then(() => {
           expect(compileFunctionsStub.calledOnce).toEqual(true);
         }));
 
-      it('should run "package:finalize" promise chain', () => googlePackage
-        .hooks['package:finalize']().then(() => {
+      it('should run "package:finalize" promise chain', () =>
+        googlePackage.hooks['package:finalize']().then(() => {
           expect(mergeServiceResourcesStub.calledOnce).toEqual(true);
           expect(saveUpdateTemplateFileStub.calledAfter(mergeServiceResourcesStub)).toEqual(true);
         }));

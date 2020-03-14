@@ -12,14 +12,12 @@ module.exports = {
     const artifactFilePath = this.serverless.service.package.artifact;
     const fileName = artifactFilePath.split(path.sep).pop();
 
-    this.serverless.service.package
-      .artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
+    this.serverless.service.package.artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
 
-    this.serverless.service.getAllFunctions().forEach((functionName) => {
+    this.serverless.service.getAllFunctions().forEach(functionName => {
       const funcObject = this.serverless.service.getFunction(functionName);
 
-      this.serverless.cli
-        .log(`Compiling function "${functionName}"...`);
+      this.serverless.cli.log(`Compiling function "${functionName}"...`);
 
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);
@@ -28,22 +26,23 @@ module.exports = {
       const funcTemplate = getFunctionTemplate(
         funcObject,
         this.serverless.service.provider.region,
-        `gs://${
-        this.serverless.service.provider.deploymentBucketName
-        }/${this.serverless.service.package.artifactFilePath}`);
+        `gs://${this.serverless.service.provider.deploymentBucketName}/${this.serverless.service.package.artifactFilePath}`
+      );
 
-      funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
-        || _.get(this, 'serverless.service.provider.memorySize')
-        || 256;
-      funcTemplate.properties.location = _.get(funcObject, 'location')
-        || _.get(this, 'serverless.service.provider.region')
-        || 'us-central1';
-      funcTemplate.properties.runtime = _.get(funcObject, 'runtime')
-        || _.get(this, 'serverless.service.provider.runtime')
-        || 'nodejs8';
-      funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
-        || _.get(this, 'serverless.service.provider.timeout')
-        || '60s';
+      funcTemplate.properties.availableMemoryMb =
+        _.get(funcObject, 'memorySize') ||
+        _.get(this, 'serverless.service.provider.memorySize') ||
+        256;
+      funcTemplate.properties.location =
+        _.get(funcObject, 'location') ||
+        _.get(this, 'serverless.service.provider.region') ||
+        'us-central1';
+      funcTemplate.properties.runtime =
+        _.get(funcObject, 'runtime') ||
+        _.get(this, 'serverless.service.provider.runtime') ||
+        'nodejs8';
+      funcTemplate.properties.timeout =
+        _.get(funcObject, 'timeout') || _.get(this, 'serverless.service.provider.timeout') || '60s';
       funcTemplate.properties.environmentVariables = _.merge(
         {},
         _.get(this, 'serverless.service.provider.environment'),
@@ -51,17 +50,21 @@ module.exports = {
       );
 
       if (funcObject.vpc) {
-        _.assign(funcTemplate.properties, { vpcConnector: _.get(funcObject, 'vpc')
-         || _.get(this, 'serverless.service.provider.vpc') });
+        _.assign(funcTemplate.properties, {
+          vpcConnector: _.get(funcObject, 'vpc') || _.get(this, 'serverless.service.provider.vpc'),
+        });
       }
 
-      funcTemplate.properties.maxInstances = funcObject.maxInstances;
+      if (funcObject.maxInstances) {
+        funcTemplate.properties.maxInstances = funcObject.maxInstances;
+      }
 
       if (!_.size(funcTemplate.properties.environmentVariables)) {
         delete funcTemplate.properties.environmentVariables;
       }
 
-      funcTemplate.properties.labels = _.assign({},
+      funcTemplate.properties.labels = _.assign(
+        {},
         _.get(this, 'serverless.service.provider.labels') || {},
         _.get(funcObject, 'labels') || {} // eslint-disable-line comma-dangle
       );
@@ -149,7 +152,8 @@ const validateVpcConnectorProperty = (funcObject, functionName) => {
   }
 };
 
-const getFunctionTemplate = (funcObject, region, sourceArchiveUrl) => { //eslint-disable-line
+const getFunctionTemplate = (funcObject, region, sourceArchiveUrl) => {
+  //eslint-disable-line
   return {
     type: 'cloudfunctions.v1beta2.function',
     name: funcObject.name,
