@@ -7,9 +7,7 @@ const async = require('async');
 
 module.exports = {
   monitorDeployment(deploymentName, action, frequency) {
-    const validStatuses = [
-      'DONE',
-    ];
+    const validStatuses = ['DONE'];
 
     let deploymentStatus = null;
 
@@ -17,15 +15,16 @@ module.exports = {
 
     return new BbPromise((resolve, reject) => {
       async.whilst(
-        () => (validStatuses.indexOf(deploymentStatus) === -1),
+        () => validStatuses.indexOf(deploymentStatus) === -1,
 
-        (callback) => {
+        callback => {
           setTimeout(() => {
             const params = {
               project: this.serverless.service.provider.project,
             };
-            return this.provider.request('deploymentmanager', 'deployments', 'list', params)
-              .then((response) => {
+            return this.provider
+              .request('deploymentmanager', 'deployments', 'list', params)
+              .then(response => {
                 // if actions is "remove" and no deployments are left set to "DONE"
                 if (!response.deployments && action === 'remove') {
                   deploymentStatus = 'DONE';
@@ -47,7 +46,7 @@ module.exports = {
                 this.serverless.cli.printDot();
                 return callback();
               })
-              .catch((error) => {
+              .catch(error => {
                 reject(error);
               });
           }, frequency);
@@ -58,19 +57,17 @@ module.exports = {
           this.serverless.cli.consoleLog('');
           this.serverless.cli.log('Done...');
           resolve(deploymentStatus);
-        });
+        }
+      );
     });
   },
 };
 
-const throwErrorIfDeploymentFails = (deployment) => {
+const throwErrorIfDeploymentFails = deployment => {
   if (deployment.operation.error && deployment.operation.error.errors.length) {
     const errorCode = deployment.operation.error.errors[0].code;
     const parsedDetails = deployment.operation.error.errors[0].message;
-    const errorMessage = [
-      `Deployment failed: ${errorCode}\n\n`,
-      `     ${parsedDetails}`,
-    ].join('');
+    const errorMessage = [`Deployment failed: ${errorCode}\n\n`, `     ${parsedDetails}`].join('');
     throw new Error(errorMessage);
   }
 };
