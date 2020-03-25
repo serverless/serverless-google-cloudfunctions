@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.2](https://github.com/serverless/serverless-google-cloudfunctions/compare/v2.4.1...v2.4.2) (2020-03-25)
+
+- Ensure to rely internally on v1 and not v1 Beta CloudFunctions API ([#165](https://github.com/serverless/serverless-google-cloudfunctions/issues/165)) ([Eisuke Kuwahata](https://github.com/mather))
+
 ### [2.4.1](https://github.com/serverless/serverless-google-cloudfunctions/compare/v2.4.0...v2.4.1) (2020-02-28)
 
 ### Bug Fixes
