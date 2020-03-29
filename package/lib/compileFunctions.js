@@ -35,10 +35,6 @@ module.exports = {
         _.get(funcObject, 'memorySize') ||
         _.get(this, 'serverless.service.provider.memorySize') ||
         256;
-      funcTemplate.properties.location =
-        _.get(funcObject, 'location') ||
-        _.get(this, 'serverless.service.provider.region') ||
-        'us-central1';
       funcTemplate.properties.runtime =
         _.get(funcObject, 'runtime') ||
         _.get(this, 'serverless.service.provider.runtime') ||
