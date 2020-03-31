@@ -59,7 +59,7 @@ The second is from the developers' point of view , which means you need to make 
 
 ### Notices
 
-Both the methods have some pros and cons, but it would work at least .
+Both the methods have some pros and cons, see the details from here:
 
 1. If your functions are called by bucket or pubsub, the modification of the function name may not impact your business.
 
