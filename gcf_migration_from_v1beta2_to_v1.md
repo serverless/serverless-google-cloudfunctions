@@ -1,4 +1,3 @@
-
 # google cloud function migration reference
 
 ## Background
@@ -16,7 +15,7 @@ Which means the former ones deployed used v1beta2 api version and now use v1 in 
 
 ## Solutions
 
-First please be  careful that
+First please be careful that
 
 > Google Cloud Functions v1beta2 API version will be shut down on April 15, 2020
 
@@ -35,11 +34,12 @@ you can specify the **package.json** in nodejs project like
     "serverless-google-cloudfunctions": "^2.4.1"
   },
 ```
+
 the version of the serverless-google-cloudfunctions must be below **v2.4.2**
 
-2. Redeploy 
+2. Redeploy
 
- redeploy it ,and everything would be ok.
+redeploy it ,and everything would be ok.
 
 Then you should consider upgrading to v1.
 
@@ -52,6 +52,7 @@ If you choose to upgrade to v1 function , and make sure the **package.json** usi
     "serverless-google-cloudfunctions": "*"
   },
 ```
+
 there are at least two ways to realize that.
 
 #### method 1
@@ -62,23 +63,23 @@ you need to use the [deployment manager](https://cloud.google.com/deployment-man
 
 1. Delete all the functions
 
-you have to delete all the functions and related bucket first ,and then delete the  all the related resources from deployment manager
+you have to delete all the functions and related bucket first ,and then delete the all the related resources from deployment manager
 
 2. Delete all the related buckets with cloud functions
 
-By default , each time you you use ```serverless deploy ``` , it would create a bucket for you to store the zip package for the function.
+By default , each time you you use `serverless deploy` , it would create a bucket for you to store the zip package for the function.
 
 pls delete this bucket first.
 
 3. Delete all the function resources in deployment manager
- 
+
 4. Redeploy the functions
 
-#### method 2 
+#### method 2
 
-The second is from the developers' point of view , which means you need to make some changes to the ```serverless.yml```.
+The second is from the developers' point of view , which means you need to make some changes to the `serverless.yml`.
 
-For example , one of your services may be named ```service-1``` ,and you may change it to whatever different from this name 
+For example , one of your services may be named `service-1` ,and you may change it to whatever different from this name
 
 or rename the function's name to make sure this function is different from the older one.
 
@@ -95,4 +96,3 @@ Both the methods have some pros and cons, but it would work at least .
 2. If your functions are called by http ,the function name would be changed ,which means the http url that need to be called may also be changed
 
 3. If you use cloud function to store some important data,pls export these data first and then import them to a new bucket.
-
