@@ -1,25 +1,25 @@
-# Cloud function Migration Reference from v1beta to v1
+# Migration Reference from v2 to v3
 
 ## Background
 
 > Google Cloud Functions v1beta2 API version will be shut down on April 15, 2020
 
-When you are using serverless to deploy google cloud functions with latest serverless google plugin (support google api v1),
+When you are using serverless to deploy google cloud functions with serverless google plugin v3 (Support google api v1),
 It may face a error like
 
-```shell
+```
 Deployment failed: TYPE_MISMATCH
      Resource types cannot be changed, previous (cloudfunctions.v1beta2.function) -> updated (gcp-types/cloudfunctions-v1:projects.locations.functions)
 ```
 
-Which means the former ones deployed used v1beta2 api version and now use v1 in the v2.4.2 of serverless-google-cloudfunctions, thus it failed to deploy.
+Which means the former ones deployed used serverless-google-cloudfunctions v2, thus it failed to deploy.
 First please be careful that
 
 ## Solutions
 
-If you choose to upgrade to v1 function , and make sure the **package.json** using the latest plugin in nodejs project
+If you choose to upgrade to v1 function , and make sure the _package.json_ using the latest plugin in nodejs project
 
-```
+```json
   "devDependencies": {
     "serverless-google-cloudfunctions": "*"
   },

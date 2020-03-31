@@ -32,4 +32,4 @@ docker-compose run node bash
 
 > Google Cloud Functions v1beta2 API version will be shut down on April 15, 2020
 
-You can follow this [document](./MIGRATION_GUIDE.md) to upgrade your v1beta based cloud function( serverless-google-cloudfunctions v2.4.1) to v1
+You can follow this [document](./MIGRATION_GUIDE.md) to upgrade your serverless-google-cloudfunctions v2 to v3
