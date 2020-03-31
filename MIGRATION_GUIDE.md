@@ -25,7 +25,7 @@ If you choose to upgrade to v1 function , and make sure the _package.json_ using
   },
 ```
 
-There are at least two options to upgrade the exisingt cloud function that deploy via google api v1beta.
+There are two options to upgrade the exising cloud functions that deploy via _serverless-google-cloudfunctions v2_ (google api v1beta).
 
 ### Option 1
 
@@ -33,19 +33,17 @@ The first is from the devops point of view ,you don't need to change the code at
 
 you need to open the [deployment manager](https://cloud.google.com/deployment-manager) in GCP.
 
-- Delete all the functions
+- _Delete all the functions_
 
-you have to delete all the functions and related bucket first ,and then delete the all the related resources from deployment manager
+  You have to delete all the functions and related bucket first ,and then delete the all the related resources from deployment manager
 
-- Delete all the related buckets with cloud functions
+- _Delete all the related buckets with cloud functions_
 
-By default, each time you you use `serverless deploy` , it would create a bucket for you to store the zip package for the function.
+  By default, each time you you use `serverless deploy` , it would create a bucket for you to store the zip package for the function. pls delete this bucket first.
 
-pls delete this bucket first.
+- _Delete all the function resources in deployment manager_
 
-- Delete all the function resources in deployment manager
-
-- Redeploy the functions
+- _Redeploy the functions_
 
 ### Option 2
 
@@ -53,7 +51,7 @@ The second is from the developers' point of view , which means you need to make 
 
 - Change the service name or change the function name to make sure this function is different from the older one.
 
-- redeploy the functions.
+- Redeploy the functions.
 
 - Once it's done，you may consider delete the old ones.
 
