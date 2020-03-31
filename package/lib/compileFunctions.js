@@ -12,7 +12,7 @@ module.exports = {
     const artifactFilePath = this.serverless.service.package.artifact;
     const fileName = artifactFilePath.split(path.sep).pop();
     const projectName = _.get(this, 'serverless.service.provider.project');
-
+    this.serverless.service.provider.region = this.serverless.service.provider.region || 'us-central1';
     this.serverless.service.package.artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
 
     this.serverless.service.getAllFunctions().forEach(functionName => {
