@@ -526,7 +526,6 @@ describe('CompileFunctions', () => {
             entryPoint: 'func1',
             availableMemoryMb: 256,
             timeout: '60s',
-            location: 'us-central1',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
             httpsTrigger: {
               url: 'foo',
@@ -582,7 +581,6 @@ describe('CompileFunctions', () => {
             entryPoint: 'func1',
             availableMemoryMb: 256,
             timeout: '60s',
-            location: 'us-central1',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
             eventTrigger: {
               eventType: 'foo',
@@ -602,7 +600,6 @@ describe('CompileFunctions', () => {
             entryPoint: 'func2',
             availableMemoryMb: 256,
             timeout: '60s',
-            location: 'us-central1',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
             eventTrigger: {
               eventType: 'foo',
@@ -638,7 +635,6 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            location: 'us-central1',
             runtime: 'nodejs8',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
@@ -680,7 +676,6 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            location: 'us-central1',
             runtime: 'nodejs8',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
@@ -730,7 +725,6 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            location: 'us-central1',
             runtime: 'nodejs8',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
@@ -749,7 +743,6 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func2',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            location: 'us-central1',
             runtime: 'nodejs8',
             function: 'my-service-dev-func2',
             entryPoint: 'func2',
