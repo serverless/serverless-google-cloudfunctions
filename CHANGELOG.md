@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v2.4.3...v3.0.0) (2020-04-01)
+
+### ⚠ BREAKING CHANGES
+
+- Drop support for Node.js v6
+- Services deployed with v1 Beta cannot be updated with v1.
+
+Co-authored-by: Jeremy Minhua Bao (US - ADVS) <jeremy.bao@pwc.com>
+Co-authored-by: zxhaaa <zxhaaa@hotmail.com>
+Co-authored-by: Peachey_Chen <mr_robot2015@foxmail.com>
+
+### Features
+
+- Switch from CloudFunctions v1 beta to v1 ([#206](https://github.com/serverless/serverless-google-cloudfunctions/issues/206)) ([482ee0e](https://github.com/serverless/serverless-google-cloudfunctions/commit/482ee0e63a1f72dec8cce6c80dfe66ab406671ae))
+- Upgrade googleapis to latest version ([#209](https://github.com/serverless/serverless-google-cloudfunctions/issues/209)) ([ab0d8ba](https://github.com/serverless/serverless-google-cloudfunctions/commit/ab0d8ba802d5999c9848232e836651c577a9f0cd))
+
 ### [2.4.3](https://github.com/serverless/serverless-google-cloudfunctions/compare/v2.4.2...v2.4.3) (2020-04-01)
 
 ### Bug Fixes
