@@ -1,6 +1,6 @@
 {
   "name": "serverless-google-cloudfunctions",
-  "version": "3.0.0",
+  "version": "2.4.3",
   "description": "Provider plugin for the Serverless Framework v1.x which adds support for Google Cloud Functions.",
   "author": "serverless.com",
   "repository": "serverless/serverless-google-cloudfunctions",

@@ -23,12 +23,11 @@ describe('CompileFunctions', () => {
         resources: [],
       },
       deploymentBucketName: 'sls-my-service-dev-12345678',
-      project: 'myProject',
-      region: 'us-central1',
     };
     serverless.setProvider('google', new GoogleProvider(serverless));
     const options = {
       stage: 'dev',
+      region: 'us-central1',
     };
     googlePackage = new GooglePackage(serverless, options);
     consoleLogStub = sinon.stub(googlePackage.serverless.cli, 'log').returns();
@@ -105,13 +104,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 1024,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -142,13 +140,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 1024,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -179,13 +176,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 256,
             timeout: '120s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -216,13 +212,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 256,
             timeout: '120s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -255,13 +250,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -296,13 +290,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -341,13 +334,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -383,13 +375,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 256,
             environmentVariables: {
               TEST_VAR: 'test',
@@ -425,13 +416,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 256,
             environmentVariables: {
               TEST_VAR: 'test',
@@ -472,13 +462,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 256,
             environmentVariables: {
               TEST_VAR: 'test_var',
@@ -517,13 +506,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -572,13 +560,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -591,13 +578,12 @@ describe('CompileFunctions', () => {
           },
         },
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func2',
           properties: {
-            parent: 'projects/myProject/locations/us-central1',
+            location: 'us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func2',
-            entryPoint: 'func2',
+            function: 'func2',
             availableMemoryMb: 256,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -631,13 +617,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 128,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -672,13 +657,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 128,
             timeout: '60s',
             maxInstances: 10,
@@ -721,13 +705,12 @@ describe('CompileFunctions', () => {
 
       const compiledResources = [
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func1',
-            entryPoint: 'func1',
+            function: 'func1',
             availableMemoryMb: 128,
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -739,13 +722,12 @@ describe('CompileFunctions', () => {
           },
         },
         {
-          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          type: 'cloudfunctions.v1beta2.function',
           name: 'my-service-dev-func2',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
             runtime: 'nodejs8',
-            function: 'my-service-dev-func2',
-            entryPoint: 'func2',
+            function: 'func2',
             availableMemoryMb: 128,
             timeout: '60s',
             maxInstances: 10,
