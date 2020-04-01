@@ -37,7 +37,7 @@ module.exports = {
     };
 
     _.forEach(resources.resources, resource => {
-      if (resource.type === 'cloudfunctions.v1beta2.function') {
+      if (resource.type === 'gcp-types/cloudfunctions-v1:projects.locations.functions') {
         const serviceFuncName = getFunctionNameInService(
           resource.name,
           this.serverless.service.service,
@@ -53,7 +53,7 @@ module.exports = {
           const region = this.options.region;
           const project = this.serverless.service.provider.project;
           const baseUrl = `https://${region}-${project}.cloudfunctions.net`;
-          const path = serviceFunc.handler; // NOTE this might change
+          const path = serviceFunc.name; // NOTE this might change
           funcResource = `${baseUrl}/${path}`;
         }
 
