@@ -104,13 +104,6 @@ jobs:
     - name: 'Unit Tests - Node.js v8'
       node_js: 8
 
-    - name: 'Unit Tests - Node.js v6'
-      node_js: 6
-      before_install:
-        # npm@3 doesn't seem handle `--no-optional` option of `npm update` command.
-        # Upgrade npm to version which is distributed with Node.js v8
-        - npm i -g npm@6.4.1
-
     - stage: Tag on Release
       name: 'Tag on Release'
       node_js: 12
