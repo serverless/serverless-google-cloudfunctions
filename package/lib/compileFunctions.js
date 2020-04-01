@@ -11,7 +11,6 @@ module.exports = {
   compileFunctions() {
     const artifactFilePath = this.serverless.service.package.artifact;
     const fileName = artifactFilePath.split(path.sep).pop();
-    const projectName = _.get(this, 'serverless.service.provider.project');
 
     this.serverless.service.package.artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
 
@@ -26,7 +25,6 @@ module.exports = {
 
       const funcTemplate = getFunctionTemplate(
         funcObject,
-        projectName,
         this.serverless.service.provider.region,
         `gs://${this.serverless.service.provider.deploymentBucketName}/${this.serverless.service.package.artifactFilePath}`
       );
@@ -152,18 +150,17 @@ const validateVpcConnectorProperty = (funcObject, functionName) => {
   }
 };
 
-const getFunctionTemplate = (funcObject, projectName, region, sourceArchiveUrl) => {
+const getFunctionTemplate = (funcObject, region, sourceArchiveUrl) => {
   //eslint-disable-line
   return {
-    type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+    type: 'cloudfunctions.v1beta2.function',
     name: funcObject.name,
     properties: {
-      parent: `projects/${projectName}/locations/${region}`,
+      location: region,
       availableMemoryMb: 256,
       runtime: 'nodejs8',
       timeout: '60s',
-      entryPoint: funcObject.handler,
-      function: funcObject.name,
+      function: funcObject.handler,
       sourceArchiveUrl,
     },
   };
