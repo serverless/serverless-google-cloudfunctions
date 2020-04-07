@@ -1,6 +1,6 @@
 {
   "name": "serverless-google-cloudfunctions",
-  "version": "2.4.1",
+  "version": "3.0.0",
   "description": "Provider plugin for the Serverless Framework v1.x which adds support for Google Cloud Functions.",
   "author": "serverless.com",
   "repository": "serverless/serverless-google-cloudfunctions",
@@ -43,20 +43,20 @@
     "bluebird": "^3.7.2",
     "chalk": "^2.4.2",
     "fs-extra": "^8.1.0",
-    "googleapis": "^39.2.0",
+    "googleapis": "^48.0.0",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@serverless/eslint-config": "^1.2.1",
-    "coveralls": "^3.0.9",
+    "coveralls": "^3.0.11",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.1",
     "git-list-updated": "^1.2.1",
     "github-release-from-cc-changelog": "^2.2.0",
     "husky": "^4.2.3",
     "jest": "^24.9.0",
-    "lint-staged": "^10.0.8",
+    "lint-staged": "^10.0.9",
     "prettier": "^1.19.1",
     "sinon": "^7.5.0",
     "standard-version": "^7.1.0"
