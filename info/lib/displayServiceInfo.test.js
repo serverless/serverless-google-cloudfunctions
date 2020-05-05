@@ -18,9 +18,7 @@ describe('DisplayServiceInfo', () => {
     serverless.service.functions = {
       func1: {
         handler: 'handler',
-        events: [
-          { http: 'foo' },
-        ],
+        events: [{ http: 'foo' }],
       },
       func2: {
         handler: 'handler',
@@ -52,12 +50,9 @@ describe('DisplayServiceInfo', () => {
     let printInfoStub;
 
     beforeEach(() => {
-      getResourcesStub = sinon.stub(googleInfo, 'getResources')
-        .returns(BbPromise.resolve());
-      gatherDataStub = sinon.stub(googleInfo, 'gatherData')
-        .returns(BbPromise.resolve());
-      printInfoStub = sinon.stub(googleInfo, 'printInfo')
-        .returns(BbPromise.resolve());
+      getResourcesStub = sinon.stub(googleInfo, 'getResources').returns(BbPromise.resolve());
+      gatherDataStub = sinon.stub(googleInfo, 'gatherData').returns(BbPromise.resolve());
+      printInfoStub = sinon.stub(googleInfo, 'printInfo').returns(BbPromise.resolve());
     });
 
     afterEach(() => {
@@ -66,8 +61,8 @@ describe('DisplayServiceInfo', () => {
       googleInfo.printInfo.restore();
     });
 
-    it('should run promise chain', () => googleInfo
-      .displayServiceInfo().then(() => {
+    it('should run promise chain', () =>
+      googleInfo.displayServiceInfo().then(() => {
         expect(getResourcesStub.calledOnce).toEqual(true);
         expect(gatherDataStub.calledAfter(getResourcesStub));
         expect(printInfoStub.calledAfter(gatherDataStub));
@@ -85,16 +80,14 @@ describe('DisplayServiceInfo', () => {
       googleInfo.provider.request.restore();
     });
 
-    it('should return a list with resources from the deployment', () => googleInfo
-      .getResources().then(() => {
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'resources',
-          'list',
-          {
+    it('should return a list with resources from the deployment', () =>
+      googleInfo.getResources().then(() => {
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'resources', 'list', {
             project: 'my-project',
             deployment: 'sls-my-service-dev',
-          })).toEqual(true);
+          })
+        ).toEqual(true);
       }));
   });
 
@@ -103,8 +96,14 @@ describe('DisplayServiceInfo', () => {
       const resources = {
         resources: [
           { type: 'resource.which.should.be.filterered', name: 'someResource' },
-          { type: 'cloudfunctions.v1beta2.function', name: 'my-service-dev-func1' },
-          { type: 'cloudfunctions.v1beta2.function', name: 'my-service-dev-func2' },
+          {
+            type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+            name: 'my-service-dev-func1',
+          },
+          {
+            type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+            name: 'my-service-dev-func2',
+          },
         ],
       };
 
@@ -117,7 +116,7 @@ describe('DisplayServiceInfo', () => {
           functions: [
             {
               name: 'func1',
-              resource: 'https://us-central1-my-project.cloudfunctions.net/handler',
+              resource: 'https://us-central1-my-project.cloudfunctions.net/my-service-dev-func1',
             },
             {
               name: 'func2',
@@ -127,16 +126,14 @@ describe('DisplayServiceInfo', () => {
         },
       };
 
-      return googleInfo.gatherData(resources).then((data) => {
+      return googleInfo.gatherData(resources).then(data => {
         expect(data).toEqual(expectedData);
       });
     });
 
     it('should resolve with empty data if resource type is not matching', () => {
       const resources = {
-        resources: [
-          { type: 'resource.which.should.be.filterered', name: 'someResource' },
-        ],
+        resources: [{ type: 'resource.which.should.be.filterered', name: 'someResource' }],
       };
 
       const expectedData = {
@@ -149,7 +146,7 @@ describe('DisplayServiceInfo', () => {
         },
       };
 
-      return googleInfo.gatherData(resources).then((data) => {
+      return googleInfo.gatherData(resources).then(data => {
         expect(data).toEqual(expectedData);
       });
     });
@@ -176,7 +173,7 @@ describe('DisplayServiceInfo', () => {
           functions: [
             {
               name: 'func1',
-              resource: 'https://us-central1-my-project.cloudfunctions.net/handler',
+              resource: 'https://us-central1-my-project.cloudfunctions.net/my-service-dev-func1',
             },
             {
               name: 'func2',
@@ -197,7 +194,8 @@ describe('DisplayServiceInfo', () => {
 
       expectedOutput += `${chalk.yellow.underline('Deployed functions')}\n`;
       expectedOutput += `${chalk.yellow('func1')}\n`;
-      expectedOutput += '  https://us-central1-my-project.cloudfunctions.net/handler\n';
+      expectedOutput +=
+        '  https://us-central1-my-project.cloudfunctions.net/my-service-dev-func1\n';
       expectedOutput += `${chalk.yellow('func2')}\n`;
       expectedOutput += '  projects/*/topics/my-test-topic\n';
 
