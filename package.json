@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
-    "@serverless/eslint-config": "^1.2.1",
+    "@serverless/eslint-config": "^2.0.0",
     "coveralls": "^3.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.2",
