@@ -23,6 +23,7 @@ describe('InvokeFunction', () => {
     serverless.service.functions = {
       func1: {
         handler: 'foo',
+        name: 'full-function-name',
       },
     };
     serverless.setProvider('google', new GoogleProvider(serverless));
@@ -77,7 +78,7 @@ describe('InvokeFunction', () => {
             'functions',
             'call',
             {
-              name: 'projects/my-project/locations/us-central1/functions/foo',
+              name: 'projects/my-project/locations/us-central1/functions/full-function-name',
               resource: {
                 data: '',
               },
@@ -100,7 +101,7 @@ describe('InvokeFunction', () => {
             'functions',
             'call',
             {
-              name: 'projects/my-project/locations/us-central1/functions/foo',
+              name: 'projects/my-project/locations/us-central1/functions/full-function-name',
               resource: {
                 data: googleInvoke.options.data,
               },
