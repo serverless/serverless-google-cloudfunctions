@@ -55,7 +55,7 @@
     "git-list-updated": "^1.2.1",
     "github-release-from-cc-changelog": "^2.2.0",
     "husky": "^4.2.5",
-    "jest": "^26.0.1",
+    "jest": "^25.5.4",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
     "sinon": "^8.1.1",
