@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v3.0.0...v3.1.0) (2020-05-11)
+
+### Features
+
+- Support serviceAccount option for deployment ([#215](https://github.com/serverless/serverless-google-cloudfunctions/issues/215)) ([1164495](https://github.com/serverless/serverless-google-cloudfunctions/commit/11644956771bc64dc0259b6316502f104fadf1ea))
+
+### Bug Fixes
+
+- Fix function name resolution on invoke ([#216](https://github.com/serverless/serverless-google-cloudfunctions/issues/216)) ([86d40aa](https://github.com/serverless/serverless-google-cloudfunctions/commit/86d40aa3ab07e512eb7e6a92424db399335a8201))
+
 ## [3.0.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v2.4.3...v3.0.0) (2020-04-01)
 
 ### ⚠ BREAKING CHANGES
