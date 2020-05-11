@@ -32,6 +32,10 @@ module.exports = {
         `gs://${this.serverless.service.provider.deploymentBucketName}/${this.serverless.service.package.artifactFilePath}`
       );
 
+      funcTemplate.properties.serviceAccountEmail =
+        _.get(funcObject, 'serviceAccountEmail') ||
+        _.get(this, 'serverless.service.provider.serviceAccountEmail') ||
+        null;
       funcTemplate.properties.availableMemoryMb =
         _.get(funcObject, 'memorySize') ||
         _.get(this, 'serverless.service.provider.memorySize') ||
@@ -47,6 +51,10 @@ module.exports = {
         _.get(this, 'serverless.service.provider.environment'),
         funcObject.environment // eslint-disable-line comma-dangle
       );
+
+      if (!funcTemplate.properties.serviceAccountEmail) {
+        delete funcTemplate.properties.serviceAccountEmail;
+      }
 
       if (funcObject.vpc) {
         _.assign(funcTemplate.properties, {

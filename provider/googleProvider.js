@@ -41,6 +41,27 @@ class GoogleProvider {
       logging: google.logging('v2'),
       cloudfunctions: google.cloudfunctions('v1'),
     };
+
+    this.variableResolvers = {
+      gs: this.getGsValue,
+    };
+  }
+
+  getGsValue(variableString) {
+    const groups = variableString.split(':')[1].split('/');
+    const bucket = groups.shift();
+    const object = groups.join('/');
+
+    return this.serverless
+      .getProvider('google')
+      .request('storage', 'objects', 'get', {
+        bucket,
+        object,
+        alt: 'media',
+      })
+      .catch(err => {
+        throw new Error(`Error getting value for ${variableString}. ${err.message}`);
+      });
   }
 
   request() {
