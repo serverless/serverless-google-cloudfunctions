@@ -49,14 +49,14 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@serverless/eslint-config": "^1.2.1",
-    "coveralls": "^3.0.11",
+    "coveralls": "^3.1.0",
     "eslint": "^6.8.0",
-    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-import": "^2.20.2",
     "git-list-updated": "^1.2.1",
     "github-release-from-cc-changelog": "^2.2.0",
-    "husky": "^4.2.3",
+    "husky": "^4.2.5",
     "jest": "^24.9.0",
-    "lint-staged": "^10.0.9",
+    "lint-staged": "^10.2.2",
     "prettier": "^1.19.1",
     "sinon": "^7.5.0",
     "standard-version": "^7.1.0"
