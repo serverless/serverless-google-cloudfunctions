@@ -7,9 +7,7 @@ const chalk = require('chalk');
 
 module.exports = {
   invokeFunction() {
-    return BbPromise.bind(this)
-      .then(this.invoke)
-      .then(this.printResult);
+    return BbPromise.bind(this).then(this.invoke).then(this.printResult);
   },
 
   invoke() {

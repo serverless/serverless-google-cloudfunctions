@@ -36,7 +36,7 @@ const updateBucketName = (bucket, name) => {
   return newBucket;
 };
 
-const findDeploymentBucket = resource => {
+const findDeploymentBucket = (resource) => {
   const type = 'storage.v1.bucket';
   const name = 'will-be-replaced-by-serverless';
 

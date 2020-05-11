@@ -109,7 +109,7 @@ describe('GoogleProvider', () => {
       googleProvider.sdk.service.resource.method.bind = () =>
         sinon.stub().resolves({ data: 'result' });
 
-      return googleProvider.request('service', 'resource', 'method', {}).then(result => {
+      return googleProvider.request('service', 'resource', 'method', {}).then((result) => {
         expect(result).toEqual('result');
       });
     });

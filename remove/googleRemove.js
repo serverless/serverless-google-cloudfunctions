@@ -33,9 +33,7 @@ class GoogleRemove {
           .then(this.setDeploymentBucketName),
 
       'remove:remove': () =>
-        BbPromise.bind(this)
-          .then(this.emptyDeploymentBucket)
-          .then(this.removeDeployment),
+        BbPromise.bind(this).then(this.emptyDeploymentBucket).then(this.removeDeployment),
     };
   }
 }

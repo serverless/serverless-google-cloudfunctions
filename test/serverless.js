@@ -6,11 +6,11 @@ class Serverless {
     this.providers = {};
 
     this.service = {};
-    this.service.getAllFunctions = function() {
+    this.service.getAllFunctions = function () {
       //eslint-disable-line
       return Object.keys(this.functions);
     };
-    this.service.getFunction = function(functionName) {
+    this.service.getFunction = function (functionName) {
       //eslint-disable-line
       // NOTE the stage is always 'dev'!
       this.functions[functionName].name = `${this.service}-dev-${functionName}`;
@@ -29,7 +29,7 @@ class Serverless {
 
     this.plugins = [];
     this.pluginManager = {
-      addPlugin: plugin => this.plugins.push(plugin),
+      addPlugin: (plugin) => this.plugins.push(plugin),
     };
   }
 

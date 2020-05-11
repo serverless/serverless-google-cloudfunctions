@@ -5,9 +5,7 @@ const _ = require('lodash');
 
 module.exports = {
   cleanupDeploymentBucket() {
-    return BbPromise.bind(this)
-      .then(this.getObjectsToRemove)
-      .then(this.removeObjects);
+    return BbPromise.bind(this).then(this.getObjectsToRemove).then(this.removeObjects);
   },
 
   getObjectsToRemove() {
@@ -15,7 +13,7 @@ module.exports = {
       bucket: this.serverless.service.provider.deploymentBucketName,
     };
 
-    return this.provider.request('storage', 'objects', 'list', params).then(response => {
+    return this.provider.request('storage', 'objects', 'list', params).then((response) => {
       if (!response.items.length) return BbPromise.resolve([]);
 
       const files = response.items;
@@ -25,7 +23,7 @@ module.exports = {
 
       const orderedObjects = _.orderBy(
         files,
-        file => {
+        (file) => {
           const timestamp = file.name.match(/(serverless)\/(.+)\/(.+)\/(\d+)-(.+)\/(.+\.zip)/)[4];
           return timestamp;
         },
@@ -48,7 +46,7 @@ module.exports = {
 
     this.serverless.cli.log('Removing old artifacts...');
 
-    const removePromises = objectsToRemove.map(object => {
+    const removePromises = objectsToRemove.map((object) => {
       const params = {
         bucket: object.bucket,
         object: object.name,

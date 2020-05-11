@@ -7,9 +7,7 @@ const chalk = require('chalk');
 
 module.exports = {
   retrieveLogs() {
-    return BbPromise.bind(this)
-      .then(this.getLogs)
-      .then(this.printLogs);
+    return BbPromise.bind(this).then(this.getLogs).then(this.printLogs);
   },
 
   getLogs() {

@@ -69,7 +69,7 @@ describe('EmptyDeploymentBucket', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleRemove.getObjectsToRemove().then(objects => {
+      return googleRemove.getObjectsToRemove().then((objects) => {
         expect(objects.length).toEqual(0);
         expect(objects).toEqual([]);
         expect(
@@ -95,7 +95,7 @@ describe('EmptyDeploymentBucket', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleRemove.getObjectsToRemove().then(objects => {
+      return googleRemove.getObjectsToRemove().then((objects) => {
         expect(objects.length).toEqual(2);
         expect(objects).toContainEqual({
           bucket: 'sls-my-service-dev-12345678',
@@ -151,7 +151,7 @@ describe('EmptyDeploymentBucket', () => {
 
       requestStub.returns(BbPromise.resolve('removePromise'));
 
-      return googleRemove.removeObjects(objectsToRemove).then(removePromises => {
+      return googleRemove.removeObjects(objectsToRemove).then((removePromises) => {
         expect(requestStub.called).toEqual(true);
         expect(consoleLogStub.calledOnce).toEqual(true);
         expect(removePromises).toEqual(['removePromise', 'removePromise']);

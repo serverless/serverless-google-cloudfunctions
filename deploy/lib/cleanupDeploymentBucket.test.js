@@ -94,7 +94,7 @@ describe('CleanupDeploymentBucket', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleDeploy.getObjectsToRemove().then(objects => {
+      return googleDeploy.getObjectsToRemove().then((objects) => {
         expect(objects.length).toEqual(2);
         expect(objects).not.toContainEqual({
           bucket: 'sls-my-service-dev-12345678',
@@ -143,7 +143,7 @@ describe('CleanupDeploymentBucket', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleDeploy.getObjectsToRemove().then(objects => {
+      return googleDeploy.getObjectsToRemove().then((objects) => {
         expect(objects.length).toEqual(0);
         expect(objects).toEqual([]);
         expect(
@@ -160,7 +160,7 @@ describe('CleanupDeploymentBucket', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleDeploy.getObjectsToRemove().then(objects => {
+      return googleDeploy.getObjectsToRemove().then((objects) => {
         expect(objects.length).toEqual(0);
         expect(objects).toEqual([]);
         expect(
@@ -217,7 +217,7 @@ describe('CleanupDeploymentBucket', () => {
 
       requestStub.returns(BbPromise.resolve('removePromise'));
 
-      return googleDeploy.removeObjects(objectsToRemove).then(removePromises => {
+      return googleDeploy.removeObjects(objectsToRemove).then((removePromises) => {
         expect(requestStub.called).toEqual(true);
         expect(consoleLogStub.calledOnce).toEqual(true);
         expect(removePromises).toEqual([

@@ -67,7 +67,7 @@ describe('MonitorDeployment', () => {
 
         return googleCommand
           .monitorDeployment(deploymentName, 'create', 10)
-          .then(deploymentStatus => {
+          .then((deploymentStatus) => {
             expect(consoleLogStub.called).toEqual(true);
             expect(
               requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
@@ -100,7 +100,7 @@ describe('MonitorDeployment', () => {
 
         requestStub.returns(BbPromise.resolve(response));
 
-        return googleCommand.monitorDeployment(deploymentName, 'update', 10).catch(error => {
+        return googleCommand.monitorDeployment(deploymentName, 'update', 10).catch((error) => {
           expect(consoleLogStub.called).toEqual(true);
           expect(
             requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
@@ -121,7 +121,7 @@ describe('MonitorDeployment', () => {
 
         return googleCommand
           .monitorDeployment(deploymentName, 'remove', 10)
-          .then(deploymentStatus => {
+          .then((deploymentStatus) => {
             expect(consoleLogStub.called).toEqual(true);
             expect(
               requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
@@ -142,7 +142,7 @@ describe('MonitorDeployment', () => {
 
         return googleCommand
           .monitorDeployment(deploymentName, 'remove', 10)
-          .then(deploymentStatus => {
+          .then((deploymentStatus) => {
             expect(consoleLogStub.called).toEqual(true);
             expect(
               requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {

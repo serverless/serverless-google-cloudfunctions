@@ -37,9 +37,7 @@ class GooglePackage {
       'package:cleanup': () => BbPromise.bind(this).then(this.cleanupServerlessDir),
 
       'before:package:initialize': () =>
-        BbPromise.bind(this)
-          .then(this.validate)
-          .then(this.setDefaults),
+        BbPromise.bind(this).then(this.validate).then(this.setDefaults),
 
       'package:initialize': () =>
         BbPromise.bind(this)
@@ -53,9 +51,7 @@ class GooglePackage {
       'package:compileFunctions': () => BbPromise.bind(this).then(this.compileFunctions),
 
       'package:finalize': () =>
-        BbPromise.bind(this)
-          .then(this.mergeServiceResources)
-          .then(this.saveUpdateTemplateFile),
+        BbPromise.bind(this).then(this.mergeServiceResources).then(this.saveUpdateTemplateFile),
     };
   }
 }

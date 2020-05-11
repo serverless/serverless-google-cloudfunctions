@@ -71,7 +71,7 @@ describe('UpdateDeployment', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleDeploy.getDeployment().then(foundDeployment => {
+      return googleDeploy.getDeployment().then((foundDeployment) => {
         expect(foundDeployment).toEqual(undefined);
         expect(
           requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
@@ -87,7 +87,7 @@ describe('UpdateDeployment', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleDeploy.getDeployment().then(foundDeployment => {
+      return googleDeploy.getDeployment().then((foundDeployment) => {
         expect(foundDeployment).toEqual(response.deployments[0]);
         expect(
           requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {

@@ -126,7 +126,7 @@ describe('DisplayServiceInfo', () => {
         },
       };
 
-      return googleInfo.gatherData(resources).then(data => {
+      return googleInfo.gatherData(resources).then((data) => {
         expect(data).toEqual(expectedData);
       });
     });
@@ -146,7 +146,7 @@ describe('DisplayServiceInfo', () => {
         },
       };
 
-      return googleInfo.gatherData(resources).then(data => {
+      return googleInfo.gatherData(resources).then((data) => {
         expect(data).toEqual(expectedData);
       });
     });

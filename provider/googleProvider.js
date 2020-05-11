@@ -59,7 +59,7 @@ class GoogleProvider {
         object,
         alt: 'media',
       })
-      .catch(err => {
+      .catch((err) => {
         throw new Error(`Error getting value for ${variableString}. ${err.message}`);
       });
   }
@@ -68,7 +68,7 @@ class GoogleProvider {
     // grab necessary stuff from arguments array
     const lastArg = arguments[Object.keys(arguments).pop()]; //eslint-disable-line
     const hasParams = typeof lastArg === 'object';
-    const filArgs = _.filter(arguments, v => typeof v === 'string'); //eslint-disable-line
+    const filArgs = _.filter(arguments, (v) => typeof v === 'string'); //eslint-disable-line
     const params = hasParams ? lastArg : {};
 
     const service = filArgs[0];
@@ -86,8 +86,8 @@ class GoogleProvider {
       return filArgs
         .reduce((p, c) => p[c], this.sdk)
         .bind(serviceInstance)(requestParams)
-        .then(result => result.data)
-        .catch(error => {
+        .then((result) => result.data)
+        .catch((error) => {
           if (
             error &&
             error.errors &&

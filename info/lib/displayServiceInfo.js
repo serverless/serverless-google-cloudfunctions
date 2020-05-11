@@ -8,10 +8,7 @@ const _ = require('lodash');
 
 module.exports = {
   displayServiceInfo() {
-    return BbPromise.bind(this)
-      .then(this.getResources)
-      .then(this.gatherData)
-      .then(this.printInfo);
+    return BbPromise.bind(this).then(this.getResources).then(this.gatherData).then(this.printInfo);
   },
 
   getResources() {
@@ -36,7 +33,7 @@ module.exports = {
       functions: [],
     };
 
-    _.forEach(resources.resources, resource => {
+    _.forEach(resources.resources, (resource) => {
       if (resource.type === 'gcp-types/cloudfunctions-v1:projects.locations.functions') {
         const serviceFuncName = getFunctionNameInService(
           resource.name,
@@ -83,7 +80,7 @@ module.exports = {
     // get all the functions
     message += `${chalk.yellow.underline('Deployed functions')}\n`;
     if (data.resources.functions.length) {
-      data.resources.functions.forEach(func => {
+      data.resources.functions.forEach((func) => {
         message += `${chalk.yellow(func.name)}\n`;
         message += `  ${func.resource}\n`;
       });

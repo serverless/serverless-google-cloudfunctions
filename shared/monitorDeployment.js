@@ -17,21 +17,21 @@ module.exports = {
       async.whilst(
         () => validStatuses.indexOf(deploymentStatus) === -1,
 
-        callback => {
+        (callback) => {
           setTimeout(() => {
             const params = {
               project: this.serverless.service.provider.project,
             };
             return this.provider
               .request('deploymentmanager', 'deployments', 'list', params)
-              .then(response => {
+              .then((response) => {
                 // if actions is "remove" and no deployments are left set to "DONE"
                 if (!response.deployments && action === 'remove') {
                   deploymentStatus = 'DONE';
                   callback();
                 }
 
-                const deployment = response.deployments.find(dep => dep.name === deploymentName);
+                const deployment = response.deployments.find((dep) => dep.name === deploymentName);
 
                 // if actions is "remove" and deployment disappeared then set to "DONE"
                 if (!deployment && action === 'remove') {
@@ -46,7 +46,7 @@ module.exports = {
                 this.serverless.cli.printDot();
                 return callback();
               })
-              .catch(error => {
+              .catch((error) => {
                 reject(error);
               });
           }, frequency);
@@ -63,7 +63,7 @@ module.exports = {
   },
 };
 
-const throwErrorIfDeploymentFails = deployment => {
+const throwErrorIfDeploymentFails = (deployment) => {
   if (deployment.operation.error && deployment.operation.error.errors.length) {
     const errorCode = deployment.operation.error.errors[0].code;
     const parsedDetails = deployment.operation.error.errors[0].message;

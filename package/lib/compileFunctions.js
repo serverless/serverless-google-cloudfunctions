@@ -16,7 +16,7 @@ module.exports = {
       this.serverless.service.provider.region || 'us-central1';
     this.serverless.service.package.artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
 
-    this.serverless.service.getAllFunctions().forEach(functionName => {
+    this.serverless.service.getAllFunctions().forEach((functionName) => {
       const funcObject = this.serverless.service.getFunction(functionName);
 
       this.serverless.cli.log(`Compiling function "${functionName}"...`);

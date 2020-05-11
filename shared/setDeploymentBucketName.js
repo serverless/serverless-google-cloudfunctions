@@ -21,12 +21,12 @@ module.exports = {
 
     return this.provider
       .request('deploymentmanager', 'resources', 'list', params)
-      .then(response => {
+      .then((response) => {
         if (!_.isEmpty(response) && response.resources) {
           const regex = new RegExp(`sls-${service}-${stage}-.+`);
 
           const deploymentBucket = response.resources.find(
-            resource => resource.type === 'storage.v1.bucket' && resource.name.match(regex)
+            (resource) => resource.type === 'storage.v1.bucket' && resource.name.match(regex)
           );
 
           this.serverless.service.provider.deploymentBucketName = deploymentBucket.name;

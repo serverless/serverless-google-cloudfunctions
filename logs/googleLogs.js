@@ -27,10 +27,7 @@ class GoogleLogs {
     Object.assign(this, validate, setDefaults, retrieveLogs);
 
     this.hooks = {
-      'before:logs:logs': () =>
-        BbPromise.bind(this)
-          .then(this.validate)
-          .then(this.setDefaults),
+      'before:logs:logs': () => BbPromise.bind(this).then(this.validate).then(this.setDefaults),
 
       'logs:logs': () => BbPromise.bind(this).then(this.retrieveLogs),
     };

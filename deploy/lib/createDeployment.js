@@ -7,9 +7,7 @@ const BbPromise = require('bluebird');
 
 module.exports = {
   createDeployment() {
-    return BbPromise.bind(this)
-      .then(this.checkForExistingDeployment)
-      .then(this.createIfNotExists);
+    return BbPromise.bind(this).then(this.checkForExistingDeployment).then(this.createIfNotExists);
   },
 
   checkForExistingDeployment() {
@@ -19,11 +17,11 @@ module.exports = {
 
     return this.provider
       .request('deploymentmanager', 'deployments', 'list', params)
-      .then(response => {
+      .then((response) => {
         let foundDeployment;
 
         if (response && response.deployments) {
-          foundDeployment = response.deployments.find(deployment => {
+          foundDeployment = response.deployments.find((deployment) => {
             const name = `sls-${this.serverless.service.service}-${this.options.stage}`;
             return deployment.name === name;
           });

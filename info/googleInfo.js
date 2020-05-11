@@ -15,10 +15,7 @@ class GoogleInfo {
     Object.assign(this, validate, setDefaults, displayServiceInfo);
 
     this.hooks = {
-      'before:info:info': () =>
-        BbPromise.bind(this)
-          .then(this.validate)
-          .then(this.setDefaults),
+      'before:info:info': () => BbPromise.bind(this).then(this.validate).then(this.setDefaults),
 
       'deploy:deploy': () => BbPromise.bind(this).then(this.displayServiceInfo),
 

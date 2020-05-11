@@ -72,7 +72,7 @@ describe('CreateDeployment', () => {
     it('should return "undefined" if no deployments are found', () => {
       requestStub.returns(BbPromise.resolve([]));
 
-      return googleDeploy.checkForExistingDeployment().then(foundDeployment => {
+      return googleDeploy.checkForExistingDeployment().then((foundDeployment) => {
         expect(foundDeployment).toEqual(undefined);
         expect(
           requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
@@ -88,7 +88,7 @@ describe('CreateDeployment', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleDeploy.checkForExistingDeployment().then(foundDeployment => {
+      return googleDeploy.checkForExistingDeployment().then((foundDeployment) => {
         expect(foundDeployment).toEqual(undefined);
         expect(
           requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
@@ -104,7 +104,7 @@ describe('CreateDeployment', () => {
       };
       requestStub.returns(BbPromise.resolve(response));
 
-      return googleDeploy.checkForExistingDeployment().then(foundDeployment => {
+      return googleDeploy.checkForExistingDeployment().then((foundDeployment) => {
         expect(foundDeployment).toEqual(response.deployments[0]);
         expect(
           requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {

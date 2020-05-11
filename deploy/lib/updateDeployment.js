@@ -7,9 +7,7 @@ const BbPromise = require('bluebird');
 
 module.exports = {
   updateDeployment() {
-    return BbPromise.bind(this)
-      .then(this.getDeployment)
-      .then(this.update);
+    return BbPromise.bind(this).then(this.getDeployment).then(this.update);
   },
 
   getDeployment() {
@@ -19,8 +17,8 @@ module.exports = {
 
     return this.provider
       .request('deploymentmanager', 'deployments', 'list', params)
-      .then(response => {
-        const deployment = response.deployments.find(dep => {
+      .then((response) => {
+        const deployment = response.deployments.find((dep) => {
           const name = `sls-${this.serverless.service.service}-${this.options.stage}`;
           return dep.name === name;
         });
