@@ -47,10 +47,13 @@ module.exports = {
         'nodejs8';
       funcTemplate.properties.timeout =
         _.get(funcObject, 'timeout') || _.get(this, 'serverless.service.provider.timeout') || '60s';
-      funcTemplate.properties.environmentVariables = _.merge(
-        {},
-        _.get(this, 'serverless.service.provider.environment'),
-        funcObject.environment // eslint-disable-line comma-dangle
+      funcTemplate.properties.environmentVariables = _.mapValues(
+        _.merge(
+          {},
+          _.get(this, 'serverless.service.provider.environment'),
+          funcObject.environment // eslint-disable-line comma-dangle
+        ),
+        (value) => value.toString()
       );
       funcTemplate.accessControl.gcpIamPolicy.bindings = _.unionBy(
         _.get(funcObject, 'iam.bindings'),

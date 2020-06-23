@@ -376,6 +376,9 @@ describe('CompileFunctions', () => {
           handler: 'func1',
           environment: {
             TEST_VAR: 'test',
+            INT_VAR: 1,
+            FLOAT_VAR: 3.141,
+            BOOL_VAR: true,
           },
           events: [{ http: 'foo' }],
         },
@@ -393,6 +396,9 @@ describe('CompileFunctions', () => {
             availableMemoryMb: 256,
             environmentVariables: {
               TEST_VAR: 'test',
+              INT_VAR: '1',
+              FLOAT_VAR: '3.141',
+              BOOL_VAR: 'true',
             },
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -421,6 +427,9 @@ describe('CompileFunctions', () => {
       };
       googlePackage.serverless.service.provider.environment = {
         TEST_VAR: 'test',
+        INT_VAR: 1,
+        FLOAT_VAR: 3.141,
+        BOOL_VAR: true,
       };
 
       const compiledResources = [
@@ -435,6 +444,9 @@ describe('CompileFunctions', () => {
             availableMemoryMb: 256,
             environmentVariables: {
               TEST_VAR: 'test',
+              INT_VAR: '1',
+              FLOAT_VAR: '3.141',
+              BOOL_VAR: 'true',
             },
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -461,6 +473,7 @@ describe('CompileFunctions', () => {
           environment: {
             TEST_VAR: 'test_var',
             TEST_VALUE: 'foobar',
+            TEST_BOOL: true,
           },
           events: [{ http: 'foo' }],
         },
@@ -468,6 +481,7 @@ describe('CompileFunctions', () => {
       googlePackage.serverless.service.provider.environment = {
         TEST_VAR: 'test',
         TEST_FOO: 'foo',
+        TEST_BOOL: false,
       };
 
       const compiledResources = [
@@ -484,6 +498,7 @@ describe('CompileFunctions', () => {
               TEST_VAR: 'test_var',
               TEST_VALUE: 'foobar',
               TEST_FOO: 'foo',
+              TEST_BOOL: 'true',
             },
             timeout: '60s',
             sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
@@ -503,6 +518,7 @@ describe('CompileFunctions', () => {
         expect(googlePackage.serverless.service.provider.environment).toEqual({
           TEST_VAR: 'test',
           TEST_FOO: 'foo',
+          TEST_BOOL: false,
         });
       });
     });
