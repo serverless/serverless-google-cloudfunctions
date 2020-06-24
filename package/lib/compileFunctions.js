@@ -90,7 +90,7 @@ module.exports = {
         funcTemplate.properties.httpsTrigger = {};
         funcTemplate.properties.httpsTrigger.url = url;
 
-        if (_.get(funcObject, 'allowUnauthenticated') === true) {
+        if (funcObject.allowUnauthenticated === true) {
           funcTemplate.accessControl.gcpIamPolicy.bindings = _.unionBy(
             [{ role: 'roles/cloudfunctions.invoker', members: ['allUsers'] }],
             funcTemplate.accessControl.gcpIamPolicy.bindings,
@@ -109,7 +109,7 @@ module.exports = {
         funcTemplate.properties.eventTrigger.resource = resource;
       }
 
-      if (!_.size(funcTemplate.accessControl.gcpIamPolicy.bindings)) {
+      if (!funcTemplate.accessControl.gcpIamPolicy.bindings.length) {
         delete funcTemplate.accessControl;
       }
 
@@ -186,7 +186,7 @@ const validateIamProperty = (funcObject, functionName) => {
         ].join('');
         throw new Error(errorMessage);
       }
-      if (!binding.members || binding.members.length === 0) {
+      if (!Array.isArray(binding.members) || !binding.members.length) {
         const errorMessage = [
           `The function "${functionName}" has no members specified for an IAM binding.`,
           ' Each binding requires at least one member to be assigned. See the IAM documentation',
