@@ -21,7 +21,11 @@ module.exports = {
     const updatedBucket = updateBucketName(bucket, name);
 
     const bucketIndex = deploymentTemplate.resources.findIndex(findDeploymentBucket);
-
+    if (this.serverless.service.provider.region) {
+      updatedBucket.properties.location = this.serverless.service.provider.region
+    } else {
+      unset(updatedBucket.properties)
+    }
     deploymentTemplate.resources[bucketIndex] = updatedBucket;
 
     this.serverless.service.provider.compiledConfigurationTemplate = deploymentTemplate;
