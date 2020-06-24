@@ -22,7 +22,7 @@ module.exports = {
 
     const bucketIndex = deploymentTemplate.resources.findIndex(findDeploymentBucket);
     if (this.serverless.service.provider.region) {
-      updatedBucket.properties.location = this.serverless.service.provider.region
+      updatedBucket.properties= {location :this.serverless.service.provider.region }
     } else {
       unset(updatedBucket.properties)
     }
