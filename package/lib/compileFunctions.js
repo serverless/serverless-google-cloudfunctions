@@ -90,7 +90,7 @@ module.exports = {
         funcTemplate.properties.httpsTrigger = {};
         funcTemplate.properties.httpsTrigger.url = url;
 
-        if (funcObject.allowUnauthenticated === true) {
+        if (funcObject.allowUnauthenticated) {
           funcTemplate.accessControl.gcpIamPolicy.bindings = _.unionBy(
             [{ role: 'roles/cloudfunctions.invoker', members: ['allUsers'] }],
             funcTemplate.accessControl.gcpIamPolicy.bindings,
