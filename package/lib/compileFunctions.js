@@ -199,16 +199,15 @@ const validateIamProperty = (funcObject, functionName) => {
 
 const coerceEnvOrError = (result, key, value) => {
   if (typeof value === 'string') {
-    result[key] = value;
+    return value;
   } else if (typeof value === 'number') {
-    result[key] = value.toString();
-  } else {
-    const errorMessage = [
-      `The value for environment variable ${key} is an unsupported type: ${typeof value}.`,
-      ' Values must either be strings or numbers (which are coerced into strings at package time).',
-    ].join('');
-    throw new Error(errorMessage);
+    return value.toString();
   }
+  const errorMessage = [
+    `The value for environment variable ${key} is an unsupported type: ${typeof value}.`,
+    ' Values must either be strings or numbers (which are coerced into strings at package time).',
+  ].join('');
+  throw new Error(errorMessage);
 };
 
 const getFunctionTemplate = (funcObject, projectName, region, sourceArchiveUrl) => {
