@@ -24,6 +24,9 @@ module.exports = {
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);
       validateVpcConnectorProperty(funcObject, functionName);
+      validateIamProperty(funcObject, functionName);
+
+      const eventType = Object.keys(funcObject.events[0])[0];
 
       const funcTemplate = getFunctionTemplate(
         funcObject,
@@ -52,6 +55,28 @@ module.exports = {
         funcObject.environment // eslint-disable-line comma-dangle
       );
 
+      const allowUnauthenticated =
+        eventType === 'http' &&
+        (funcObject.allowUnauthenticated || this.serverless.service.provider.allowUnauthenticated);
+
+      // Collect the configured IAM bindings at the function and provider level and merge the
+      // members for each defined role. This transforms the array of IAM bindings into a mapping
+      // in order to easily merge.
+      const iamBindings = _.reduce(
+        _.concat(
+          _.get(funcObject, 'iam.bindings') || [],
+          _.get(this, 'serverless.service.provider.iam.bindings') || [],
+          allowUnauthenticated
+            ? [{ role: 'roles/cloudfunctions.invoker', members: ['allUsers'] }]
+            : []
+        ),
+        (result, value) => {
+          result[value.role] = _.union(result[value.role] || [], value.members);
+          return result;
+        },
+        {}
+      );
+
       if (!funcTemplate.properties.serviceAccountEmail) {
         delete funcTemplate.properties.serviceAccountEmail;
       }
@@ -76,8 +101,6 @@ module.exports = {
         _.get(funcObject, 'labels') || {} // eslint-disable-line comma-dangle
       );
 
-      const eventType = Object.keys(funcObject.events[0])[0];
-
       if (eventType === 'http') {
         const url = funcObject.events[0].http;
 
@@ -96,6 +119,16 @@ module.exports = {
       }
 
       this.serverless.service.provider.compiledConfigurationTemplate.resources.push(funcTemplate);
+
+      if (Object.keys(iamBindings).length) {
+        const fnResource = `projects/${projectName}/locations/${this.serverless.service.provider.region}/functions/${funcObject.name}`;
+        this.serverless.service.provider.functionIamBindings[fnResource] = _.flatMap(
+          iamBindings,
+          (value, key) => {
+            return { role: key, members: value };
+          }
+        );
+      }
     });
 
     return BbPromise.resolve();
@@ -157,6 +190,29 @@ const validateVpcConnectorProperty = (funcObject, functionName) => {
   }
 };
 
+const validateIamProperty = (funcObject, functionName) => {
+  if (_.get(funcObject, 'iam.bindings') && funcObject.iam.bindings.length > 0) {
+    funcObject.iam.bindings.forEach((binding) => {
+      if (!binding.role) {
+        const errorMessage = [
+          `The function "${functionName}" has no role specified for an IAM binding.`,
+          ' Each binding requires a role. For details on supported roles, see the documentation',
+          ' at: https://cloud.google.com/iam/docs/understanding-roles',
+        ].join('');
+        throw new Error(errorMessage);
+      }
+      if (!Array.isArray(binding.members) || !binding.members.length) {
+        const errorMessage = [
+          `The function "${functionName}" has no members specified for an IAM binding.`,
+          ' Each binding requires at least one member to be assigned. See the IAM documentation',
+          ' for details on configuring members: https://cloud.google.com/iam/docs/overview',
+        ].join('');
+        throw new Error(errorMessage);
+      }
+    });
+  }
+};
+
 const getFunctionTemplate = (funcObject, projectName, region, sourceArchiveUrl) => {
   //eslint-disable-line
   return {
@@ -170,6 +226,11 @@ const getFunctionTemplate = (funcObject, projectName, region, sourceArchiveUrl) 
       entryPoint: funcObject.handler,
       function: funcObject.name,
       sourceArchiveUrl,
+    },
+    accessControl: {
+      gcpIamPolicy: {
+        bindings: [],
+      },
     },
   };
 };
