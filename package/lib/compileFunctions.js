@@ -62,20 +62,17 @@ module.exports = {
       // Collect the configured IAM bindings at the function and provider level and merge the
       // members for each defined role. This transforms the array of IAM bindings into a mapping
       // in order to easily merge.
-      const iamBindings = _.reduce(
-        _.concat(
-          _.get(funcObject, 'iam.bindings') || [],
+      const iamBindings = (_.get(funcObject, 'iam.bindings') || [])
+        .concat(
           _.get(this, 'serverless.service.provider.iam.bindings') || [],
           allowUnauthenticated
             ? [{ role: 'roles/cloudfunctions.invoker', members: ['allUsers'] }]
             : []
-        ),
-        (result, value) => {
+        )
+        .reduce((result, value) => {
           result[value.role] = _.union(result[value.role] || [], value.members);
           return result;
-        },
-        {}
-      );
+        }, {});
 
       if (!funcTemplate.properties.serviceAccountEmail) {
         delete funcTemplate.properties.serviceAccountEmail;

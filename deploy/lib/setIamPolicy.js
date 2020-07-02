@@ -1,7 +1,7 @@
 'use strict';
 
-const _ = require('lodash');
 const BbPromise = require('bluebird');
+const ServerlessError = require('serverless/lib/classes/Error').ServerlessError;
 
 module.exports = {
   setIamPolicy() {
@@ -33,37 +33,40 @@ module.exports = {
     }
     this.serverless.cli.log('Setting IAM policies...');
 
-    _.forEach(policies, (value, key) => {
+    const promises = [];
+    Object.entries(policies).forEach((entry) => {
       const func = functions.find((fn) => {
-        return fn.name === key;
+        return fn.name === entry[0];
       });
       if (func) {
         const params = {
           resource: func.name,
           requestBody: {
             policy: {
-              bindings: value,
+              bindings: entry[1],
             },
           },
         };
 
-        this.provider.request(
-          'cloudfunctions',
-          'projects',
-          'locations',
-          'functions',
-          'setIamPolicy',
-          params
+        promises.push(
+          this.provider.request(
+            'cloudfunctions',
+            'projects',
+            'locations',
+            'functions',
+            'setIamPolicy',
+            params
+          )
         );
       } else {
         const errorMessage = [
-          `Unable to set IAM bindings (${value}) for "${key}": function not found for`,
+          `Unable to set IAM bindings (${entry[1]}) for "${entry[0]}": function not found for`,
           ` project "${this.serverless.service.provider.project}" in region "${this.options.region}".`,
         ].join('');
-        throw new Error(errorMessage);
+        throw new ServerlessError(errorMessage);
       }
     });
 
-    return BbPromise.resolve();
+    return BbPromise.all(promises);
   },
 };
