@@ -96,8 +96,7 @@ module.exports = {
 
 const getFunctionNameInService = (funcName, service, stage) => {
   let funcNameInService = funcName;
-  funcNameInService = funcNameInService.replace(service, '');
-  funcNameInService = funcNameInService.replace(stage, '');
-  funcNameInService = funcNameInService.slice(2, funcNameInService.length);
+  funcNameInService = funcNameInService.replace(`${service}-`, '');
+  funcNameInService = funcNameInService.replace(`${stage}-`, '');
   return funcNameInService;
 };
