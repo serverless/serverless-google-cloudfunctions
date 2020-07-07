@@ -35,7 +35,7 @@ const updateBucket = (bucket, name, location) => {
   const newBucket = _.cloneDeep(bucket);
   newBucket.name = name;
   if (location) {
-    newBucket.properties = newBucket.properties || {};
+    if (!newBucket.properties) newBucket.properties = {};
     newBucket.properties.location = location;
   }
   return newBucket;
