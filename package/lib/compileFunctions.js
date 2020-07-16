@@ -47,10 +47,9 @@ module.exports = {
         'nodejs8';
       funcTemplate.properties.timeout =
         _.get(funcObject, 'timeout') || _.get(this, 'serverless.service.provider.timeout') || '60s';
-      funcTemplate.properties.environmentVariables = _.merge(
-        {},
-        _.get(this, 'serverless.service.provider.environment'),
-        funcObject.environment // eslint-disable-line comma-dangle
+      funcTemplate.properties.environmentVariables = _.mapValues(
+        _.merge({}, _.get(this, 'serverless.service.provider.environment'), funcObject.environment),
+        (value, key, result) => coerceEnvOrError(result, key, value)
       );
       funcTemplate.accessControl.gcpIamPolicy.bindings = _.unionBy(
         _.get(funcObject, 'iam.bindings'),
@@ -196,6 +195,19 @@ const validateIamProperty = (funcObject, functionName) => {
       }
     });
   }
+};
+
+const coerceEnvOrError = (result, key, value) => {
+  if (typeof value === 'string') {
+    return value;
+  } else if (typeof value === 'number') {
+    return value.toString();
+  }
+  const errorMessage = [
+    `The value for environment variable ${key} is an unsupported type: ${typeof value}.`,
+    ' Values must either be strings or numbers (which are coerced into strings at package time).',
+  ].join('');
+  throw new Error(errorMessage);
 };
 
 const getFunctionTemplate = (funcObject, projectName, region, sourceArchiveUrl) => {
