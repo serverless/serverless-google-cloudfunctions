@@ -12,8 +12,11 @@ class Serverless {
     };
     this.service.getFunction = function (functionName) {
       //eslint-disable-line
-      // NOTE the stage is always 'dev'!
-      this.functions[functionName].name = `${this.service}-dev-${functionName}`;
+      // NOTE assign the function name only when it is not specified
+      if (!this.functions[functionName].name) {
+        // NOTE the stage is always 'dev'!
+        this.functions[functionName].name = `${this.service}-dev-${functionName}`;
+      }
       return this.functions[functionName];
     };
     this.utils = {

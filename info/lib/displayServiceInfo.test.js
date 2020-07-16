@@ -16,11 +16,11 @@ describe('DisplayServiceInfo', () => {
     serverless = new Serverless();
     serverless.service.service = 'my-service';
     serverless.service.functions = {
-      func1: {
+      'func1': {
         handler: 'handler',
         events: [{ http: 'foo' }],
       },
-      func2: {
+      'func2': {
         handler: 'handler',
         events: [
           {
@@ -31,6 +31,11 @@ describe('DisplayServiceInfo', () => {
             },
           },
         ],
+      },
+      'my-func3': {
+        name: 'my-func3',
+        handler: 'handler',
+        events: [{ http: 'foo' }],
       },
     };
     serverless.service.provider = {
@@ -121,6 +126,37 @@ describe('DisplayServiceInfo', () => {
             {
               name: 'func2',
               resource: 'projects/*/topics/my-test-topic',
+            },
+          ],
+        },
+      };
+
+      return googleInfo.gatherData(resources).then((data) => {
+        expect(data).toEqual(expectedData);
+      });
+    });
+
+    it('should gather the resource data when the function name is specified', () => {
+      const resources = {
+        resources: [
+          { type: 'resource.which.should.be.filterered', name: 'someResource' },
+          {
+            type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+            name: 'my-func3',
+          },
+        ],
+      };
+
+      const expectedData = {
+        service: 'my-service',
+        project: 'my-project',
+        stage: 'dev',
+        region: 'us-central1',
+        resources: {
+          functions: [
+            {
+              name: 'my-func3',
+              resource: 'https://us-central1-my-project.cloudfunctions.net/my-func3',
             },
           ],
         },
