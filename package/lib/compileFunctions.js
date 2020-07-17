@@ -24,7 +24,6 @@ module.exports = {
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);
       validateVpcConnectorProperty(funcObject, functionName);
-      validateIamProperty(funcObject, functionName);
 
       const funcTemplate = getFunctionTemplate(
         funcObject,
@@ -51,11 +50,6 @@ module.exports = {
         {},
         _.get(this, 'serverless.service.provider.environment'),
         funcObject.environment // eslint-disable-line comma-dangle
-      );
-      funcTemplate.accessControl.gcpIamPolicy.bindings = _.unionBy(
-        _.get(funcObject, 'iam.bindings'),
-        _.get(this, 'serverless.service.provider.iam.bindings'),
-        'role'
       );
 
       if (!funcTemplate.properties.serviceAccountEmail) {
@@ -89,14 +83,6 @@ module.exports = {
 
         funcTemplate.properties.httpsTrigger = {};
         funcTemplate.properties.httpsTrigger.url = url;
-
-        if (funcObject.allowUnauthenticated) {
-          funcTemplate.accessControl.gcpIamPolicy.bindings = _.unionBy(
-            [{ role: 'roles/cloudfunctions.invoker', members: ['allUsers'] }],
-            funcTemplate.accessControl.gcpIamPolicy.bindings,
-            'role'
-          );
-        }
       }
       if (eventType === 'event') {
         const type = funcObject.events[0].event.eventType;
@@ -107,10 +93,6 @@ module.exports = {
         funcTemplate.properties.eventTrigger.eventType = type;
         if (path) funcTemplate.properties.eventTrigger.path = path;
         funcTemplate.properties.eventTrigger.resource = resource;
-      }
-
-      if (!funcTemplate.accessControl.gcpIamPolicy.bindings.length) {
-        delete funcTemplate.accessControl;
       }
 
       this.serverless.service.provider.compiledConfigurationTemplate.resources.push(funcTemplate);
@@ -175,29 +157,6 @@ const validateVpcConnectorProperty = (funcObject, functionName) => {
   }
 };
 
-const validateIamProperty = (funcObject, functionName) => {
-  if (_.get(funcObject, 'iam.bindings') && funcObject.iam.bindings.length > 0) {
-    funcObject.iam.bindings.forEach((binding) => {
-      if (!binding.role) {
-        const errorMessage = [
-          `The function "${functionName}" has no role specified for an IAM binding.`,
-          ' Each binding requires a role. For details on supported roles, see the documentation',
-          ' at: https://cloud.google.com/iam/docs/understanding-roles',
-        ].join('');
-        throw new Error(errorMessage);
-      }
-      if (!Array.isArray(binding.members) || !binding.members.length) {
-        const errorMessage = [
-          `The function "${functionName}" has no members specified for an IAM binding.`,
-          ' Each binding requires at least one member to be assigned. See the IAM documentation',
-          ' for details on configuring members: https://cloud.google.com/iam/docs/overview',
-        ].join('');
-        throw new Error(errorMessage);
-      }
-    });
-  }
-};
-
 const getFunctionTemplate = (funcObject, projectName, region, sourceArchiveUrl) => {
   //eslint-disable-line
   return {
@@ -211,11 +170,6 @@ const getFunctionTemplate = (funcObject, projectName, region, sourceArchiveUrl) 
       entryPoint: funcObject.handler,
       function: funcObject.name,
       sourceArchiveUrl,
-    },
-    accessControl: {
-      gcpIamPolicy: {
-        bindings: [],
-      },
     },
   };
 };
