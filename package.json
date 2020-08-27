@@ -47,7 +47,7 @@
     "lodash": "^4.17.20"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
+    "@commitlint/cli": "^9.1.2",
     "@serverless/eslint-config": "^2.2.0",
     "coveralls": "^3.1.0",
     "eslint": "^6.8.0",
