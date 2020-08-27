@@ -44,22 +44,22 @@
     "chalk": "^3.0.0",
     "fs-extra": "^8.1.0",
     "googleapis": "^50.0.0",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
-    "@serverless/eslint-config": "^2.0.0",
+    "@serverless/eslint-config": "^2.2.0",
     "coveralls": "^3.1.0",
     "eslint": "^6.8.0",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-import": "^2.22.0",
     "git-list-updated": "^1.2.1",
     "github-release-from-cc-changelog": "^2.2.0",
     "husky": "^4.2.5",
     "jest": "^25.5.4",
-    "lint-staged": "^10.2.2",
-    "prettier": "^2.0.5",
+    "lint-staged": "^10.2.13",
+    "prettier": "^2.1.1",
     "sinon": "^8.1.1",
-    "standard-version": "^8.0.0"
+    "standard-version": "^8.0.2"
   },
   "scripts": {
     "commitlint": "commitlint -f HEAD@{15}",
