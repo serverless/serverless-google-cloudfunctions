@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.1](https://github.com/serverless/serverless-google-cloudfunctions/compare/v3.1.0...v3.1.1) (2020-08-27)
+
+### Bug Fixes
+
+- Deploy bucket in configured location ([#227](https://github.com/serverless/serverless-google-cloudfunctions/issues/227)) ([86494b4](https://github.com/serverless/serverless-google-cloudfunctions/commit/86494b4ef88ac54ccb0d29014a2bb3806c055ea9))
+- Fix deployment status when the function name is specified ([#225](https://github.com/serverless/serverless-google-cloudfunctions/issues/225)) ([251e1cf](https://github.com/serverless/serverless-google-cloudfunctions/commit/251e1cf61c04a0d28509eea08b603a91f6d73440))
+
 ## [3.1.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v3.0.0...v3.1.0) (2020-05-11)
 
 ### Features
