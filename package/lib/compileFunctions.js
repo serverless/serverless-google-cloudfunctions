@@ -52,7 +52,7 @@ module.exports = {
           _.get(this, 'serverless.service.provider.environment'),
           funcObject.environment // eslint-disable-line comma-dangle
         ),
-        value => value.toString() // eslint-disable-line comma-dangle
+        (value) => value.toString() // eslint-disable-line comma-dangle
       );
 
       if (!funcTemplate.properties.serviceAccountEmail) {
