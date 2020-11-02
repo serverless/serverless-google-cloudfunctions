@@ -67,11 +67,13 @@ describe('RetrieveLogs', () => {
 
     it('should return a default amount of logs for the function if the "count" option is not given', () => {
       googleLogs.options.function = 'func1';
+      let func = googleLogs.options.function;
+      func = googleLogs.getGoogleCloudFunctionName(serverless.service.functions, func);
 
       return googleLogs.getLogs().then(() => {
         expect(
           requestStub.calledWithExactly('logging', 'entries', 'list', {
-            filter: 'Function execution foo us-central1',
+            filter: `resource.labels.function_name="${func}" AND NOT textPayload=""`,
             orderBy: 'timestamp desc',
             resourceNames: ['projects/my-project'],
             pageSize: 10,
@@ -117,13 +119,13 @@ describe('RetrieveLogs', () => {
     it('should print the received execution result log on the console', () => {
       const logs = {
         entries: [
-          { timestamp: '1970-01-01 00:00', textPayload: 'Entry 1' },
-          { timestamp: '1970-01-01 00:01', textPayload: 'Entry 2' },
+          { timestamp: '1970-01-01 00:00', textPayload: 'Entry 1', labels: {execution_id: 'foo'}, },
+          { timestamp: '1970-01-01 00:01', textPayload: 'Entry 2', labels: {execution_id: 'bar'}, },
         ],
       };
 
-      const logEntry1 = `${chalk.grey('1970-01-01 00:00:')} Entry 1`;
-      const logEntry2 = `${chalk.grey('1970-01-01 00:01:')} Entry 2`;
+      const logEntry1 = `${chalk.grey('1970-01-01 00:00:')} | Execution ID: foo | Entry 1`;
+      const logEntry2 = `${chalk.grey('1970-01-01 00:01:')} | Execution ID: bar | Entry 2`;
       const expectedOutput = `Displaying the 2 most recent log(s):\n\n${logEntry1}\n${logEntry2}`;
 
       return googleLogs.printLogs(logs).then(() => {

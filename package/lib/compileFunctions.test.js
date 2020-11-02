@@ -98,7 +98,7 @@ describe('CompileFunctions', () => {
         func1: {
           handler: 'func1',
           memorySize: 1024,
-          runtime: 'nodejs8',
+          runtime: 'nodejs10',
           events: [{ http: 'foo' }],
         },
       };
@@ -109,7 +109,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 1024,
@@ -146,7 +146,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 1024,
@@ -183,7 +183,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -220,7 +220,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -259,7 +259,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -300,7 +300,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -345,7 +345,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -387,7 +387,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -429,7 +429,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -476,7 +476,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -521,7 +521,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -576,7 +576,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -595,7 +595,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func2',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func2',
             entryPoint: 'func2',
             availableMemoryMb: 256,
@@ -623,7 +623,7 @@ describe('CompileFunctions', () => {
         func1: {
           handler: 'func1',
           memorySize: 128,
-          runtime: 'nodejs8',
+          runtime: 'nodejs10',
           vpc: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
           events: [{ http: 'foo' }],
         },
@@ -635,7 +635,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 128,
@@ -663,7 +663,7 @@ describe('CompileFunctions', () => {
         func1: {
           handler: 'func1',
           memorySize: 128,
-          runtime: 'nodejs8',
+          runtime: 'nodejs10',
           maxInstances: 10,
           vpc: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
           events: [{ http: 'foo' }],
@@ -676,7 +676,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 128,
@@ -705,14 +705,14 @@ describe('CompileFunctions', () => {
         func1: {
           handler: 'func1',
           memorySize: 128,
-          runtime: 'nodejs8',
+          runtime: 'nodejs10',
           vpc: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
           events: [{ http: 'foo' }],
         },
         func2: {
           handler: 'func2',
           memorySize: 128,
-          runtime: 'nodejs8',
+          runtime: 'nodejs10',
           maxInstances: 10,
           vpc: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
           events: [{ http: 'bar' }],
@@ -725,7 +725,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 128,
@@ -743,7 +743,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func2',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func2',
             entryPoint: 'func2',
             availableMemoryMb: 128,

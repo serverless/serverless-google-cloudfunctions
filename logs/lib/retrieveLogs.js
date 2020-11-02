@@ -12,14 +12,15 @@ module.exports = {
 
   getLogs() {
     const project = this.serverless.service.provider.project;
-    const region = this.options.region;
     let func = this.options.function;
     const pageSize = this.options.count || 10;
 
+    // func = `${this.serverless.service.service}-${this.options.stage}`
     func = getGoogleCloudFunctionName(this.serverless.service.functions, func);
-
+    
+    // Actually the function name on GCP is service-stage-handler
     return this.provider.request('logging', 'entries', 'list', {
-      filter: `Function execution ${func} ${region}`,
+      filter: `resource.labels.function_name="${func}" AND NOT textPayload=""`,
       orderBy: 'timestamp desc',
       resourceNames: [`projects/${project}`],
       pageSize,
@@ -40,7 +41,7 @@ module.exports = {
     }
 
     let output = logs.entries.reduce(
-      (p, c) => (p += `${chalk.grey(`${c.timestamp}:`)} ${c.textPayload}\n`),
+      (p, c) => (p += `${chalk.grey(`${c.timestamp}:`)} | Execution ID: ${c.labels.execution_id} | ${c.textPayload}\n`),
       ''
     ); //eslint-disable-line
 
@@ -51,17 +52,17 @@ module.exports = {
 
     return BbPromise.resolve();
   },
+
+ // retrieve the functions name (Google uses our handler property as the function name)
+ getGoogleCloudFunctionName(serviceFunctions, func) {
+    if (!serviceFunctions[func]) {
+      const errorMessage = [
+        `Function "${func}" not found. `,
+        'Please check your "serverless.yml" file for the correct function name.',
+      ].join('');
+      throw new Error(errorMessage);
+    }
+    return serviceFunctions[func].name;
+  },
 };
 
-// retrieve the functions name (Google uses our handler property as the function name)
-const getGoogleCloudFunctionName = (serviceFunctions, func) => {
-  if (!serviceFunctions[func]) {
-    const errorMessage = [
-      `Function "${func}" not found. `,
-      'Please check your "serverless.yml" file for the correct function name.',
-    ].join('');
-    throw new Error(errorMessage);
-  }
-
-  return serviceFunctions[func].handler;
-};

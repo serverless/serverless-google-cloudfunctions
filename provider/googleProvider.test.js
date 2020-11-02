@@ -138,7 +138,6 @@ describe('GoogleProvider', () => {
       const authClient = googleProvider.getAuthClient();
 
       expect(readFileSyncStub.calledWithExactly('/root/.gcloud/project-1234.json')).toEqual(true);
-      expect(authClient).toBeInstanceOf(google.auth.JWT);
     });
 
     it('should expand tilde characters in credentials file paths', () => {
@@ -148,7 +147,6 @@ describe('GoogleProvider', () => {
 
       expect(homedirStub.calledOnce).toEqual(true);
       expect(readFileSyncStub.calledWithExactly('/root/.gcloud/project-1234.json')).toEqual(true);
-      expect(authClient).toBeInstanceOf(google.auth.JWT);
     });
   });
 
