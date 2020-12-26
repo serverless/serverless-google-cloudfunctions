@@ -16,8 +16,7 @@ module.exports = {
     const pageSize = this.options.count || 10;
 
     func = getGoogleCloudFunctionName(this.serverless.service.functions, func);
-    
-    // Actually the function name on GCP is service-stage-handler
+
     return this.provider.request('logging', 'entries', 'list', {
       filter: `resource.labels.function_name="${func}" AND NOT textPayload=""`,
       orderBy: 'timestamp desc',
@@ -29,7 +28,6 @@ module.exports = {
   printLogs(logs) {
     if (!logs.entries || !logs.entries.length) {
       logs = {
-        //eslint-disable-line
         entries: [
           {
             timestamp: new Date().toISOString().slice(0, 10),
@@ -39,10 +37,13 @@ module.exports = {
       };
     }
 
-    let output = logs.entries.reduce(
-      (p, c) => (p += `${chalk.grey(`${c.timestamp}:`)} | Execution ID: ${c.labels.execution_id} | ${c.textPayload}\n`),
-      ''
-    ); //eslint-disable-line
+    let output = logs.entries.reduce((p, c) => {
+      let message = '';
+      message += `${chalk.grey(`${c.timestamp}:`)}\t`;
+      message += c.labels && c.labels.execution_id ? `[${c.labels.execution_id}]\t` : '';
+      message += `${c.textPayload}\n`;
+      return p + message;
+    }, '');
 
     output = `Displaying the ${logs.entries.length} most recent log(s):\n\n${output}`; // prettify output
     output = output.slice(0, output.length - 1); // remove "\n---\n\n" for the last log entry
@@ -53,7 +54,6 @@ module.exports = {
   },
 };
 
-// retrieve the functions name (Google uses our handler property as the function name)
 const getGoogleCloudFunctionName = (serviceFunctions, func) => {
   if (!serviceFunctions[func]) {
     const errorMessage = [

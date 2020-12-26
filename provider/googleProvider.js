@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs');
 const os = require('os');
 
 const _ = require('lodash');
@@ -114,18 +113,15 @@ class GoogleProvider {
         credentials = credParts.reduce((memo, part) => path.join(memo, part), '');
       }
 
-      const auth = new google.auth.GoogleAuth({
+      return new google.auth.GoogleAuth({
         keyFile: credentials.toString(),
-        scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+        scopes: 'https://www.googleapis.com/auth/cloud-platform',
       });
-      return auth
-    } 
-    
-    const auth = new google.auth.GoogleAuth({
-      scopes: 'https://www.googleapis.com/auth/cloud-platform'
+    }
+
+    return new google.auth.GoogleAuth({
+      scopes: 'https://www.googleapis.com/auth/cloud-platform',
     });
-    return auth
-    
   }
 
   isServiceSupported(service) {
