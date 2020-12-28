@@ -74,5 +74,8 @@
     "prettify:updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier --write",
     "test": "jest"
   },
+  "engines": {
+    "node": ">=10.0"
+  },
   "license": "MIT"
 }
