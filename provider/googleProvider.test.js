@@ -1,6 +1,5 @@
 'use strict';
 
-const fs = require('fs');
 const os = require('os');
 
 const sinon = require('sinon');
@@ -10,7 +9,6 @@ const GoogleProvider = require('./googleProvider');
 const Serverless = require('../test/serverless');
 
 describe('GoogleProvider', () => {
-  let readFileSyncStub;
   let googleProvider;
   let serverless;
   let setProviderStub;
@@ -22,20 +20,15 @@ describe('GoogleProvider', () => {
     serverless.service = {
       provider: {
         project: 'example-project',
-        credentials: '/root/.gcloud/project-1234.json',
       },
     };
     setProviderStub = sinon.stub(serverless, 'setProvider').returns();
-    readFileSyncStub = sinon
-      .stub(fs, 'readFileSync')
-      .returns('{"client_email": "foo@bar.de","private_key": "wasdqwerty"}');
     homedirStub = sinon.stub(os, 'homedir').returns('/root');
     googleProvider = new GoogleProvider(serverless);
   });
 
   afterEach(() => {
     serverless.setProvider.restore();
-    fs.readFileSync.restore();
     os.homedir.restore();
   });
 
@@ -94,7 +87,7 @@ describe('GoogleProvider', () => {
         },
       };
       sinon.stub(googleProvider, 'getAuthClient').returns({
-        authorize: sinon.stub().resolves(),
+        getClient: sinon.stub().resolves(),
       });
       sinon.stub(googleProvider, 'isServiceSupported').returns();
     });
@@ -134,11 +127,20 @@ describe('GoogleProvider', () => {
   });
 
   describe('#getAuthClient()', () => {
-    it('should return a new authClient', () => {
+    it('should return a new authClient when using default credentials', () => {
       const authClient = googleProvider.getAuthClient();
 
-      expect(readFileSyncStub.calledWithExactly('/root/.gcloud/project-1234.json')).toEqual(true);
-      expect(authClient).toBeInstanceOf(google.auth.JWT);
+      expect(authClient.keyFilename).toEqual(undefined);
+      expect(authClient).toBeInstanceOf(google.auth.GoogleAuth);
+    });
+
+    it('should return a new authClient when using a credentials file', () => {
+      googleProvider.serverless.service.provider.credentials = '/root/.gcloud/project-1234.json';
+
+      const authClient = googleProvider.getAuthClient();
+
+      expect(authClient.keyFilename).toEqual('/root/.gcloud/project-1234.json');
+      expect(authClient).toBeInstanceOf(google.auth.GoogleAuth);
     });
 
     it('should expand tilde characters in credentials file paths', () => {
@@ -147,8 +149,8 @@ describe('GoogleProvider', () => {
       const authClient = googleProvider.getAuthClient();
 
       expect(homedirStub.calledOnce).toEqual(true);
-      expect(readFileSyncStub.calledWithExactly('/root/.gcloud/project-1234.json')).toEqual(true);
-      expect(authClient).toBeInstanceOf(google.auth.JWT);
+      expect(authClient.keyFilename).toEqual('/root/.gcloud/project-1234.json');
+      expect(authClient).toBeInstanceOf(google.auth.GoogleAuth);
     });
   });
 

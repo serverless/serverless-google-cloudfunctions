@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs');
 const os = require('os');
 
 const _ = require('lodash');
@@ -77,7 +76,7 @@ class GoogleProvider {
 
     const authClient = this.getAuthClient();
 
-    return authClient.authorize().then(() => {
+    return authClient.getClient().then(() => {
       const requestParams = { auth: authClient };
 
       // merge the params from the request call into the base functionParams
@@ -105,21 +104,24 @@ class GoogleProvider {
   }
 
   getAuthClient() {
-    let credentials =
-      this.serverless.service.provider.credentials || process.env.GOOGLE_APPLICATION_CREDENTIALS;
-    const credParts = credentials.split(path.sep);
+    let credentials = this.serverless.service.provider.credentials;
 
-    if (credParts[0] === '~') {
-      credParts[0] = os.homedir();
-      credentials = credParts.reduce((memo, part) => path.join(memo, part), '');
+    if (credentials) {
+      const credParts = this.serverless.service.provider.credentials.split(path.sep);
+      if (credParts[0] === '~') {
+        credParts[0] = os.homedir();
+        credentials = credParts.reduce((memo, part) => path.join(memo, part), '');
+      }
+
+      return new google.auth.GoogleAuth({
+        keyFile: credentials.toString(),
+        scopes: 'https://www.googleapis.com/auth/cloud-platform',
+      });
     }
 
-    const keyFileContent = fs.readFileSync(credentials).toString();
-    const key = JSON.parse(keyFileContent);
-
-    return new google.auth.JWT(key.client_email, null, key.private_key, [
-      'https://www.googleapis.com/auth/cloud-platform',
-    ]);
+    return new google.auth.GoogleAuth({
+      scopes: 'https://www.googleapis.com/auth/cloud-platform',
+    });
   }
 
   isServiceSupported(service) {
