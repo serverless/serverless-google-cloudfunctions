@@ -24,6 +24,8 @@ module.exports = {
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);
       validateVpcConnectorProperty(funcObject, functionName);
+      validateVpcEgressProperty(funcObject, functionName);
+      validateVpcIngressProperty(funcObject, functionName);
 
       const funcTemplate = getFunctionTemplate(
         funcObject,
@@ -57,20 +59,22 @@ module.exports = {
       }
 
       if (funcObject.vpc) {
-        _.assign(funcTemplate.properties, {
+        Object.assign(funcTemplate.properties, {
           vpcConnector: _.get(funcObject, 'vpc') || _.get(this, 'serverless.service.provider.vpc'),
         });
       }
 
       if (funcObject.egress) {
-        _.assign(funcTemplate.properties, {
-          vpcConnectorEgressSettings: _.get(funcObject, 'egress') || _.get(this, 'serverless.service.provider.egress'),
+        Object.assign(funcTemplate.properties, {
+          vpcConnectorEgressSettings:
+            _.get(funcObject, 'egress') || _.get(this, 'serverless.service.provider.egress'),
         });
       }
 
       if (funcObject.ingress) {
         _.assign(funcTemplate.properties, {
-          ingressSettings: _.get(funcObject, 'ingress') || _.get(this, 'serverless.service.provider.ingress'),
+          ingressSettings:
+            _.get(funcObject, 'ingress') || _.get(this, 'serverless.service.provider.ingress'),
         });
       }
 
@@ -169,6 +173,11 @@ const validateVpcConnectorProperty = (funcObject, functionName) => {
   }
 };
 
+const validEgressTypes = new Set([
+  'VPC_CONNECTOR_EGRESS_SETTINGS_UNSPECIFIED',
+  'PRIVATE_RANGES_ONLY',
+  'ALL_TRAFFIC',
+]);
 /**
  * Validate the function egress settings per
  * https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#vpcconnectoregresssettings
@@ -176,9 +185,8 @@ const validateVpcConnectorProperty = (funcObject, functionName) => {
  * @param {*} functionName
  */
 const validateVpcEgressProperty = (funcObject, functionName) => {
-  if (funcObject.egress && typeof funcObject.egress === 'string') {
-    const validTypes = ['VPC_CONNECTOR_EGRESS_SETTINGS_UNSPECIFIED', 'PRIVATE_RANGES_ONLY', 'ALL_TRAFFIC'];
-    if (!validTypes.includes(funcObject.egress)) {
+  if (typeof funcObject.egress === 'string') {
+    if (!validEgressTypes.includes(funcObject.egress)) {
       const errorMessage = [
         `The function "${functionName}" has an invalid egress setting`,
         ' Egress setting should be ALL_TRAFFIC, PRIVATE_RANGES_ONLY or VPC_CONNECTOR_EGRESS_SETTINGS_UNSPECIFIED',
@@ -189,6 +197,12 @@ const validateVpcEgressProperty = (funcObject, functionName) => {
   }
 };
 
+const validIngressTypes = new Set([
+  'INGRESS_SETTINGS_UNSPECIFIED',
+  'ALLOW_ALL',
+  'ALLOW_INTERNAL_ONLY',
+  'ALLOW_INTERNAL_AND_GCLB',
+]);
 /**
  * Validate the function ingress settings per
  * https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#ingresssettings
@@ -196,9 +210,8 @@ const validateVpcEgressProperty = (funcObject, functionName) => {
  * @param {*} functionName
  */
 const validateVpcIngressProperty = (funcObject, functionName) => {
-  if (funcObject.ingress && typeof funcObject.ingress === 'string') {
-    const validTypes = ['INGRESS_SETTINGS_UNSPECIFIED', 'ALLOW_ALL', 'ALLOW_INTERNAL_ONLY', 'ALLOW_INTERNAL_AND_GCLB'];
-    if (!validTypes.includes(funcObject.ingress)) {
+  if (typeof funcObject.ingress === 'string') {
+    if (!validIngressTypes.includes(funcObject.ingress)) {
       const errorMessage = [
         `The function "${functionName}" has an invalid ingress setting`,
         ' Ingress setting should be ALLOW_ALL, ALLOW_INTERNAL_ONLY, ALLOW_INTERNAL_AND_GCLB or INGRESS_SETTINGS_UNSPECIFIED',
