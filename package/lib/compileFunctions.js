@@ -72,7 +72,7 @@ module.exports = {
       }
 
       if (funcObject.ingress) {
-        _.assign(funcTemplate.properties, {
+        Object.assign(funcTemplate.properties, {
           ingressSettings:
             _.get(funcObject, 'ingress') || _.get(this, 'serverless.service.provider.ingress'),
         });
@@ -186,7 +186,7 @@ const validEgressTypes = new Set([
  */
 const validateVpcEgressProperty = (funcObject, functionName) => {
   if (typeof funcObject.egress === 'string') {
-    if (!validEgressTypes.includes(funcObject.egress)) {
+    if (!validEgressTypes.has(funcObject.egress)) {
       const errorMessage = [
         `The function "${functionName}" has an invalid egress setting`,
         ' Egress setting should be ALL_TRAFFIC, PRIVATE_RANGES_ONLY or VPC_CONNECTOR_EGRESS_SETTINGS_UNSPECIFIED',
@@ -211,7 +211,7 @@ const validIngressTypes = new Set([
  */
 const validateVpcIngressProperty = (funcObject, functionName) => {
   if (typeof funcObject.ingress === 'string') {
-    if (!validIngressTypes.includes(funcObject.ingress)) {
+    if (!validIngressTypes.has(funcObject.ingress)) {
       const errorMessage = [
         `The function "${functionName}" has an invalid ingress setting`,
         ' Ingress setting should be ALLOW_ALL, ALLOW_INTERNAL_ONLY, ALLOW_INTERNAL_AND_GCLB or INGRESS_SETTINGS_UNSPECIFIED',
