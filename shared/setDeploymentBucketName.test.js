@@ -75,9 +75,7 @@ describe('SetDeploymentBucketName', () => {
       requestStub.returns(BbPromise.resolve(response));
 
       return googleCommand.setDeploymentBucketName().then(() => {
-        expect(serverless.service.provider.bucket.name).toEqual(
-          'sls-my-service-dev-12345678'
-        );
+        expect(serverless.service.provider.bucket.name).toEqual('sls-my-service-dev-12345678');
         expect(
           requestStub.calledWithExactly('deploymentmanager', 'resources', 'list', {
             project: 'my-project',
