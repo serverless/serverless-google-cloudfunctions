@@ -61,6 +61,18 @@ module.exports = {
           vpcConnector: _.get(funcObject, 'vpc') || _.get(this, 'serverless.service.provider.vpc'),
         });
       }
+      
+	  if (funcObject.vpcEgress) {
+		  const egress = (_.get(funcObject, 'vpcEgress') || _.get(this, 'serverless.service.provider.vpcEgress');
+		  if (egress) {
+			  egress = egress.toUpperCase();
+			  if (egress==='all') egrees = 'ALL_TRAFFIC';
+			  if (egress==='private') egrees = 'PRIVATE_RANGES_ONLY';
+		  }
+        _.assign(funcTemplate.properties, {
+          vpcConnectorEgressSettings: egress,
+        });
+      }
 
       if (funcObject.maxInstances) {
         funcTemplate.properties.maxInstances = funcObject.maxInstances;
@@ -145,15 +157,39 @@ const validateEventsProperty = (funcObject, functionName) => {
 
 const validateVpcConnectorProperty = (funcObject, functionName) => {
   if (funcObject.vpc && typeof funcObject.vpc === 'string') {
-    const vpcNamePattern = /projects\/[\s\S]*\/locations\/[\s\S]*\/connectors\/[\s\S]*/i;
-    if (!vpcNamePattern.test(funcObject.vpc)) {
-      const errorMessage = [
-        `The function "${functionName}" has invalid vpc connection name`,
-        ' VPC Connector name should follow projects/{project_id}/locations/{region}/connectors/{connector_name}',
-        ' Please check the docs for more info.',
-      ].join('');
-      throw new Error(errorMessage);
-    }
+	
+	// vpcConnector argument can be one of two possible formats as described here:
+	// https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#resource:-cloudfunction
+	if (funcObject.vpc.indexOf('/')) {
+		const vpcNamePattern = /projects\/[\s\S]*\/locations\/[\s\S]*\/connectors\/[\s\S]*/i;
+		if (!vpcNamePattern.test(funcObject.vpc)) {
+		  const errorMessage = [
+			`The function "${functionName}" has invalid vpc connection name`,
+			' VPC Connector name should follow projects/{project_id}/locations/{region}/connectors/{connector_name}',
+			' or just {connector_name} if within the same project.',
+			' Please check the docs for more info at ',
+			' https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#resource:-cloudfunction',
+		  ].join('');
+		  throw new Error(errorMessage);
+		}	
+	}
+  }
+};
+
+const validateVpcConnectorEgressProperty = (funcObject, functionName) => {
+  if (funcObject.vpcEgress && typeof funcObject.vpcEgress === 'string') {
+	  const egress = funcObject.vpcEgress.toUpperCase();
+	  if (egress!=='ALL' && egress!=='ALL_TRAFFIC' && egress!=='PRIVATE' && egress!=='PRIVATE_RANGES_ONLY') {
+		const errorMessage = [
+			`The function "${functionName}" has invalid vpc connection name`,
+			' VPC Connector Egress Setting be either ALL_TRAFFIC or PRIVATE_RANGES_ONLY. ',
+			' You may shorten these to ALL or PRIVATE optionally.',
+			' Please check the docs for more info at',
+			' https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#resource:-cloudfunction',
+		  ].join('');
+		  throw new Error(errorMessage);
+
+	  }
   }
 };
 
