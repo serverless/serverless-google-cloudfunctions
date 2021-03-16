@@ -66,8 +66,8 @@ module.exports = {
 		  let egress = _.get(funcObject, 'vpcEgress') || _.get(this, 'serverless.service.provider.vpcEgress');
 		  if (egress) {
 			  egress = egress.toUpperCase();
-			  if (egress==='all') egrees = 'ALL_TRAFFIC';
-			  if (egress==='private') egrees = 'PRIVATE_RANGES_ONLY';
+			  if (egress==='all') egress = 'ALL_TRAFFIC';
+			  if (egress==='private') egress = 'PRIVATE_RANGES_ONLY';
 		  }
         _.assign(funcTemplate.properties, {
           vpcConnectorEgressSettings: egress,
