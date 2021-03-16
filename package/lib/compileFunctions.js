@@ -160,7 +160,7 @@ const validateVpcConnectorProperty = (funcObject, functionName) => {
 	
 	// vpcConnector argument can be one of two possible formats as described here:
 	// https://cloud.google.com/functions/docs/reference/rest/v1/projects.locations.functions#resource:-cloudfunction
-	if (funcObject.vpc.indexOf('/')) {
+	if (funcObject.vpc.indexOf('/')>-1) {
 		const vpcNamePattern = /projects\/[\s\S]*\/locations\/[\s\S]*\/connectors\/[\s\S]*/i;
 		if (!vpcNamePattern.test(funcObject.vpc)) {
 		  const errorMessage = [
