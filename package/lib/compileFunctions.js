@@ -63,7 +63,7 @@ module.exports = {
       }
       
 	  if (funcObject.vpcEgress) {
-		  const egress = _.get(funcObject, 'vpcEgress') || _.get(this, 'serverless.service.provider.vpcEgress');
+		  let egress = _.get(funcObject, 'vpcEgress') || _.get(this, 'serverless.service.provider.vpcEgress');
 		  if (egress) {
 			  egress = egress.toUpperCase();
 			  if (egress==='all') egrees = 'ALL_TRAFFIC';
