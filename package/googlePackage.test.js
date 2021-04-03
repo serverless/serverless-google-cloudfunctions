@@ -35,6 +35,22 @@ describe('GooglePackage', () => {
       expect(googlePackage.provider).toBeInstanceOf(GoogleProvider);
     });
 
+    it('should define the schema of the http triggered function', () => {
+      expect(serverless.configSchemaHandler.defineFunctionEvent).toHaveBeenCalledWith(
+        'google',
+        'http',
+        expect.any(Object)
+      );
+    });
+
+    it('should define the schema of the event triggered function', () => {
+      expect(serverless.configSchemaHandler.defineFunctionEvent).toHaveBeenCalledWith(
+        'google',
+        'event',
+        expect.any(Object)
+      );
+    });
+
     describe('hooks', () => {
       let cleanupServerlessDirStub;
       let validateStub;
