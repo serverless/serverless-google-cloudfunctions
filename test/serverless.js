@@ -34,6 +34,11 @@ class Serverless {
     this.pluginManager = {
       addPlugin: (plugin) => this.plugins.push(plugin),
     };
+
+    this.configSchemaHandler = {
+      defineProvider: jest.fn(),
+      defineFunctionEvent: jest.fn(),
+    };
   }
 
   setProvider(name, provider) {
