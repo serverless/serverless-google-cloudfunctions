@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v3.1.1...v4.0.0) (2021-04-12)
+
+### ⚠ BREAKING CHANGES
+
+- Node.js version 10 or later is required (dropped support for v6 and v8)
+
+### Features
+
+- Add schema validation ([#252](https://github.com/serverless/serverless-google-cloudfunctions/issues/252)) ([c332d3d](https://github.com/serverless/serverless-google-cloudfunctions/commit/c332d3d909b6984395cee003f4a139d5aa9e0729)) ([Corentin Doue](https://github.com/CorentinDoue))
+
+### Bug Fixes
+
+- Authentication and Logs ([#244](https://github.com/serverless/serverless-google-cloudfunctions/issues/244)) ([8a34b88](https://github.com/serverless/serverless-google-cloudfunctions/commit/8a34b88250e4cacda46f34024ba482b2051deac9)) ([Rothanak So](https://github.com/rothso) & [Mahamed](https://github.com/upodroid))
+
 ## [3.1.1](https://github.com/serverless/serverless-google-cloudfunctions/compare/v3.1.0...v3.1.1) (2020-08-27)
 
 ### Bug Fixes

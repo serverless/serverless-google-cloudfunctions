@@ -67,6 +67,13 @@ describe('GoogleProvider', () => {
       expect(google._options.headers['User-Agent']) // eslint-disable-line no-underscore-dangle
         .toMatch(/Serverless\/.+ Serverless-Google-Provider\/.+ Googleapis\/.+/);
     });
+
+    it('should define the schema of the provider', () => {
+      expect(serverless.configSchemaHandler.defineProvider).toHaveBeenCalledWith(
+        'google',
+        expect.any(Object)
+      );
+    });
   });
 
   describe('#request()', () => {
