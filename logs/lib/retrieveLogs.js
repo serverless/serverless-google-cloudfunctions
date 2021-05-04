@@ -13,7 +13,7 @@ module.exports = {
   getLogs() {
     const project = this.serverless.service.provider.project;
     let func = this.options.function;
-    const pageSize = this.options.count || 10;
+    const pageSize = parseInt(this.options.count, 10) || 10;
 
     func = getGoogleCloudFunctionName(this.serverless.service.functions, func);
 

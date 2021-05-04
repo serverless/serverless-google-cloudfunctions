@@ -52,6 +52,10 @@ describe('GoogleLogs', () => {
       expect(googleLogs.commands.logs.options.count).not.toEqual(undefined);
     });
 
+    it('should have the option "count" with type "string"', () => {
+      expect(googleLogs.commands.logs.options.count.type).toEqual('string');
+    });
+
     describe('hooks', () => {
       let validateStub;
       let setDefaultsStub;
