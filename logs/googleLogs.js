@@ -19,6 +19,7 @@ class GoogleLogs {
           count: {
             usage: 'Amount of requested logs',
             shortcut: 'c',
+            type: 'string',
           },
         },
       },
