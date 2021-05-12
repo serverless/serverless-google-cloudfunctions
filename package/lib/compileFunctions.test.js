@@ -121,6 +121,11 @@ describe('CompileFunctions', () => {
             },
             labels: {},
           },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
+          },
         },
       ];
 
@@ -158,6 +163,11 @@ describe('CompileFunctions', () => {
               url: 'foo',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -197,6 +207,11 @@ describe('CompileFunctions', () => {
             },
             labels: {},
           },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
+          },
         },
       ];
 
@@ -234,6 +249,11 @@ describe('CompileFunctions', () => {
               url: 'foo',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -277,6 +297,11 @@ describe('CompileFunctions', () => {
               test: 'label',
             },
           },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
+          },
         },
       ];
 
@@ -317,6 +342,11 @@ describe('CompileFunctions', () => {
             },
             labels: {
               test: 'label',
+            },
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
             },
           },
         },
@@ -366,6 +396,11 @@ describe('CompileFunctions', () => {
               secondTest: 'tested',
             },
           },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
+          },
         },
       ];
 
@@ -409,6 +444,11 @@ describe('CompileFunctions', () => {
             },
             labels: {},
           },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
+          },
         },
       ];
 
@@ -451,6 +491,11 @@ describe('CompileFunctions', () => {
               url: 'foo',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -502,6 +547,11 @@ describe('CompileFunctions', () => {
             },
             labels: {},
           },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
+          },
         },
       ];
 
@@ -542,6 +592,11 @@ describe('CompileFunctions', () => {
               url: 'foo',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -601,6 +656,11 @@ describe('CompileFunctions', () => {
             },
             labels: {},
           },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
+          },
         },
         {
           type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
@@ -618,6 +678,11 @@ describe('CompileFunctions', () => {
               resource: 'some-resource',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -659,6 +724,11 @@ describe('CompileFunctions', () => {
             },
             labels: {},
             vpcConnector: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -702,6 +772,11 @@ describe('CompileFunctions', () => {
             },
             labels: {},
             vpcConnector: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -752,6 +827,11 @@ describe('CompileFunctions', () => {
             labels: {},
             vpcConnector: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
           },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
+          },
         },
         {
           type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
@@ -770,6 +850,11 @@ describe('CompileFunctions', () => {
             },
             labels: {},
             vpcConnector: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -853,7 +938,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -863,6 +948,11 @@ describe('CompileFunctions', () => {
               url: 'foo',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -901,7 +991,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -911,6 +1001,11 @@ describe('CompileFunctions', () => {
               url: 'foo',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -956,7 +1051,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -967,6 +1062,11 @@ describe('CompileFunctions', () => {
               resource: 'some-resource',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -1002,7 +1102,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -1013,6 +1113,11 @@ describe('CompileFunctions', () => {
               resource: 'some-resource',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -1048,7 +1153,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -1058,6 +1163,11 @@ describe('CompileFunctions', () => {
               url: 'foo',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -1103,7 +1213,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -1113,6 +1223,11 @@ describe('CompileFunctions', () => {
               url: 'foo',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -1174,7 +1289,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -1184,6 +1299,11 @@ describe('CompileFunctions', () => {
               url: 'foo',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -1238,7 +1358,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -1248,6 +1368,11 @@ describe('CompileFunctions', () => {
               url: 'foo',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
@@ -1302,7 +1427,7 @@ describe('CompileFunctions', () => {
           name: 'my-service-dev-func1',
           properties: {
             parent: 'projects/myProject/locations/us-central1',
-            runtime: 'nodejs8',
+            runtime: 'nodejs10',
             function: 'my-service-dev-func1',
             entryPoint: 'func1',
             availableMemoryMb: 256,
@@ -1312,6 +1437,11 @@ describe('CompileFunctions', () => {
               url: 'foo',
             },
             labels: {},
+          },
+          accessControl: {
+            gcpIamPolicy: {
+              bindings: [],
+            },
           },
         },
       ];
