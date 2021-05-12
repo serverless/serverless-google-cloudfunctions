@@ -1,11 +1,12 @@
 'use strict';
 
-const BbPromise = require('bluebird');
 const ServerlessError = require('serverless/lib/classes/Error').ServerlessError;
 
 module.exports = {
   setIamPolicy() {
-    return BbPromise.bind(this).then(this.getFunctions).then(this.setPolicies);
+    return Promise.resolve()
+      .then(() => this.getFunctions())
+      .then(() => this.setPolicies());
   },
 
   getFunctions() {
@@ -29,7 +30,7 @@ module.exports = {
     // If there are no IAM policies configured with any function, there is nothing to
     // do here.
     if (!policies || !Object.keys(policies).length) {
-      return BbPromise.resolve();
+      return Promise.resolve();
     }
     this.serverless.cli.log('Setting IAM policies...');
 
@@ -67,6 +68,6 @@ module.exports = {
       }
     });
 
-    return BbPromise.all(promises);
+    return Promise.all(promises);
   },
 };

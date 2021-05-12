@@ -1,7 +1,6 @@
 'use strict';
 
 const sinon = require('sinon');
-const BbPromise = require('bluebird');
 
 const GoogleProvider = require('../../provider/googleProvider');
 const GoogleDeploy = require('../googleDeploy');
@@ -39,8 +38,8 @@ describe('SetIamPolicy', () => {
     let setPoliciesStub;
 
     beforeEach(() => {
-      getFunctionsStub = sinon.stub(googleDeploy, 'getFunctions').returns(BbPromise.resolve());
-      setPoliciesStub = sinon.stub(googleDeploy, 'setPolicies').returns(BbPromise.resolve());
+      getFunctionsStub = sinon.stub(googleDeploy, 'getFunctions').returns(Promise.resolve());
+      setPoliciesStub = sinon.stub(googleDeploy, 'setPolicies').returns(Promise.resolve());
     });
 
     afterEach(() => {
@@ -58,7 +57,7 @@ describe('SetIamPolicy', () => {
 
   describe('#getFunctions', () => {
     it('should return "undefined" if no functions are found', () => {
-      requestStub.returns(BbPromise.resolve([]));
+      requestStub.returns(Promise.resolve([]));
 
       return googleDeploy.getFunctions().then((foundFunctions) => {
         expect(foundFunctions).toEqual(undefined);
@@ -81,7 +80,7 @@ describe('SetIamPolicy', () => {
       const response = {
         functions: [{ name: 'cloud-function-1' }, { name: 'cloud-function-2' }],
       };
-      requestStub.returns(BbPromise.resolve(response));
+      requestStub.returns(Promise.resolve(response));
 
       return googleDeploy.getFunctions().then((foundFunctions) => {
         expect(foundFunctions).toEqual([
@@ -160,7 +159,7 @@ describe('SetIamPolicy', () => {
       googleDeploy.serverless.service.provider.functionIamBindings = {
         'cloud-function-2': [{ role: 'roles/cloudfunctions.invoker', members: ['allUsers'] }],
       };
-      requestStub.returns(BbPromise.resolve());
+      requestStub.returns(Promise.resolve());
 
       return googleDeploy.setPolicies(foundFunctions).then(() => {
         expect(consoleLogStub.calledOnce).toEqual(true);
