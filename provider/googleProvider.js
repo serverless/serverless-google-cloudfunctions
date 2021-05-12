@@ -239,6 +239,14 @@ class GoogleProvider {
       throw new Error(errorMessage);
     }
   }
+
+  getRuntime(funcObject) {
+    return (
+      _.get(funcObject, 'runtime') ||
+      _.get(this, 'serverless.service.provider.runtime') ||
+      'nodejs10'
+    );
+  }
 }
 
 module.exports = GoogleProvider;
