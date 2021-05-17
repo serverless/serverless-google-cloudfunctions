@@ -2,6 +2,7 @@
 
 const chalk = require('chalk');
 const path = require('path');
+const _ = require('lodash');
 
 const tryToRequirePaths = (paths) => {
   let loaded;
@@ -37,6 +38,8 @@ module.exports = {
     if (!cloudFunction) {
       throw new Error(`Failed to load function "${functionObj.handler}" from the loaded file`);
     }
+
+    this.addEnvironmentVariablesToProcessEnv(functionObj);
 
     function handleError(err) {
       let errorResult;
@@ -90,5 +93,10 @@ module.exports = {
 
       return maybeThennable;
     });
+  },
+
+  addEnvironmentVariablesToProcessEnv(functionObj) {
+    const environmentVariables = this.provider.getConfiguredEnvironment(functionObj);
+    _.merge(process.env, environmentVariables);
   },
 };

@@ -22,7 +22,6 @@ class GoogleInvokeLocal {
         await this.validate();
         await this.setDefaults();
         await this.getDataAndContext();
-        // TODO load env var in process.env
       },
       'invoke:local:invoke': async () => this.invokeLocal(),
     };

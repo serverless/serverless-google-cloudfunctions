@@ -25,4 +25,8 @@ module.exports = {
     console.log('ASYNC_HANDLER');
     throw new Error('ASYNC_ERROR');
   },
+  envHandler: async () => {
+    // eslint-disable-next-line no-console
+    console.log(process.env.MY_VAR);
+  },
 };

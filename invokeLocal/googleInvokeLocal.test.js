@@ -45,6 +45,7 @@ describe('GoogleInvokeLocal', () => {
       ${'invokeLocalNodeJs'}
       ${'loadFileInOption'}
       ${'validateEventsProperty'}
+      ${'addEnvironmentVariablesToProcessEnv'}
     `('should declare $method method', ({ method }) => {
       expect(googleInvokeLocal[method]).toBeDefined();
     });

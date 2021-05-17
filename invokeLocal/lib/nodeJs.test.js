@@ -15,12 +15,16 @@ describe('invokeLocalNodeJs', () => {
   const context = {
     name: contextName,
   };
+  const myVarValue = 'MY_VAR_VALUE';
   let serverless;
   let googleInvokeLocal;
 
   beforeEach(() => {
     serverless = new Serverless();
     serverless.setProvider('google', new GoogleProvider(serverless));
+    serverless.service.provider.environment = {
+      MY_VAR: myVarValue,
+    };
     serverless.serviceDir = path.join(process.cwd(), 'invokeLocal', 'lib', 'testMocks'); // To load the index.js of the mock folder
     serverless.cli.consoleLog = jest.fn();
     googleInvokeLocal = new GoogleInvokeLocal(serverless, {});
@@ -68,5 +72,14 @@ describe('invokeLocalNodeJs', () => {
     expect(serverless.cli.consoleLog).toHaveBeenCalledWith(
       expect.stringContaining('"errorMessage": "ASYNC_ERROR"')
     );
+  });
+
+  it('should give the environment variables to the handler', async () => {
+    const functionConfig = {
+      handler: 'envHandler',
+    };
+    await googleInvokeLocal.invokeLocalNodeJs(functionConfig, event, context);
+    // eslint-disable-next-line no-console
+    expect(console.log).toHaveBeenCalledWith(myVarValue);
   });
 });

@@ -19,6 +19,7 @@ class Serverless {
       }
       return this.functions[functionName];
     };
+    this.service.provider = {};
     this.utils = {
       writeFileSync() {},
       readFileSync() {},
