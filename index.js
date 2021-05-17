@@ -11,6 +11,7 @@ const GooglePackage = require('./package/googlePackage');
 const GoogleDeploy = require('./deploy/googleDeploy');
 const GoogleRemove = require('./remove/googleRemove');
 const GoogleInvoke = require('./invoke/googleInvoke');
+const GoogleInvokeLocal = require('./invokeLocal/googleInvokeLocal');
 const GoogleLogs = require('./logs/googleLogs');
 const GoogleInfo = require('./info/googleInfo');
 
@@ -24,6 +25,7 @@ class GoogleIndex {
     this.serverless.pluginManager.addPlugin(GoogleDeploy);
     this.serverless.pluginManager.addPlugin(GoogleRemove);
     this.serverless.pluginManager.addPlugin(GoogleInvoke);
+    this.serverless.pluginManager.addPlugin(GoogleInvokeLocal);
     this.serverless.pluginManager.addPlugin(GoogleLogs);
     this.serverless.pluginManager.addPlugin(GoogleInfo);
   }

@@ -39,6 +39,8 @@ class Serverless {
       defineProvider: jest.fn(),
       defineFunctionEvent: jest.fn(),
     };
+
+    this.processedInput = {};
   }
 
   setProvider(name, provider) {
