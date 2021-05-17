@@ -247,6 +247,14 @@ class GoogleProvider {
       'nodejs10'
     );
   }
+
+  getConfiguredEnvironment(funcObject) {
+    return _.merge(
+      {},
+      _.get(this, 'serverless.service.provider.environment'),
+      funcObject.environment
+    );
+  }
 }
 
 module.exports = GoogleProvider;

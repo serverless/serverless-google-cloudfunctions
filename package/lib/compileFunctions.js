@@ -44,11 +44,8 @@ module.exports = {
       funcTemplate.properties.runtime = this.provider.getRuntime(funcObject);
       funcTemplate.properties.timeout =
         _.get(funcObject, 'timeout') || _.get(this, 'serverless.service.provider.timeout') || '60s';
-      funcTemplate.properties.environmentVariables = _.merge(
-        {},
-        _.get(this, 'serverless.service.provider.environment'),
-        funcObject.environment // eslint-disable-line comma-dangle
-      );
+      funcTemplate.properties.environmentVariables =
+        this.provider.getConfiguredEnvironment(funcObject);
 
       if (!funcTemplate.properties.serviceAccountEmail) {
         delete funcTemplate.properties.serviceAccountEmail;
