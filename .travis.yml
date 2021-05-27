@@ -101,9 +101,6 @@ jobs:
     - name: 'Unit Tests - Node.js v10'
       node_js: 10
 
-    - name: 'Unit Tests - Node.js v8'
-      node_js: 8
-
     - stage: Tag on Release
       name: 'Tag on Release'
       node_js: 12
