@@ -46,10 +46,13 @@ module.exports = {
         'nodejs10';
       funcTemplate.properties.timeout =
         _.get(funcObject, 'timeout') || _.get(this, 'serverless.service.provider.timeout') || '60s';
-      funcTemplate.properties.environmentVariables = _.merge(
-        {},
-        _.get(this, 'serverless.service.provider.environment'),
-        funcObject.environment // eslint-disable-line comma-dangle
+      funcTemplate.properties.environmentVariables = _.mapValues(
+        _.merge(
+          {},
+          _.get(this, 'serverless.service.provider.environment'),
+          funcObject.environment // eslint-disable-line comma-dangle
+        ),
+        (value) => value.toString() // eslint-disable-line comma-dangle
       );
 
       if (!funcTemplate.properties.serviceAccountEmail) {
