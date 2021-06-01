@@ -51,4 +51,33 @@ module.exports = {
       }
     });
   },
+
+  validateEventsProperty(funcObject, functionName, supportedEvents = ['http', 'event']) {
+    if (!funcObject.events || funcObject.events.length === 0) {
+      const errorMessage = [
+        `Missing "events" property for function "${functionName}".`,
+        ' Your function needs at least one "event".',
+        ' Please check the docs for more info.',
+      ].join('');
+      throw new Error(errorMessage);
+    }
+
+    if (funcObject.events.length > 1) {
+      const errorMessage = [
+        `The function "${functionName}" has more than one event.`,
+        ' Only one event per function is supported.',
+        ' Please check the docs for more info.',
+      ].join('');
+      throw new Error(errorMessage);
+    }
+
+    const eventType = Object.keys(funcObject.events[0])[0];
+    if (supportedEvents.indexOf(eventType) === -1) {
+      const errorMessage = [
+        `Event type "${eventType}" of function "${functionName}" not supported.`,
+        ` supported event types are: ${supportedEvents.join(', ')}`,
+      ].join('');
+      throw new Error(errorMessage);
+    }
+  },
 };

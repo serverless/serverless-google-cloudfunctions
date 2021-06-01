@@ -6,6 +6,7 @@ const path = require('path');
 
 const _ = require('lodash');
 const BbPromise = require('bluebird');
+const { validateEventsProperty } = require('../../shared/validate');
 
 module.exports = {
   compileFunctions() {
@@ -40,17 +41,11 @@ module.exports = {
         _.get(funcObject, 'memorySize') ||
         _.get(this, 'serverless.service.provider.memorySize') ||
         256;
-      funcTemplate.properties.runtime =
-        _.get(funcObject, 'runtime') ||
-        _.get(this, 'serverless.service.provider.runtime') ||
-        'nodejs10';
+      funcTemplate.properties.runtime = this.provider.getRuntime(funcObject);
       funcTemplate.properties.timeout =
         _.get(funcObject, 'timeout') || _.get(this, 'serverless.service.provider.timeout') || '60s';
-      funcTemplate.properties.environmentVariables = _.merge(
-        {},
-        _.get(this, 'serverless.service.provider.environment'),
-        funcObject.environment // eslint-disable-line comma-dangle
-      );
+      funcTemplate.properties.environmentVariables =
+        this.provider.getConfiguredEnvironment(funcObject);
 
       if (!funcTemplate.properties.serviceAccountEmail) {
         delete funcTemplate.properties.serviceAccountEmail;
@@ -108,36 +103,6 @@ const validateHandlerProperty = (funcObject, functionName) => {
       `Missing "handler" property for function "${functionName}".`,
       ' Your function needs a "handler".',
       ' Please check the docs for more info.',
-    ].join('');
-    throw new Error(errorMessage);
-  }
-};
-
-const validateEventsProperty = (funcObject, functionName) => {
-  if (!funcObject.events || funcObject.events.length === 0) {
-    const errorMessage = [
-      `Missing "events" property for function "${functionName}".`,
-      ' Your function needs at least one "event".',
-      ' Please check the docs for more info.',
-    ].join('');
-    throw new Error(errorMessage);
-  }
-
-  if (funcObject.events.length > 1) {
-    const errorMessage = [
-      `The function "${functionName}" has more than one event.`,
-      ' Only one event per function is supported.',
-      ' Please check the docs for more info.',
-    ].join('');
-    throw new Error(errorMessage);
-  }
-
-  const supportedEvents = ['http', 'event'];
-  const eventType = Object.keys(funcObject.events[0])[0];
-  if (supportedEvents.indexOf(eventType) === -1) {
-    const errorMessage = [
-      `Event type "${eventType}" of function "${functionName}" not supported.`,
-      ` supported event types are: ${supportedEvents.join(', ')}`,
     ].join('');
     throw new Error(errorMessage);
   }
