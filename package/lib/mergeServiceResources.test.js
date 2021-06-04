@@ -1,4 +1,4 @@
-'use stict';
+'use strict';
 
 const GoogleProvider = require('../../provider/googleProvider');
 const GooglePackage = require('../googlePackage');
@@ -22,18 +22,16 @@ describe('MergeServiceResources', () => {
     googlePackage = new GooglePackage(serverless, options);
   });
 
-  it('should resolve if service resources are not defined', () => googlePackage
-    .mergeServiceResources().then(() => {
-      expect(serverless.service.provider
-        .compiledConfigurationTemplate).toEqual({});
+  it('should resolve if service resources are not defined', () =>
+    googlePackage.mergeServiceResources().then(() => {
+      expect(serverless.service.provider.compiledConfigurationTemplate).toEqual({});
     }));
 
   it('should resolve if service resources is empty', () => {
     serverless.service.resources = {};
 
     return googlePackage.mergeServiceResources().then(() => {
-      expect(serverless.service.provider
-        .compiledConfigurationTemplate).toEqual({});
+      expect(serverless.service.provider.compiledConfigurationTemplate).toEqual({});
     });
   });
 
@@ -94,8 +92,7 @@ describe('MergeServiceResources', () => {
     };
 
     return googlePackage.mergeServiceResources().then(() => {
-      expect(serverless.service.provider.compiledConfigurationTemplate)
-        .toEqual(expectedResult);
+      expect(serverless.service.provider.compiledConfigurationTemplate).toEqual(expectedResult);
     });
   });
 });

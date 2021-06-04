@@ -12,22 +12,14 @@ class GoogleInfo {
     this.options = options;
     this.provider = this.serverless.getProvider('google');
 
-    Object.assign(
-      this,
-      validate,
-      setDefaults,
-      displayServiceInfo);
+    Object.assign(this, validate, setDefaults, displayServiceInfo);
 
     this.hooks = {
-      'before:info:info': () => BbPromise.bind(this)
-        .then(this.validate)
-        .then(this.setDefaults),
+      'before:info:info': () => BbPromise.bind(this).then(this.validate).then(this.setDefaults),
 
-      'deploy:deploy': () => BbPromise.bind(this)
-        .then(this.displayServiceInfo),
+      'deploy:deploy': () => BbPromise.bind(this).then(this.displayServiceInfo),
 
-      'info:info': () => BbPromise.bind(this)
-        .then(this.displayServiceInfo),
+      'info:info': () => BbPromise.bind(this).then(this.displayServiceInfo),
     };
   }
 }

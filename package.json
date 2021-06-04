@@ -1,18 +1,9 @@
 {
   "name": "serverless-google-cloudfunctions",
-  "version": "2.3.2",
+  "version": "4.0.0",
   "description": "Provider plugin for the Serverless Framework v1.x which adds support for Google Cloud Functions.",
-  "main": "index.js",
   "author": "serverless.com",
-  "license": "MIT",
-  "repository": {
-    "git": "https://github.com/serverless/serverless-google-cloudfunctions"
-  },
-  "scripts": {
-    "test": "jest",
-    "coverage": "jest --coverage",
-    "lint": "eslint . --cache"
-  },
+  "repository": "serverless/serverless-google-cloudfunctions",
   "homepage": "https://github.com/serverless/serverless-google-cloudfunctions",
   "keywords": [
     "serverless",
@@ -24,6 +15,29 @@
     "internet of things",
     "serverless.com"
   ],
+  "eslintConfig": {
+    "extends": "@serverless/eslint-config/node",
+    "root": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint"
+    ],
+    "*.{css,html,js,json,md,yaml,yml}": [
+      "prettier -c"
+    ]
+  },
+  "standard-version": {
+    "skip": {
+      "commit": true,
+      "tag": true
+    }
+  },
   "dependencies": {
     "async": "^2.6.3",
     "bluebird": "^3.7.2",
@@ -35,11 +49,35 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "coveralls": "^2.11.16",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-plugin-import": "^2.2.0",
-    "jest": "^23.3.0",
-    "sinon": "^6.1.2"
-  }
+    "@commitlint/cli": "^9.1.2",
+    "@serverless/eslint-config": "^2.2.0",
+    "coveralls": "^3.1.0",
+    "eslint": "^7.24.0",
+    "eslint-plugin-import": "^2.22.1",
+    "git-list-updated": "^1.2.1",
+    "github-release-from-cc-changelog": "^2.2.0",
+    "husky": "^4.2.5",
+    "jest": "^25.5.4",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
+    "sinon": "^8.1.1",
+    "standard-version": "^9.2.0"
+  },
+  "scripts": {
+    "commitlint": "commitlint -f HEAD@{15}",
+    "commitlint:pull-request": "commitlint -f HEAD~1",
+    "coverage": "jest --coverage",
+    "lint": "eslint . --cache",
+    "lint:updated": "pipe-git-updated --ext=js -- eslint --cache",
+    "prepare-release": "standard-version && prettier --write CHANGELOG.md",
+    "prettier-check": "prettier -c --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\"",
+    "prettier-check:updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier -c",
+    "prettify": "prettier --write --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\"",
+    "prettify:updated": "pipe-git-updated --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier --write",
+    "test": "jest"
+  },
+  "engines": {
+    "node": ">=10.0"
+  },
+  "license": "MIT"
 }

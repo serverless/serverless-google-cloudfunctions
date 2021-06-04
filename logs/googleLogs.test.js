@@ -40,8 +40,7 @@ describe('GoogleLogs', () => {
     });
 
     it('should have the lifecycle event "logs" for the "logs" command', () => {
-      expect(googleLogs.commands.logs.lifecycleEvents)
-        .toEqual(['logs']);
+      expect(googleLogs.commands.logs.lifecycleEvents).toEqual(['logs']);
     });
 
     it('should have the option "count" with the "c" shortcut', () => {
@@ -53,18 +52,19 @@ describe('GoogleLogs', () => {
       expect(googleLogs.commands.logs.options.count).not.toEqual(undefined);
     });
 
+    it('should have the option "count" with type "string"', () => {
+      expect(googleLogs.commands.logs.options.count.type).toEqual('string');
+    });
+
     describe('hooks', () => {
       let validateStub;
       let setDefaultsStub;
       let retrieveLogsStub;
 
       beforeEach(() => {
-        validateStub = sinon.stub(googleLogs, 'validate')
-          .returns(BbPromise.resolve());
-        setDefaultsStub = sinon.stub(googleLogs, 'setDefaults')
-          .returns(BbPromise.resolve());
-        retrieveLogsStub = sinon.stub(googleLogs, 'retrieveLogs')
-          .returns(BbPromise.resolve());
+        validateStub = sinon.stub(googleLogs, 'validate').returns(BbPromise.resolve());
+        setDefaultsStub = sinon.stub(googleLogs, 'setDefaults').returns(BbPromise.resolve());
+        retrieveLogsStub = sinon.stub(googleLogs, 'retrieveLogs').returns(BbPromise.resolve());
       });
 
       afterEach(() => {
@@ -73,14 +73,14 @@ describe('GoogleLogs', () => {
         googleLogs.retrieveLogs.restore();
       });
 
-      it('should run "before:logs:logs" promise chain', () => googleLogs
-        .hooks['before:logs:logs']().then(() => {
+      it('should run "before:logs:logs" promise chain', () =>
+        googleLogs.hooks['before:logs:logs']().then(() => {
           expect(validateStub.calledOnce).toEqual(true);
           expect(setDefaultsStub.calledAfter(validateStub)).toEqual(true);
         }));
 
-      it('should run "logs:logs" promise chain', () => googleLogs
-        .hooks['logs:logs']().then(() => {
+      it('should run "logs:logs" promise chain', () =>
+        googleLogs.hooks['logs:logs']().then(() => {
           expect(retrieveLogsStub.calledOnce).toEqual(true);
         }));
     });

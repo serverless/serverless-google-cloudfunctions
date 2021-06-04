@@ -8,10 +8,7 @@ const _ = require('lodash');
 
 module.exports = {
   displayServiceInfo() {
-    return BbPromise.bind(this)
-      .then(this.getResources)
-      .then(this.gatherData)
-      .then(this.printInfo);
+    return BbPromise.bind(this).then(this.getResources).then(this.gatherData).then(this.printInfo);
   },
 
   getResources() {
@@ -37,9 +34,12 @@ module.exports = {
     };
 
     _.forEach(resources.resources, (resource) => {
-      if (resource.type === 'cloudfunctions.v1beta2.function') {
+      if (resource.type === 'gcp-types/cloudfunctions-v1:projects.locations.functions') {
         const serviceFuncName = getFunctionNameInService(
-          resource.name, this.serverless.service.service, this.options.stage);
+          resource.name,
+          this.serverless.service.service,
+          this.options.stage
+        );
         const serviceFunc = this.serverless.service.getFunction(serviceFuncName);
         const eventType = Object.keys(serviceFunc.events[0])[0];
         const funcEventConfig = serviceFunc.events[0][eventType];
@@ -50,7 +50,7 @@ module.exports = {
           const region = this.options.region;
           const project = this.serverless.service.provider.project;
           const baseUrl = `https://${region}-${project}.cloudfunctions.net`;
-          const path = serviceFunc.handler; // NOTE this might change
+          const path = serviceFunc.name; // NOTE this might change
           funcResource = `${baseUrl}/${path}`;
         }
 
@@ -96,8 +96,7 @@ module.exports = {
 
 const getFunctionNameInService = (funcName, service, stage) => {
   let funcNameInService = funcName;
-  funcNameInService = funcNameInService.replace(service, '');
-  funcNameInService = funcNameInService.replace(stage, '');
-  funcNameInService = funcNameInService.slice(2, funcNameInService.length);
+  funcNameInService = funcNameInService.replace(`${service}-`, '');
+  funcNameInService = funcNameInService.replace(`${stage}-`, '');
   return funcNameInService;
 };

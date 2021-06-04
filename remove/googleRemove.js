@@ -22,17 +22,18 @@ class GoogleRemove {
       setDeploymentBucketName,
       emptyDeploymentBucket,
       removeDeployment,
-      monitorDeployment);
+      monitorDeployment
+    );
 
     this.hooks = {
-      'before:remove:remove': () => BbPromise.bind(this)
-        .then(this.validate)
-        .then(this.setDefaults)
-        .then(this.setDeploymentBucketName),
+      'before:remove:remove': () =>
+        BbPromise.bind(this)
+          .then(this.validate)
+          .then(this.setDefaults)
+          .then(this.setDeploymentBucketName),
 
-      'remove:remove': () => BbPromise.bind(this)
-        .then(this.emptyDeploymentBucket)
-        .then(this.removeDeployment),
+      'remove:remove': () =>
+        BbPromise.bind(this).then(this.emptyDeploymentBucket).then(this.removeDeployment),
     };
   }
 }

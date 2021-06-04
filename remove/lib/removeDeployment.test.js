@@ -37,7 +37,8 @@ describe('RemoveDeployment', () => {
 
     beforeEach(() => {
       consoleLogStub = sinon.stub(googleRemove.serverless.cli, 'log').returns();
-      monitorDeploymentStub = sinon.stub(googleRemove, 'monitorDeployment')
+      monitorDeploymentStub = sinon
+        .stub(googleRemove, 'monitorDeployment')
         .returns(BbPromise.resolve());
     });
 
@@ -55,15 +56,12 @@ describe('RemoveDeployment', () => {
 
       return googleRemove.removeDeployment().then(() => {
         expect(consoleLogStub.calledOnce).toEqual(true);
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'deployments',
-          'delete',
-          params)).toEqual(true);
-        expect(monitorDeploymentStub.calledWithExactly(
-          'sls-my-service-dev',
-          'remove',
-          5000)).toEqual(true);
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'deployments', 'delete', params)
+        ).toEqual(true);
+        expect(
+          monitorDeploymentStub.calledWithExactly('sls-my-service-dev', 'remove', 5000)
+        ).toEqual(true);
       });
     });
   });

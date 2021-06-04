@@ -7,9 +7,7 @@ const BbPromise = require('bluebird');
 
 module.exports = {
   createDeployment() {
-    return BbPromise.bind(this)
-      .then(this.checkForExistingDeployment)
-      .then(this.createIfNotExists);
+    return BbPromise.bind(this).then(this.checkForExistingDeployment).then(this.createIfNotExists);
   },
 
   checkForExistingDeployment() {
@@ -17,7 +15,8 @@ module.exports = {
       project: this.serverless.service.provider.project,
     };
 
-    return this.provider.request('deploymentmanager', 'deployments', 'list', params)
+    return this.provider
+      .request('deploymentmanager', 'deployments', 'list', params)
       .then((response) => {
         let foundDeployment;
 
@@ -37,8 +36,11 @@ module.exports = {
 
     this.serverless.cli.log('Creating deployment...');
 
-    const filePath = path.join(this.serverless.config.servicePath,
-      '.serverless', 'configuration-template-create.yml');
+    const filePath = path.join(
+      this.serverless.config.servicePath,
+      '.serverless',
+      'configuration-template-create.yml'
+    );
 
     const deploymentName = `sls-${this.serverless.service.service}-${this.options.stage}`;
 
@@ -54,7 +56,8 @@ module.exports = {
       },
     };
 
-    return this.provider.request('deploymentmanager', 'deployments', 'insert', params)
+    return this.provider
+      .request('deploymentmanager', 'deployments', 'insert', params)
       .then(() => this.monitorDeployment(deploymentName, 'create', 5000));
   },
 };

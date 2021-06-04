@@ -43,15 +43,16 @@ describe('GoogleRemove', () => {
       let removeDeploymentStub;
 
       beforeEach(() => {
-        validateStub = sinon.stub(googleRemove, 'validate')
+        validateStub = sinon.stub(googleRemove, 'validate').returns(BbPromise.resolve());
+        setDefaultsStub = sinon.stub(googleRemove, 'setDefaults').returns(BbPromise.resolve());
+        setDeploymentBucketNameStub = sinon
+          .stub(googleRemove, 'setDeploymentBucketName')
           .returns(BbPromise.resolve());
-        setDefaultsStub = sinon.stub(googleRemove, 'setDefaults')
+        emptyDeploymentBucketStub = sinon
+          .stub(googleRemove, 'emptyDeploymentBucket')
           .returns(BbPromise.resolve());
-        setDeploymentBucketNameStub = sinon.stub(googleRemove, 'setDeploymentBucketName')
-          .returns(BbPromise.resolve());
-        emptyDeploymentBucketStub = sinon.stub(googleRemove, 'emptyDeploymentBucket')
-          .returns(BbPromise.resolve());
-        removeDeploymentStub = sinon.stub(googleRemove, 'removeDeployment')
+        removeDeploymentStub = sinon
+          .stub(googleRemove, 'removeDeployment')
           .returns(BbPromise.resolve());
       });
 
@@ -63,15 +64,15 @@ describe('GoogleRemove', () => {
         googleRemove.removeDeployment.restore();
       });
 
-      it('should run "before:remove:remove" promise chain', () => googleRemove
-        .hooks['before:remove:remove']().then(() => {
+      it('should run "before:remove:remove" promise chain', () =>
+        googleRemove.hooks['before:remove:remove']().then(() => {
           expect(validateStub.calledOnce).toEqual(true);
           expect(setDefaultsStub.calledAfter(validateStub)).toEqual(true);
           expect(setDeploymentBucketNameStub.calledAfter(setDefaultsStub)).toEqual(true);
         }));
 
-      it('should run "remove:remove" promise chain', () => googleRemove
-        .hooks['remove:remove']().then(() => {
+      it('should run "remove:remove" promise chain', () =>
+        googleRemove.hooks['remove:remove']().then(() => {
           expect(emptyDeploymentBucketStub.calledOnce).toEqual(true);
           expect(removeDeploymentStub.calledAfter(emptyDeploymentBucketStub)).toEqual(true);
         }));

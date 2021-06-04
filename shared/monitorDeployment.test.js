@@ -65,14 +65,15 @@ describe('MonitorDeployment', () => {
         requestStub.onCall(0).returns(BbPromise.resolve(response1));
         requestStub.onCall(1).returns(BbPromise.resolve(response2));
 
-        return googleCommand.monitorDeployment(deploymentName, 'create', 10)
+        return googleCommand
+          .monitorDeployment(deploymentName, 'create', 10)
           .then((deploymentStatus) => {
             expect(consoleLogStub.called).toEqual(true);
-            expect(requestStub.calledWithExactly(
-              'deploymentmanager',
-              'deployments',
-              'list',
-              { project: 'my-project' })).toEqual(true);
+            expect(
+              requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
+                project: 'my-project',
+              })
+            ).toEqual(true);
             expect(deploymentStatus).toEqual('DONE');
           });
       });
@@ -101,11 +102,11 @@ describe('MonitorDeployment', () => {
 
         return googleCommand.monitorDeployment(deploymentName, 'update', 10).catch((error) => {
           expect(consoleLogStub.called).toEqual(true);
-          expect(requestStub.calledWithExactly(
-            'deploymentmanager',
-            'deployments',
-            'list',
-            { project: 'my-project' })).toEqual(true);
+          expect(
+            requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
+              project: 'my-project',
+            })
+          ).toEqual(true);
           expect(error.toString()).toMatch(/Error detail/);
         });
       });
@@ -118,14 +119,15 @@ describe('MonitorDeployment', () => {
 
         requestStub.returns(BbPromise.resolve(response));
 
-        return googleCommand.monitorDeployment(deploymentName, 'remove', 10)
+        return googleCommand
+          .monitorDeployment(deploymentName, 'remove', 10)
           .then((deploymentStatus) => {
             expect(consoleLogStub.called).toEqual(true);
-            expect(requestStub.calledWithExactly(
-              'deploymentmanager',
-              'deployments',
-              'list',
-              { project: 'my-project' })).toEqual(true);
+            expect(
+              requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
+                project: 'my-project',
+              })
+            ).toEqual(true);
             expect(deploymentStatus).toEqual('DONE');
           });
       });
@@ -133,21 +135,20 @@ describe('MonitorDeployment', () => {
       it('should stop if the deployment is unavailable and the action is "remove"', () => {
         const deploymentName = 'sls-my-service-dev';
         const response = {
-          deployments: [
-            { name: 'a-different-deployment' },
-          ],
+          deployments: [{ name: 'a-different-deployment' }],
         };
 
         requestStub.returns(BbPromise.resolve(response));
 
-        return googleCommand.monitorDeployment(deploymentName, 'remove', 10)
+        return googleCommand
+          .monitorDeployment(deploymentName, 'remove', 10)
           .then((deploymentStatus) => {
             expect(consoleLogStub.called).toEqual(true);
-            expect(requestStub.calledWithExactly(
-              'deploymentmanager',
-              'deployments',
-              'list',
-              { project: 'my-project' })).toEqual(true);
+            expect(
+              requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
+                project: 'my-project',
+              })
+            ).toEqual(true);
             expect(deploymentStatus).toEqual('DONE');
           });
       });

@@ -7,32 +7,27 @@ const chalk = require('chalk');
 
 module.exports = {
   retrieveLogs() {
-    return BbPromise.bind(this)
-      .then(this.getLogs)
-      .then(this.printLogs);
+    return BbPromise.bind(this).then(this.getLogs).then(this.printLogs);
   },
 
   getLogs() {
     const project = this.serverless.service.provider.project;
-    const region = this.options.region;
     let func = this.options.function;
-    const pageSize = this.options.count || 10;
+    const pageSize = parseInt(this.options.count, 10) || 10;
 
     func = getGoogleCloudFunctionName(this.serverless.service.functions, func);
 
     return this.provider.request('logging', 'entries', 'list', {
-      filter: `Function execution ${func} ${region}`,
+      filter: `resource.labels.function_name="${func}" AND NOT textPayload=""`,
       orderBy: 'timestamp desc',
-      resourceNames: [
-        `projects/${project}`,
-      ],
+      resourceNames: [`projects/${project}`],
       pageSize,
     });
   },
 
   printLogs(logs) {
     if (!logs.entries || !logs.entries.length) {
-      logs = { //eslint-disable-line
+      logs = {
         entries: [
           {
             timestamp: new Date().toISOString().slice(0, 10),
@@ -42,8 +37,13 @@ module.exports = {
       };
     }
 
-    let output = logs.entries
-      .reduce((p, c, i) => p += `${chalk.grey(c.timestamp + ':')} ${c.textPayload}\n`, ''); //eslint-disable-line
+    let output = logs.entries.reduce((p, c) => {
+      let message = '';
+      message += `${chalk.grey(`${c.timestamp}:`)}\t`;
+      message += c.labels && c.labels.execution_id ? `[${c.labels.execution_id}]\t` : '';
+      message += `${c.textPayload}\n`;
+      return p + message;
+    }, '');
 
     output = `Displaying the ${logs.entries.length} most recent log(s):\n\n${output}`; // prettify output
     output = output.slice(0, output.length - 1); // remove "\n---\n\n" for the last log entry
@@ -54,7 +54,6 @@ module.exports = {
   },
 };
 
-// retrieve the functions name (Google uses our handler property as the function name)
 const getGoogleCloudFunctionName = (serviceFunctions, func) => {
   if (!serviceFunctions[func]) {
     const errorMessage = [
@@ -63,6 +62,5 @@ const getGoogleCloudFunctionName = (serviceFunctions, func) => {
     ].join('');
     throw new Error(errorMessage);
   }
-
-  return serviceFunctions[func].handler;
+  return serviceFunctions[func].name;
 };

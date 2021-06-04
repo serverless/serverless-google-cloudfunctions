@@ -30,11 +30,14 @@ describe('Validate', () => {
     let validateHandlersStub;
 
     beforeEach(() => {
-      validateServicePathStub = sinon.stub(googleCommand, 'validateServicePath')
+      validateServicePathStub = sinon
+        .stub(googleCommand, 'validateServicePath')
         .returns(BbPromise.resolve());
-      validateServiceNameStub = sinon.stub(googleCommand, 'validateServiceName')
+      validateServiceNameStub = sinon
+        .stub(googleCommand, 'validateServiceName')
         .returns(BbPromise.resolve());
-      validateHandlersStub = sinon.stub(googleCommand, 'validateHandlers')
+      validateHandlersStub = sinon
+        .stub(googleCommand, 'validateHandlers')
         .returns(BbPromise.resolve());
     });
 
@@ -44,8 +47,8 @@ describe('Validate', () => {
       googleCommand.validateHandlers.restore();
     });
 
-    it('should run promise chain', () => googleCommand
-      .validate().then(() => {
+    it('should run promise chain', () =>
+      googleCommand.validate().then(() => {
         expect(validateServicePathStub.calledOnce).toEqual(true);
         expect(validateServiceNameStub.calledAfter(validateServicePathStub));
         expect(validateHandlersStub.calledAfter(validateServiceNameStub));
@@ -108,6 +111,63 @@ describe('Validate', () => {
       };
 
       expect(() => googleCommand.validateHandlers()).not.toThrow(Error);
+    });
+  });
+
+  describe('#validateEventsProperty()', () => {
+    const functionName = 'functionName';
+    const eventEvent = {
+      event: {},
+    };
+    const httpEvent = {
+      http: {},
+    };
+    const unknownEvent = {
+      unknown: {},
+    };
+
+    it('should throw if the configuration of function has no events', () => {
+      expect(() => validate.validateEventsProperty({}, functionName)).toThrow();
+    });
+
+    it('should throw if the configuration of function has an empty events array', () => {
+      expect(() => validate.validateEventsProperty({ events: [] }, functionName)).toThrow();
+    });
+
+    it('should throw if the configuration of function has more than one events', () => {
+      expect(() =>
+        validate.validateEventsProperty({ events: [eventEvent, httpEvent] }, functionName)
+      ).toThrow();
+    });
+
+    it('should throw if the configuration of function has an unknown event', () => {
+      expect(() =>
+        validate.validateEventsProperty({ events: [unknownEvent] }, functionName)
+      ).toThrow();
+    });
+
+    it('should pass if the configuration of function has an http event', () => {
+      expect(() =>
+        validate.validateEventsProperty({ events: [httpEvent] }, functionName)
+      ).not.toThrow();
+    });
+
+    it('should pass if the configuration of function has an event event', () => {
+      expect(() =>
+        validate.validateEventsProperty({ events: [eventEvent] }, functionName)
+      ).not.toThrow();
+    });
+
+    it('should throw if the configuration of function has an http event but http event is not supported', () => {
+      expect(() =>
+        validate.validateEventsProperty({ events: [unknownEvent] }, functionName, ['event'])
+      ).toThrow();
+    });
+
+    it('should pass if the configuration of function has an event event and event is supported', () => {
+      expect(() =>
+        validate.validateEventsProperty({ events: [eventEvent] }, functionName, ['event'])
+      ).not.toThrow();
     });
   });
 });

@@ -7,9 +7,7 @@ const chalk = require('chalk');
 
 module.exports = {
   invokeFunction() {
-    return BbPromise.bind(this)
-      .then(this.invoke)
-      .then(this.printResult);
+    return BbPromise.bind(this).then(this.invoke).then(this.printResult);
   },
 
   invoke() {
@@ -33,7 +31,8 @@ module.exports = {
       'locations',
       'functions',
       'call',
-      params);
+      params
+    );
   },
 
   printResult(result) {
@@ -64,5 +63,5 @@ const getGoogleCloudFunctionName = (serviceFunctions, func) => {
     throw new Error(errorMessage);
   }
 
-  return serviceFunctions[func].handler;
+  return serviceFunctions[func].name;
 };

@@ -35,7 +35,8 @@ describe('UpdateDeployment', () => {
     configurationTemplateUpdateFilePath = path.join(
       serverless.config.servicePath,
       '.serverless',
-      'configuration-template-update.yml');
+      'configuration-template-update.yml'
+    );
   });
 
   afterEach(() => {
@@ -47,10 +48,8 @@ describe('UpdateDeployment', () => {
     let updateStub;
 
     beforeEach(() => {
-      getDeploymentStub = sinon.stub(googleDeploy, 'getDeployment')
-        .returns(BbPromise.resolve());
-      updateStub = sinon.stub(googleDeploy, 'update')
-        .returns(BbPromise.resolve());
+      getDeploymentStub = sinon.stub(googleDeploy, 'getDeployment').returns(BbPromise.resolve());
+      updateStub = sinon.stub(googleDeploy, 'update').returns(BbPromise.resolve());
     });
 
     afterEach(() => {
@@ -58,51 +57,43 @@ describe('UpdateDeployment', () => {
       googleDeploy.update.restore();
     });
 
-    it('should run promise chain', () => googleDeploy
-      .updateDeployment().then(() => {
+    it('should run promise chain', () =>
+      googleDeploy.updateDeployment().then(() => {
         expect(getDeploymentStub.calledOnce).toEqual(true);
         expect(updateStub.calledAfter(getDeploymentStub));
-      }),
-    );
+      }));
   });
 
   describe('#getDeployment()', () => {
     it('should return undefined if no deployments are found', () => {
       const response = {
-        deployments: [
-          { name: 'some-other-deployment' },
-        ],
+        deployments: [{ name: 'some-other-deployment' }],
       };
       requestStub.returns(BbPromise.resolve(response));
 
       return googleDeploy.getDeployment().then((foundDeployment) => {
         expect(foundDeployment).toEqual(undefined);
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'deployments',
-          'list',
-          { project: 'my-project' },
-        )).toEqual(true);
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
+            project: 'my-project',
+          })
+        ).toEqual(true);
       });
     });
 
     it('should return the deployment if found', () => {
       const response = {
-        deployments: [
-          { name: 'sls-my-service-dev' },
-          { name: 'some-other-deployment' },
-        ],
+        deployments: [{ name: 'sls-my-service-dev' }, { name: 'some-other-deployment' }],
       };
       requestStub.returns(BbPromise.resolve(response));
 
       return googleDeploy.getDeployment().then((foundDeployment) => {
         expect(foundDeployment).toEqual(response.deployments[0]);
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'deployments',
-          'list',
-          { project: 'my-project' },
-        )).toEqual(true);
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'deployments', 'list', {
+            project: 'my-project',
+          })
+        ).toEqual(true);
       });
     });
   });
@@ -115,7 +106,8 @@ describe('UpdateDeployment', () => {
     beforeEach(() => {
       consoleLogStub = sinon.stub(googleDeploy.serverless.cli, 'log').returns();
       readFileSyncStub = sinon.stub(fs, 'readFileSync').returns('some content');
-      monitorDeploymentStub = sinon.stub(googleDeploy, 'monitorDeployment')
+      monitorDeploymentStub = sinon
+        .stub(googleDeploy, 'monitorDeployment')
         .returns(BbPromise.resolve());
     });
 
@@ -148,17 +140,12 @@ describe('UpdateDeployment', () => {
       return googleDeploy.update(deployment).then(() => {
         expect(consoleLogStub.calledOnce).toEqual(true);
         expect(readFileSyncStub.called).toEqual(true);
-        expect(requestStub.calledWithExactly(
-          'deploymentmanager',
-          'deployments',
-          'update',
-          params,
-        )).toEqual(true);
-        expect(monitorDeploymentStub.calledWithExactly(
-          'sls-my-service-dev',
-          'update',
-          5000,
-        )).toEqual(true);
+        expect(
+          requestStub.calledWithExactly('deploymentmanager', 'deployments', 'update', params)
+        ).toEqual(true);
+        expect(
+          monitorDeploymentStub.calledWithExactly('sls-my-service-dev', 'update', 5000)
+        ).toEqual(true);
       });
     });
   });

@@ -23,6 +23,23 @@ class GooglePackage {
       this.serverless.service.package.path ||
       path.join(this.servicePath || '.', '.serverless');
     this.provider = this.serverless.getProvider('google');
+    this.serverless.configSchemaHandler.defineFunctionEvent('google', 'http', { type: 'string' });
+    this.serverless.configSchemaHandler.defineFunctionEvent('google', 'event', {
+      type: 'object',
+      properties: {
+        eventType: {
+          type: 'string',
+        },
+        path: {
+          type: 'string',
+        },
+        resource: {
+          type: 'string',
+        },
+      },
+      required: ['eventType', 'resource'],
+      additionalProperties: false,
+    });
 
     Object.assign(
       this,
@@ -35,30 +52,28 @@ class GooglePackage {
       generateArtifactDirectoryName,
       compileFunctions,
       mergeServiceResources,
-      saveUpdateTemplateFile);
+      saveUpdateTemplateFile
+    );
 
     this.hooks = {
-      'package:cleanup': () => BbPromise.bind(this)
-        .then(this.cleanupServerlessDir),
+      'package:cleanup': () => BbPromise.bind(this).then(this.cleanupServerlessDir),
 
-      'before:package:initialize': () => BbPromise.bind(this)
-        .then(this.validate)
-        .then(this.setDefaults),
+      'before:package:initialize': () =>
+        BbPromise.bind(this).then(this.validate).then(this.setDefaults),
 
-      'package:initialize': () => BbPromise.bind(this)
-        .then(this.setDeploymentBucketName)
-        .then(this.prepareDeployment)
-        .then(this.saveCreateTemplateFile),
+      'package:initialize': () =>
+        BbPromise.bind(this)
+          .then(this.setDeploymentBucketName)
+          .then(this.prepareDeployment)
+          .then(this.saveCreateTemplateFile),
 
-      'before:package:compileFunctions': () => BbPromise.bind(this)
-        .then(this.generateArtifactDirectoryName),
+      'before:package:compileFunctions': () =>
+        BbPromise.bind(this).then(this.generateArtifactDirectoryName),
 
-      'package:compileFunctions': () => BbPromise.bind(this)
-        .then(this.compileFunctions),
+      'package:compileFunctions': () => BbPromise.bind(this).then(this.compileFunctions),
 
-      'package:finalize': () => BbPromise.bind(this)
-        .then(this.mergeServiceResources)
-        .then(this.saveUpdateTemplateFile),
+      'package:finalize': () =>
+        BbPromise.bind(this).then(this.mergeServiceResources).then(this.saveUpdateTemplateFile),
     };
   }
 }

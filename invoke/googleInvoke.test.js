@@ -41,11 +41,10 @@ describe('GoogleInvoke', () => {
       let invokeFunctionStub;
 
       beforeEach(() => {
-        validateStub = sinon.stub(googleInvoke, 'validate')
-          .returns(BbPromise.resolve());
-        setDefaultsStub = sinon.stub(googleInvoke, 'setDefaults')
-          .returns(BbPromise.resolve());
-        invokeFunctionStub = sinon.stub(googleInvoke, 'invokeFunction')
+        validateStub = sinon.stub(googleInvoke, 'validate').returns(BbPromise.resolve());
+        setDefaultsStub = sinon.stub(googleInvoke, 'setDefaults').returns(BbPromise.resolve());
+        invokeFunctionStub = sinon
+          .stub(googleInvoke, 'invokeFunction')
           .returns(BbPromise.resolve());
       });
 
@@ -55,14 +54,14 @@ describe('GoogleInvoke', () => {
         googleInvoke.invokeFunction.restore();
       });
 
-      it('should run "before:invoke:invoke" promise chain', () => googleInvoke
-        .hooks['before:invoke:invoke']().then(() => {
+      it('should run "before:invoke:invoke" promise chain', () =>
+        googleInvoke.hooks['before:invoke:invoke']().then(() => {
           expect(validateStub.calledOnce).toEqual(true);
           expect(setDefaultsStub.calledAfter(validateStub)).toEqual(true);
         }));
 
-      it('should run "invoke:invoke" promise chain', () => googleInvoke
-        .hooks['invoke:invoke']().then(() => {
+      it('should run "invoke:invoke" promise chain', () =>
+        googleInvoke.hooks['invoke:invoke']().then(() => {
           expect(invokeFunctionStub.calledOnce).toEqual(true);
         }));
     });

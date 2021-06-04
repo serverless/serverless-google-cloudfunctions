@@ -57,8 +57,32 @@ describe('PrepareDeployment', () => {
 
       return googlePackage.prepareDeployment().then(() => {
         expect(readFileSyncStub.calledOnce).toEqual(true);
-        expect(serverless.service.provider
-          .compiledConfigurationTemplate).toEqual(expectedCompiledConfiguration);
+        expect(serverless.service.provider.compiledConfigurationTemplate).toEqual(
+          expectedCompiledConfiguration
+        );
+      });
+    });
+
+    it('should use the configured location', () => {
+      serverless.service.provider.region = 'europe-west1';
+
+      const expectedCompiledConfiguration = {
+        resources: [
+          {
+            type: 'storage.v1.bucket',
+            name: 'sls-my-service-dev-12345678',
+            properties: {
+              location: 'europe-west1',
+            },
+          },
+        ],
+      };
+
+      return googlePackage.prepareDeployment().then(() => {
+        expect(readFileSyncStub.calledOnce).toEqual(true);
+        expect(serverless.service.provider.compiledConfigurationTemplate).toEqual(
+          expectedCompiledConfiguration
+        );
       });
     });
   });

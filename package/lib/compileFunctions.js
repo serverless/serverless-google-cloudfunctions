@@ -6,6 +6,7 @@ const path = require('path');
 
 const _ = require('lodash');
 const BbPromise = require('bluebird');
+const { validateEventsProperty } = require('../../shared/validate');
 
 module.exports = {
   compileFunction(functionName, projectName) {
@@ -137,16 +138,32 @@ const validateEventsProperty = (funcObject, functionName) => {
   }
 };
 
-const getFunctionTemplate = (funcObject, region, sourceArchiveUrl) => { //eslint-disable-line
+const validateVpcConnectorProperty = (funcObject, functionName) => {
+  if (funcObject.vpc && typeof funcObject.vpc === 'string') {
+    const vpcNamePattern = /projects\/[\s\S]*\/locations\/[\s\S]*\/connectors\/[\s\S]*/i;
+    if (!vpcNamePattern.test(funcObject.vpc)) {
+      const errorMessage = [
+        `The function "${functionName}" has invalid vpc connection name`,
+        ' VPC Connector name should follow projects/{project_id}/locations/{region}/connectors/{connector_name}',
+        ' Please check the docs for more info.',
+      ].join('');
+      throw new Error(errorMessage);
+    }
+  }
+};
+
+const getFunctionTemplate = (funcObject, projectName, region, sourceArchiveUrl) => {
+  //eslint-disable-line
   return {
-    type: 'cloudfunctions.v1beta2.function',
+    type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
     name: funcObject.name,
     properties: {
-      location: region,
+      parent: `projects/${projectName}/locations/${region}`,
       availableMemoryMb: 256,
-      runtime: 'nodejs8',
+      runtime: 'nodejs10',
       timeout: '60s',
-      function: funcObject.handler,
+      entryPoint: funcObject.handler,
+      function: funcObject.name,
       sourceArchiveUrl,
     },
   };

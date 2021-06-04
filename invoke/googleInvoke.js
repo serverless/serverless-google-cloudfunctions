@@ -12,19 +12,12 @@ class GoogleInvoke {
     this.options = options;
     this.provider = this.serverless.getProvider('google');
 
-    Object.assign(
-      this,
-      validate,
-      setDefaults,
-      invokeFunction);
+    Object.assign(this, validate, setDefaults, invokeFunction);
 
     this.hooks = {
-      'before:invoke:invoke': () => BbPromise.bind(this)
-        .then(this.validate)
-        .then(this.setDefaults),
+      'before:invoke:invoke': () => BbPromise.bind(this).then(this.validate).then(this.setDefaults),
 
-      'invoke:invoke': () => BbPromise.bind(this)
-        .then(this.invokeFunction),
+      'invoke:invoke': () => BbPromise.bind(this).then(this.invokeFunction),
     };
   }
 }

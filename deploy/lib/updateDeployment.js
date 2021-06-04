@@ -7,9 +7,7 @@ const BbPromise = require('bluebird');
 
 module.exports = {
   updateDeployment() {
-    return BbPromise.bind(this)
-      .then(this.getDeployment)
-      .then(this.update);
+    return BbPromise.bind(this).then(this.getDeployment).then(this.update);
   },
 
   getDeployment() {
@@ -17,7 +15,8 @@ module.exports = {
       project: this.serverless.service.provider.project,
     };
 
-    return this.provider.request('deploymentmanager', 'deployments', 'list', params)
+    return this.provider
+      .request('deploymentmanager', 'deployments', 'list', params)
       .then((response) => {
         const deployment = response.deployments.find((dep) => {
           const name = `sls-${this.serverless.service.service}-${this.options.stage}`;
@@ -31,8 +30,11 @@ module.exports = {
   update(deployment) {
     this.serverless.cli.log('Updating deployment...');
 
-    const filePath = path.join(this.serverless.config.servicePath,
-      '.serverless', 'configuration-template-update.yml');
+    const filePath = path.join(
+      this.serverless.config.servicePath,
+      '.serverless',
+      'configuration-template-update.yml'
+    );
 
     const deploymentName = `sls-${this.serverless.service.service}-${this.options.stage}`;
 
@@ -50,7 +52,8 @@ module.exports = {
       },
     };
 
-    return this.provider.request('deploymentmanager', 'deployments', 'update', params)
+    return this.provider
+      .request('deploymentmanager', 'deployments', 'update', params)
       .then(() => this.monitorDeployment(deploymentName, 'update', 5000));
   },
 };

@@ -4,9 +4,7 @@ const BbPromise = require('bluebird');
 
 module.exports = {
   emptyDeploymentBucket() {
-    return BbPromise.bind(this)
-      .then(this.getObjectsToRemove)
-      .then(this.removeObjects);
+    return BbPromise.bind(this).then(this.getObjectsToRemove).then(this.removeObjects);
   },
 
   getObjectsToRemove() {
@@ -14,12 +12,11 @@ module.exports = {
       bucket: this.serverless.service.provider.deploymentBucketName,
     };
 
-    return this.provider.request('storage', 'objects', 'list', params)
-      .then((response) => {
-        if (!response.items || !response.items.length) return BbPromise.resolve([]);
+    return this.provider.request('storage', 'objects', 'list', params).then((response) => {
+      if (!response.items || !response.items.length) return BbPromise.resolve([]);
 
-        return BbPromise.resolve(response.items);
-      });
+      return BbPromise.resolve(response.items);
+    });
   },
 
   removeObjects(objectsToRemove) {

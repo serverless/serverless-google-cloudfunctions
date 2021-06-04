@@ -23,6 +23,7 @@ describe('RetrieveLogs', () => {
     serverless.service.functions = {
       func1: {
         handler: 'foo',
+        name: 'full-function-name',
       },
     };
     serverless.setProvider('google', new GoogleProvider(serverless));
@@ -38,10 +39,8 @@ describe('RetrieveLogs', () => {
     let printLogsStub;
 
     beforeEach(() => {
-      getLogsStub = sinon.stub(googleLogs, 'getLogs')
-        .returns(BbPromise.resolve());
-      printLogsStub = sinon.stub(googleLogs, 'printLogs')
-        .returns(BbPromise.resolve());
+      getLogsStub = sinon.stub(googleLogs, 'getLogs').returns(BbPromise.resolve());
+      printLogsStub = sinon.stub(googleLogs, 'printLogs').returns(BbPromise.resolve());
     });
 
     afterEach(() => {
@@ -49,8 +48,8 @@ describe('RetrieveLogs', () => {
       googleLogs.printLogs.restore();
     });
 
-    it('should run promise chain', () => googleLogs
-      .retrieveLogs().then(() => {
+    it('should run promise chain', () =>
+      googleLogs.retrieveLogs().then(() => {
         expect(getLogsStub.calledOnce).toEqual(true);
         expect(printLogsStub.calledAfter(getLogsStub));
       }));
@@ -71,18 +70,14 @@ describe('RetrieveLogs', () => {
       googleLogs.options.function = 'func1';
 
       return googleLogs.getLogs().then(() => {
-        expect(requestStub.calledWithExactly(
-          'logging',
-          'entries',
-          'list',
-          {
-            filter: 'Function execution foo us-central1',
+        expect(
+          requestStub.calledWithExactly('logging', 'entries', 'list', {
+            filter: 'resource.labels.function_name="full-function-name" AND NOT textPayload=""',
             orderBy: 'timestamp desc',
-            resourceNames: [
-              'projects/my-project',
-            ],
+            resourceNames: ['projects/my-project'],
             pageSize: 10,
-          })).toEqual(true);
+          })
+        ).toEqual(true);
       });
     });
 
@@ -91,18 +86,30 @@ describe('RetrieveLogs', () => {
       googleLogs.options.count = 100;
 
       return googleLogs.getLogs().then(() => {
-        expect(requestStub.calledWithExactly(
-          'logging',
-          'entries',
-          'list',
-          {
-            filter: 'Function execution foo us-central1',
+        expect(
+          requestStub.calledWithExactly('logging', 'entries', 'list', {
+            filter: 'resource.labels.function_name="full-function-name" AND NOT textPayload=""',
             orderBy: 'timestamp desc',
-            resourceNames: [
-              'projects/my-project',
-            ],
+            resourceNames: ['projects/my-project'],
             pageSize: googleLogs.options.count,
-          })).toEqual(true);
+          })
+        ).toEqual(true);
+      });
+    });
+
+    it('should parse the "count" option as an integer', () => {
+      googleLogs.options.function = 'func1';
+      googleLogs.options.count = '100';
+
+      return googleLogs.getLogs().then(() => {
+        expect(
+          requestStub.calledWithExactly('logging', 'entries', 'list', {
+            filter: 'resource.labels.function_name="full-function-name" AND NOT textPayload=""',
+            orderBy: 'timestamp desc',
+            resourceNames: ['projects/my-project'],
+            pageSize: parseInt(googleLogs.options.count, 10),
+          })
+        ).toEqual(true);
       });
     });
 
@@ -127,15 +134,22 @@ describe('RetrieveLogs', () => {
     it('should print the received execution result log on the console', () => {
       const logs = {
         entries: [
-          { timestamp: '1970-01-01 00:00', textPayload: 'Entry 1' },
-          { timestamp: '1970-01-01 00:01', textPayload: 'Entry 2' },
+          {
+            timestamp: '1970-01-01 00:00',
+            textPayload: 'Entry 1',
+            labels: { execution_id: 'foo' },
+          },
+          {
+            timestamp: '1970-01-01 00:01',
+            textPayload: 'Entry 2',
+            labels: { execution_id: 'bar' },
+          },
         ],
       };
 
-      const logEntry1 = `${chalk.grey('1970-01-01 00:00:')} Entry 1`;
-      const logEntry2 = `${chalk.grey('1970-01-01 00:01:')} Entry 2`;
-      const expectedOutput =
-        `Displaying the 2 most recent log(s):\n\n${logEntry1}\n${logEntry2}`;
+      const logEntry1 = `${chalk.grey('1970-01-01 00:00:')}\t[foo]\tEntry 1`;
+      const logEntry2 = `${chalk.grey('1970-01-01 00:01:')}\t[bar]\tEntry 2`;
+      const expectedOutput = `Displaying the 2 most recent log(s):\n\n${logEntry1}\n${logEntry2}`;
 
       return googleLogs.printLogs(logs).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);
@@ -144,9 +158,8 @@ describe('RetrieveLogs', () => {
 
     it('should print a default message to the console when no logs were received', () => {
       const date = `${new Date().toISOString().slice(0, 10)}:`;
-      const logEntry = `${chalk.grey(date)} There is no log data to show...`;
-      const expectedOutput =
-        `Displaying the 1 most recent log(s):\n\n${logEntry}`;
+      const logEntry = `${chalk.grey(date)}\tThere is no log data to show...`;
+      const expectedOutput = `Displaying the 1 most recent log(s):\n\n${logEntry}`;
 
       return googleLogs.printLogs({}).then(() => {
         expect(consoleLogStub.calledWithExactly(expectedOutput)).toEqual(true);

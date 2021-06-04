@@ -11,7 +11,8 @@ module.exports = {
       deployment: deploymentName,
     };
 
-    return this.provider.request('deploymentmanager', 'deployments', 'delete', params)
+    return this.provider
+      .request('deploymentmanager', 'deployments', 'delete', params)
       .then(() => this.monitorDeployment(deploymentName, 'remove', 5000));
   },
 };

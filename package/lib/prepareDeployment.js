@@ -12,16 +12,14 @@ module.exports = {
     let deploymentTemplate = this.serverless.service.provider.compiledConfigurationTemplate;
 
     deploymentTemplate = this.serverless.utils.readFileSync(
-      path.join(
-        __dirname,
-        '..',
-        'templates',
-        'core-configuration-template.yml'));
+      path.join(__dirname, '..', 'templates', 'core-configuration-template.yml')
+    );
 
     const bucket = deploymentTemplate.resources.find(findDeploymentBucket);
 
     const name = this.serverless.service.provider.deploymentBucketName;
-    const updatedBucket = updateBucketName(bucket, name);
+    const location = this.serverless.service.provider.region;
+    const updatedBucket = updateBucket(bucket, name, location);
 
     const bucketIndex = deploymentTemplate.resources.findIndex(findDeploymentBucket);
 
@@ -33,9 +31,13 @@ module.exports = {
   },
 };
 
-const updateBucketName = (bucket, name) => {
+const updateBucket = (bucket, name, location) => {
   const newBucket = _.cloneDeep(bucket);
   newBucket.name = name;
+  if (location) {
+    if (!newBucket.properties) newBucket.properties = {};
+    newBucket.properties.location = location;
+  }
   return newBucket;
 };
 

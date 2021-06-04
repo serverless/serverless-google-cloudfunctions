@@ -5,9 +5,7 @@ const _ = require('lodash');
 
 module.exports = {
   cleanupDeploymentBucket() {
-    return BbPromise.bind(this)
-      .then(this.getObjectsToRemove)
-      .then(this.removeObjects);
+    return BbPromise.bind(this).then(this.getObjectsToRemove).then(this.removeObjects);
   },
 
   getObjectsToRemove() {
@@ -15,29 +13,32 @@ module.exports = {
       bucket: this.serverless.service.provider.deploymentBucketName,
     };
 
-    return this.provider.request('storage', 'objects', 'list', params)
-      .then((response) => {
-        if (!response.items.length) return BbPromise.resolve([]);
+    return this.provider.request('storage', 'objects', 'list', params).then((response) => {
+      if (!response.items.length) return BbPromise.resolve([]);
 
-        const files = response.items;
+      const files = response.items;
 
-        // 4 old ones + the one which will be uploaded after the cleanup = 5
-        const objectsToKeepCount = 4;
+      // 4 old ones + the one which will be uploaded after the cleanup = 5
+      const objectsToKeepCount = 4;
 
-        const orderedObjects = _.orderBy(files, (file) => {
+      const orderedObjects = _.orderBy(
+        files,
+        (file) => {
           const timestamp = file.name.match(/(serverless)\/(.+)\/(.+)\/(\d+)-(.+)\/(.+\.zip)/)[4];
           return timestamp;
-        }, ['asc']);
+        },
+        ['asc']
+      );
 
-        const objectsToKeep = _.takeRight(orderedObjects, objectsToKeepCount);
-        const objectsToRemove = _.pullAllWith(files, objectsToKeep, _.isEqual);
+      const objectsToKeep = _.takeRight(orderedObjects, objectsToKeepCount);
+      const objectsToRemove = _.pullAllWith(files, objectsToKeep, _.isEqual);
 
-        if (objectsToRemove.length) {
-          return BbPromise.resolve(objectsToRemove);
-        }
+      if (objectsToRemove.length) {
+        return BbPromise.resolve(objectsToRemove);
+      }
 
-        return BbPromise.resolve([]);
-      });
+      return BbPromise.resolve([]);
+    });
   },
 
   removeObjects(objectsToRemove) {

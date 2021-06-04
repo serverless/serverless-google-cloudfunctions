@@ -14,31 +14,23 @@ class GoogleLogs {
 
     this.commands = {
       logs: {
-        lifecycleEvents: [
-          'logs',
-        ],
+        lifecycleEvents: ['logs'],
         options: {
           count: {
             usage: 'Amount of requested logs',
             shortcut: 'c',
+            type: 'string',
           },
         },
       },
     };
 
-    Object.assign(
-      this,
-      validate,
-      setDefaults,
-      retrieveLogs);
+    Object.assign(this, validate, setDefaults, retrieveLogs);
 
     this.hooks = {
-      'before:logs:logs': () => BbPromise.bind(this)
-        .then(this.validate)
-        .then(this.setDefaults),
+      'before:logs:logs': () => BbPromise.bind(this).then(this.validate).then(this.setDefaults),
 
-      'logs:logs': () => BbPromise.bind(this)
-        .then(this.retrieveLogs),
+      'logs:logs': () => BbPromise.bind(this).then(this.retrieveLogs),
     };
   }
 }
