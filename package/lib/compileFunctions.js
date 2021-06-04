@@ -22,133 +22,132 @@ module.exports = {
       projectName,
       this.serverless.service.provider.region,
       `gs://${this.serverless.service.provider.deploymentBucketName}/${this.serverless.service.package.artifactDirectoryName}/${functionName}.zip`
-      );
+    );
+    
+    funcTemplate.properties.serviceAccountEmail =
+    _.get(funcObject, 'serviceAccountEmail') ||
+    _.get(this, 'serverless.service.provider.serviceAccountEmail') ||
+    null;
+    funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
+    || _.get(this, 'serverless.service.provider.memorySize')
+    || 256;
+    funcTemplate.properties.runtime = this.provider.getRuntime(funcObject);
+    funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
+    || _.get(this, 'serverless.service.provider.timeout')
+    || '60s';
+    funcTemplate.properties.environmentVariables = this.provider.getConfiguredEnvironment(funcObject);
+    
+    if (!funcTemplate.properties.serviceAccountEmail) {
+      delete funcTemplate.properties.serviceAccountEmail;
+    }
+    
+    if (funcObject.vpc) {
+      _.assign(funcTemplate.properties, {
+        vpcConnector: _.get(funcObject, 'vpc') || _.get(this, 'serverless.service.provider.vpc'),
+      });
+    }
+    
+    if (funcObject.maxInstances) {
+      funcTemplate.properties.maxInstances = funcObject.maxInstances;
+    }
+    
+    if (!_.size(funcTemplate.properties.environmentVariables)) {
+      delete funcTemplate.properties.environmentVariables;
+    }
+    
+    funcTemplate.properties.labels = _.assign({},
+      _.get(this, 'serverless.service.provider.labels') || {},
+      _.get(funcObject, 'labels') || {} // eslint-disable-line comma-dangle
+    );
+    
+    const eventType = Object.keys(funcObject.events[0])[0];
+    
+    if (eventType === 'http') {
+      const url = funcObject.events[0].http;
       
-      funcTemplate.properties.serviceAccountEmail =
-      _.get(funcObject, 'serviceAccountEmail') ||
-      _.get(this, 'serverless.service.provider.serviceAccountEmail') ||
-      null;
-      funcTemplate.properties.availableMemoryMb = _.get(funcObject, 'memorySize')
-      || _.get(this, 'serverless.service.provider.memorySize')
-      || 256;
-      funcTemplate.properties.runtime = this.provider.getRuntime(funcObject);
-      funcTemplate.properties.timeout = _.get(funcObject, 'timeout')
-      || _.get(this, 'serverless.service.provider.timeout')
-      || '60s';
-      funcTemplate.properties.environmentVariables = this.provider.getConfiguredEnvironment(funcObject);
+      funcTemplate.properties.httpsTrigger = {};
+      funcTemplate.properties.httpsTrigger.url = url;
+    }
+    if (eventType === 'event') {
+      const type = funcObject.events[0].event.eventType;
+      const path = funcObject.events[0].event.path; //eslint-disable-line
+      const resource = funcObject.events[0].event.resource;
       
-      if (!funcTemplate.properties.serviceAccountEmail) {
-        delete funcTemplate.properties.serviceAccountEmail;
-      }
-      
-      if (funcObject.vpc) {
-        _.assign(funcTemplate.properties, {
-          vpcConnector: _.get(funcObject, 'vpc') || _.get(this, 'serverless.service.provider.vpc'),
-        });
-      }
-      
-      if (funcObject.maxInstances) {
-        funcTemplate.properties.maxInstances = funcObject.maxInstances;
-      }
-      
-      if (!_.size(funcTemplate.properties.environmentVariables)) {
-        delete funcTemplate.properties.environmentVariables;
-      }
-      
-      funcTemplate.properties.labels = _.assign({},
-        _.get(this, 'serverless.service.provider.labels') || {},
-        _.get(funcObject, 'labels') || {} // eslint-disable-line comma-dangle
-        );
-        
-        const eventType = Object.keys(funcObject.events[0])[0];
-        
-        if (eventType === 'http') {
-          const url = funcObject.events[0].http;
-          
-          funcTemplate.properties.httpsTrigger = {};
-          funcTemplate.properties.httpsTrigger.url = url;
-        }
-        if (eventType === 'event') {
-          const type = funcObject.events[0].event.eventType;
-          const path = funcObject.events[0].event.path; //eslint-disable-line
-          const resource = funcObject.events[0].event.resource;
-          
-          funcTemplate.properties.eventTrigger = {};
-          funcTemplate.properties.eventTrigger.eventType = type;
-          if (path) funcTemplate.properties.eventTrigger.path = path;
-          funcTemplate.properties.eventTrigger.resource = resource;
-        }
-        
-        this.serverless.service.provider.compiledConfigurationTemplate.resources.push(funcTemplate);
-      },
-      compileFunctions() {
-        const artifactFilePath = this.serverless.service.package.artifact;
-        const fileName = artifactFilePath.split(path.sep).pop();
-        const projectName = _.get(this, 'serverless.service.provider.project');
-        this.serverless.service.provider.region = this.serverless.service.provider.region || 'us-central1';
-        this.serverless.service.package.artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
-        
-        const allFunctions = this.serverless.service.getAllFunctions();
-        return BbPromise.each(
-          allFunctions,
-          functionName => this.compileFunction(functionName, projectName),
-          );
-        },
-      };
-      
-      const validateHandlerProperty = (funcObject, functionName) => {
-        if (!funcObject.handler) {
-          const errorMessage = [
-            `Missing "handler" property for function "${functionName}".`,
-            ' Your function needs a "handler".',
-            ' Please check the docs for more info.',
-          ].join('');
-          throw new Error(errorMessage);
-        }
-      };
-      
-      const validateEventsProperty = (funcObject, functionName) => {
-        if (!funcObject.events || funcObject.events.length === 0) {
-          const errorMessage = [
-            `Missing "events" property for function "${functionName}".`,
-            ' Your function needs at least one "event".',
-            ' Please check the docs for more info.',
-          ].join('');
-          throw new Error(errorMessage);
-        }
-        
-        if (funcObject.events.length > 1) {
-          const errorMessage = [
-            `The function "${functionName}" has more than one event.`,
-            ' Only one event per function is supported.',
-            ' Please check the docs for more info.',
-          ].join('');
-          throw new Error(errorMessage);
-        }
-        
-        const supportedEvents = ['http', 'event'];
-        const eventType = Object.keys(funcObject.events[0])[0];
-        if (supportedEvents.indexOf(eventType) === -1) {
-          const errorMessage = [
-            `Event type "${eventType}" of function "${functionName}" not supported.`,
-            ` supported event types are: ${supportedEvents.join(', ')}`,
-          ].join('');
-          throw new Error(errorMessage);
-        }
-      };
-      
-      const getFunctionTemplate = (funcObject, region, sourceArchiveUrl) => { //eslint-disable-line
-        return {
-          type: 'cloudfunctions.v1beta2.function',
-          name: funcObject.name,
-          properties: {
-            location: region,
-            availableMemoryMb: 256,
-            runtime: 'nodejs8',
-            timeout: '60s',
-            function: funcObject.handler,
-            sourceArchiveUrl,
-          },
-        };
-      };
-      
+      funcTemplate.properties.eventTrigger = {};
+      funcTemplate.properties.eventTrigger.eventType = type;
+      if (path) funcTemplate.properties.eventTrigger.path = path;
+      funcTemplate.properties.eventTrigger.resource = resource;
+    }
+    
+    this.serverless.service.provider.compiledConfigurationTemplate.resources.push(funcTemplate);
+  },
+  compileFunctions() {
+    const artifactFilePath = this.serverless.service.package.artifact;
+    const fileName = artifactFilePath.split(path.sep).pop();
+    const projectName = _.get(this, 'serverless.service.provider.project');
+    this.serverless.service.provider.region = this.serverless.service.provider.region || 'us-central1';
+    this.serverless.service.package.artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
+    
+    const allFunctions = this.serverless.service.getAllFunctions();
+    return BbPromise.each(
+      allFunctions,
+      functionName => this.compileFunction(functionName, projectName),
+    );
+  },
+};
+
+const validateHandlerProperty = (funcObject, functionName) => {
+  if (!funcObject.handler) {
+    const errorMessage = [
+      `Missing "handler" property for function "${functionName}".`,
+      ' Your function needs a "handler".',
+      ' Please check the docs for more info.',
+    ].join('');
+    throw new Error(errorMessage);
+  }
+};
+
+const validateEventsProperty = (funcObject, functionName) => {
+  if (!funcObject.events || funcObject.events.length === 0) {
+    const errorMessage = [
+      `Missing "events" property for function "${functionName}".`,
+      ' Your function needs at least one "event".',
+      ' Please check the docs for more info.',
+    ].join('');
+    throw new Error(errorMessage);
+  }
+  
+  if (funcObject.events.length > 1) {
+    const errorMessage = [
+      `The function "${functionName}" has more than one event.`,
+      ' Only one event per function is supported.',
+      ' Please check the docs for more info.',
+    ].join('');
+    throw new Error(errorMessage);
+  }
+  
+  const supportedEvents = ['http', 'event'];
+  const eventType = Object.keys(funcObject.events[0])[0];
+  if (supportedEvents.indexOf(eventType) === -1) {
+    const errorMessage = [
+      `Event type "${eventType}" of function "${functionName}" not supported.`,
+      ` supported event types are: ${supportedEvents.join(', ')}`,
+    ].join('');
+    throw new Error(errorMessage);
+  }
+};
+
+const getFunctionTemplate = (funcObject, region, sourceArchiveUrl) => { //eslint-disable-line
+  return {
+    type: 'cloudfunctions.v1beta2.function',
+    name: funcObject.name,
+    properties: {
+      location: region,
+      availableMemoryMb: 256,
+      runtime: 'nodejs8',
+      timeout: '60s',
+      function: funcObject.handler,
+      sourceArchiveUrl,
+    },
+  };
+};
