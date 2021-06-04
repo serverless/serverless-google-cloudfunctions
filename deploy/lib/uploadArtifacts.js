@@ -16,11 +16,13 @@ module.exports = {
         const functionArtifactFileName = `${name}.zip`;
         const functionObject = this.serverless.service.getFunction(name);
         functionObject.package = functionObject.package || {};
-        const artifactFilePath = functionObject.package.artifact ||
-          this.serverless.service.package.artifact;
+        const artifactFilePath =
+          functionObject.package.artifact || this.serverless.service.package.artifact;
 
-        if (!artifactFilePath ||
-          (this.serverless.service.artifact && !functionObject.package.artifact)) {
+        if (
+          !artifactFilePath ||
+          (this.serverless.service.artifact && !functionObject.package.artifact)
+        ) {
           if (this.serverless.service.package.individually || functionObject.package.individually) {
             const artifactFileName = functionArtifactFileName;
             return path.join(this.packagePath, artifactFileName);
@@ -29,20 +31,22 @@ module.exports = {
         }
 
         return artifactFilePath;
-      }),
+      })
     );
 
     return BbPromise.map(artifactFilePaths, (artifactFilePath) => {
       const stats = fs.statSync(artifactFilePath);
       const fileName = path.basename(artifactFilePath);
       this.serverless.cli.log(
-          `Uploading service ${fileName} file to Google Cloud Storage (${filesize(stats.size)})...`,
+        `Uploading service ${fileName} file to Google Cloud Storage (${filesize(stats.size)})...`
       );
 
       const params = {
         bucket: this.serverless.service.provider.deploymentBucketName,
         resource: {
-          name: `${this.serverless.service.package.artifactDirectoryName}/${path.basename(artifactFilePath)}`,
+          name: `${this.serverless.service.package.artifactDirectoryName}/${path.basename(
+            artifactFilePath
+          )}`,
           contentType: 'application/octet-stream',
         },
         media: {
@@ -53,7 +57,7 @@ module.exports = {
 
       return this.provider.request('storage', 'objects', 'insert', params);
     }).then(() => {
-        this.serverless.cli.log('Artifacts successfully uploaded...');
-      });
+      this.serverless.cli.log('Artifacts successfully uploaded...');
+    });
   },
 };

@@ -17,7 +17,8 @@ class GoogleDeploy {
     this.serverless = serverless;
     this.options = options;
     this.servicePath = this.serverless.config.servicePath || '';
-    this.packagePath = this.options.package ||
+    this.packagePath =
+      this.options.package ||
       this.serverless.service.package.path ||
       path.join(this.servicePath || '.', '.serverless');
     this.provider = this.serverless.getProvider('google');
