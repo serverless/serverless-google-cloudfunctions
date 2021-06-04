@@ -52,8 +52,7 @@ module.exports = {
       };
 
       return this.provider.request('storage', 'objects', 'insert', params);
-    })
-      .then(() => {
+    }).then(() => {
         this.serverless.cli.log('Artifacts successfully uploaded...');
       });
   },
