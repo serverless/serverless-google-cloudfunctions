@@ -36,7 +36,7 @@ module.exports = {
       const stats = fs.statSync(artifactFilePath);
       const fileName = path.basename(artifactFilePath);
       this.serverless.cli.log(
-          `Uploading service ${fileName} file to Google Cloud Storage (${filesize(stats.size)})...`
+          `Uploading service ${fileName} file to Google Cloud Storage (${filesize(stats.size)})...`,
       );
 
       const params = {

@@ -79,11 +79,11 @@ module.exports = {
       this.serverless.service.package
         .artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
     }
-    
+
     const allFunctions = this.serverless.service.getAllFunctions();
     return BbPromise.each(
       allFunctions,
-      functionName => this.compileFunction(functionName)
+      functionName => this.compileFunction(functionName),
     );
   },
 };
