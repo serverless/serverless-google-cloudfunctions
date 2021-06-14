@@ -29,7 +29,7 @@ class GoogleInvokeLocal {
 
   async invokeLocal() {
     const functionObj = this.serverless.service.getFunction(this.options.function);
-    this.validateEventsProperty(functionObj, this.options.function, ['event']); // Only event is currently supported
+    this.validateEventsProperty(functionObj, this.options.function);
 
     const runtime = this.provider.getRuntime(functionObj);
     if (!runtime.startsWith('nodejs')) {
