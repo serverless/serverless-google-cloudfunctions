@@ -165,9 +165,7 @@ describe('GoogleInvokeLocal', () => {
 
     it('should validate the function configuration', async () => {
       await googleInvokeLocal.invokeLocal();
-      expect(
-        validateEventsPropertyStub.calledOnceWith(functionObj, functionName, ['event'])
-      ).toEqual(true);
+      expect(validateEventsPropertyStub.calledOnceWith(functionObj, functionName)).toEqual(true);
     });
 
     it('should get the runtime', async () => {
