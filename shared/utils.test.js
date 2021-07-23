@@ -24,7 +24,7 @@ describe('Utils', () => {
       googleCommand.setDefaults().then(() => {
         expect(googleCommand.options.stage).toEqual('dev');
         expect(googleCommand.options.region).toEqual('us-central1');
-        expect(googleCommand.options.runtime).toEqual('nodejs8');
+        expect(googleCommand.options.runtime).toEqual('nodejs10');
       }));
 
     it('should set the options when they are provided', () => {

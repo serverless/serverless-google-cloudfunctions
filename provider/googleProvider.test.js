@@ -14,12 +14,15 @@ describe('GoogleProvider', () => {
   let setProviderStub;
   let homedirStub;
 
+  const providerRuntime = 'providerRuntime';
+
   beforeEach(() => {
     serverless = new Serverless();
     serverless.version = '1.0.0';
     serverless.service = {
       provider: {
         project: 'example-project',
+        runtime: providerRuntime,
       },
     };
     setProviderStub = sinon.stub(serverless, 'setProvider').returns();
@@ -172,6 +175,59 @@ describe('GoogleProvider', () => {
       expect(() => {
         googleProvider.isServiceSupported('unsupported');
       }).toThrow(Error);
+    });
+  });
+
+  describe('#getRuntime()', () => {
+    it('should return the runtime of the function if defined', () => {
+      const functionRuntime = 'functionRuntime';
+      expect(googleProvider.getRuntime({ runtime: functionRuntime })).toEqual(functionRuntime);
+    });
+
+    it('should return the runtime of the provider if not defined in the function', () => {
+      expect(googleProvider.getRuntime({})).toEqual(providerRuntime);
+    });
+
+    it('should return nodejs10 if neither the runtime of the function nor the one of the provider are defined', () => {
+      serverless.service.provider.runtime = undefined;
+      expect(googleProvider.getRuntime({})).toEqual('nodejs10');
+    });
+  });
+
+  describe('#getConfiguredEnvironment()', () => {
+    const functionEnvironment = {
+      MY_VAR: 'myVarFunctionValue',
+      FUNCTION_VAR: 'functionVarFunctionValue',
+    };
+    const providerEnvironment = {
+      MY_VAR: 'myVarProviderValue',
+      PROVIDER_VAR: 'providerVarProviderValue',
+    };
+
+    it('should return the environment of the function if defined', () => {
+      expect(googleProvider.getConfiguredEnvironment({ environment: functionEnvironment })).toEqual(
+        functionEnvironment
+      );
+    });
+
+    it('should return the environment of the provider if defined', () => {
+      serverless.service.provider.environment = providerEnvironment;
+      expect(googleProvider.getConfiguredEnvironment({})).toEqual(providerEnvironment);
+    });
+
+    it('should return an empty object if neither the environment of the function nor the one of the provider are defined', () => {
+      expect(googleProvider.getConfiguredEnvironment({})).toEqual({});
+    });
+
+    it('should return the merged environment of the provider and the function. The function override the provider.', () => {
+      serverless.service.provider.environment = providerEnvironment;
+      expect(googleProvider.getConfiguredEnvironment({ environment: functionEnvironment })).toEqual(
+        {
+          MY_VAR: 'myVarFunctionValue',
+          FUNCTION_VAR: 'functionVarFunctionValue',
+          PROVIDER_VAR: 'providerVarProviderValue',
+        }
+      );
     });
   });
 });

@@ -97,6 +97,22 @@ describe('RetrieveLogs', () => {
       });
     });
 
+    it('should parse the "count" option as an integer', () => {
+      googleLogs.options.function = 'func1';
+      googleLogs.options.count = '100';
+
+      return googleLogs.getLogs().then(() => {
+        expect(
+          requestStub.calledWithExactly('logging', 'entries', 'list', {
+            filter: 'resource.labels.function_name="full-function-name" AND NOT textPayload=""',
+            orderBy: 'timestamp desc',
+            resourceNames: ['projects/my-project'],
+            pageSize: parseInt(googleLogs.options.count, 10),
+          })
+        ).toEqual(true);
+      });
+    });
+
     it('should throw an error if the function could not be found in the service', () => {
       googleLogs.options.function = 'missingFunc';
 

@@ -2,11 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v4.1.0...v4.2.0) (2021-06-17)
+
+### Features
+
+- Add support for http events in invoke local ([#264](https://github.com/serverless/serverless-google-cloudfunctions/issues/264)) ([446d161](https://github.com/serverless/serverless-google-cloudfunctions/commit/446d161a3ddff8e3eaed41af0f9e415726cd23dd)) ([Corentin Doue](https://github.com/CorentinDoue))
+
+## [4.1.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v4.0.0...v4.1.0) (2021-06-07)
+
+### Features
+
+- Add support for invoke local ([#258](https://github.com/serverless/serverless-google-cloudfunctions/issues/258)) ([9e07fed](https://github.com/serverless/serverless-google-cloudfunctions/commit/9e07fedf8049836a45b038ddd2b972526c8aee6a)) ([Corentin Doue](https://github.com/CorentinDoue))
+
+### Bug Fixes
+
+- CLI option `count` type deprecation warning ([#257](https://github.com/serverless/serverless-google-cloudfunctions/issues/257)) ([8b97064](https://github.com/serverless/serverless-google-cloudfunctions/commit/8b970648f08ee39c1e8d60a373c2c1798c8cde3f)) ([Michael Haglund](https://github.com/hagmic))
+
 ## [4.0.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v3.1.1...v4.0.0) (2021-04-12)
 
 ### ⚠ BREAKING CHANGES
 
 - Node.js version 10 or later is required (dropped support for v6 and v8)
+- Default runtime has been changed to `nodejs10`
 
 ### Features
 
