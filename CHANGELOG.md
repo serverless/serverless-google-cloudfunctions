@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v4.2.0...v4.3.0) (2021-08-03)
+
+### Features
+
+- Support retry failure policy for event based functions ([#247](https://github.com/serverless/serverless-google-cloudfunctions/issues/247)) ([6ab7711](https://github.com/serverless/serverless-google-cloudfunctions/commit/6ab77112266646bd2b771a91cd9bf30487ab1abd)) ([Flavio Peralta](https://github.com/flaviomp))
+
 ## [4.2.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v4.1.0...v4.2.0) (2021-06-17)
 
 ### Features
