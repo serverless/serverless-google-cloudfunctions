@@ -148,8 +148,7 @@ const validateVpcConnectorProperty = (funcObject, functionName) => {
 
 
 const validateVpcConnectorEgressProperty = (funcObject, functionName) => {
-  if (funcObject.vpcEgress && typeof funcObject.vpcEgress === 'string') {
-    const egress = funcObject.vpcEgress.toUpperCase();
+  if (funcObject.vpcEgress && typeof funcObject.vpcEgress !== 'string') {
     const errorMessage = [
       `The function "${functionName}" has invalid vpc connection name`,
       ' VPC Connector Egress Setting be either ALL_TRAFFIC or PRIVATE_RANGES_ONLY. ',
@@ -160,7 +159,6 @@ const validateVpcConnectorEgressProperty = (funcObject, functionName) => {
     throw new Error(errorMessage);
   }
 };
-
 
 const getFunctionTemplate = (funcObject, projectName, region, sourceArchiveUrl) => {
   //eslint-disable-line
