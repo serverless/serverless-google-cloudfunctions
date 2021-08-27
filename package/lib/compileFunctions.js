@@ -59,7 +59,7 @@ module.exports = {
       }
 
       if (funcObject.vpcEgress) {
-          egress = egress.toUpperCase();
+          let egress = egress.toUpperCase();
           if (egress === 'ALL') egress = 'ALL_TRAFFIC';
           if (egress === 'PRIVATE') egress = 'PRIVATE_RANGES_ONLY';
         _.assign(funcTemplate.properties, {
