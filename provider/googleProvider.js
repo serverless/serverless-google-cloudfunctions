@@ -119,7 +119,7 @@ class GoogleProvider {
           timeout: { type: 'string' }, // Can be overridden by function configuration
           environment: { $ref: '#/definitions/cloudFunctionEnvironmentVariables' }, // Can be overridden by function configuration
           vpc: { type: 'string' }, // Can be overridden by function configuration
-          vpcEgress: { type: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration
+          vpcEgress: { $ref: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration
           labels: { $ref: '#/definitions/resourceManagerLabels' }, // Can be overridden by function configuration
         },
       },
@@ -132,7 +132,7 @@ class GoogleProvider {
           timeout: { type: 'string' }, // Override provider configuration
           environment: { $ref: '#/definitions/cloudFunctionEnvironmentVariables' }, // Override provider configuration
           vpc: { type: 'string' }, // Override provider configuration
-          vpcEgress: { type: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration
+          vpcEgress: {$ref: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration
           labels: { $ref: '#/definitions/resourceManagerLabels' }, // Override provider configuration
         },
       },
