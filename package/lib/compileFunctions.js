@@ -16,6 +16,7 @@ module.exports = {
     this.serverless.service.provider.region =
       this.serverless.service.provider.region || 'us-central1';
     this.serverless.service.package.artifactFilePath = `${this.serverless.service.package.artifactDirectoryName}/${fileName}`;
+    let vpcEgress = this.serverless.service.provider.vpcEgress;
 
     this.serverless.service.getAllFunctions().forEach((functionName) => {
       const funcObject = this.serverless.service.getFunction(functionName);
@@ -25,7 +26,7 @@ module.exports = {
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);
       validateVpcConnectorProperty(funcObject, functionName);
-      validateVpcConnectorEgressProperty(funcObject, functionName);
+      validateVpcConnectorEgressProperty(vpcEgress, projectName);
 
       const funcTemplate = getFunctionTemplate(
         funcObject,
@@ -58,12 +59,12 @@ module.exports = {
         });
       }
 
-      if (funcObject.vpcEgress) {
-          let egress = funcObject.vpcEgress.toUpperCase();
-          if (egress === 'ALL') egress = 'ALL_TRAFFIC';
-          if (egress === 'PRIVATE') egress = 'PRIVATE_RANGES_ONLY';
+      if (vpcEgress) {
+          vpcEgress = vpcEgress.toUpperCase();
+          if (vpcEgress === 'ALL') vpcEgress = 'ALL_TRAFFIC';
+          if (vpcEgress === 'PRIVATE') vpcEgress = 'PRIVATE_RANGES_ONLY';
         _.assign(funcTemplate.properties, {
-          vpcConnectorEgressSettings: egress,
+          vpcConnectorEgressSettings: vpcEgress,
         });
       }
 
@@ -146,10 +147,10 @@ const validateVpcConnectorProperty = (funcObject, functionName) => {
 
 
 
-const validateVpcConnectorEgressProperty = (funcObject, functionName) => {
-  if (funcObject.vpcEgress && typeof funcObject.vpcEgress !== 'string') {
+const validateVpcConnectorEgressProperty = (vpcEgress, providerName) => {
+  if (vpcEgress && typeof vpcEgress !== 'string') {
     const errorMessage = [
-      `The function "${functionName}" has invalid vpc connection name`,
+      `The provider "${providerName}" has invalid vpc connection name`,
       ' VPC Connector Egress Setting be either ALL_TRAFFIC or PRIVATE_RANGES_ONLY. ',
       ' You may shorten these to ALL or PRIVATE optionally.',
       ' Please check the docs for more info at',
