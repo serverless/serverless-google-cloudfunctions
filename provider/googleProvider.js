@@ -87,12 +87,7 @@ class GoogleProvider {
           additionalProperties: false,
         },
         cloudFunctionVpcEgress: {
-          enum: [
-            'ALL',
-            'ALL_TRAFFIC',
-            'PRIVATE',
-            'PRIVATE_RANGES_ONLY'
-          ],
+          enum: ['ALL', 'ALL_TRAFFIC', 'PRIVATE', 'PRIVATE_RANGES_ONLY'],
         },
         resourceManagerLabels: {
           type: 'object',
@@ -132,7 +127,7 @@ class GoogleProvider {
           timeout: { type: 'string' }, // Override provider configuration
           environment: { $ref: '#/definitions/cloudFunctionEnvironmentVariables' }, // Override provider configuration
           vpc: { type: 'string' }, // Override provider configuration
-          vpcEgress: {$ref: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration
+          vpcEgress: { $ref: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration
           labels: { $ref: '#/definitions/resourceManagerLabels' }, // Override provider configuration
         },
       },
