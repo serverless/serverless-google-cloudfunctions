@@ -768,7 +768,6 @@ describe('CompileFunctions', () => {
     });
   });
 
-
   it('should allow vpc as short name', () => {
     googlePackage.serverless.service.functions = {
       func1: {
@@ -809,7 +808,7 @@ describe('CompileFunctions', () => {
     });
   });
 
-  it('should allow vpc egress all', () => {
+  it('should allow vpc egress all at function level', () => {
     googlePackage.serverless.service.functions = {
       func1: {
         handler: 'func1',
@@ -851,7 +850,7 @@ describe('CompileFunctions', () => {
     });
   });
 
-  it('should allow vpc egress private', () => {
+  it('should allow vpc egress private at function level', () => {
     googlePackage.serverless.service.functions = {
       func1: {
         handler: 'func1',
@@ -881,6 +880,460 @@ describe('CompileFunctions', () => {
           labels: {},
           vpcConnector: 'my-vpc',
           vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY',
+        },
+      },
+    ];
+
+    return googlePackage.compileFunctions().then(() => {
+      expect(consoleLogStub.called).toEqual(true);
+      expect(
+        googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+      ).toEqual(compiledResources);
+    });
+  });
+
+  it('should allow vpc egress all at provider level', () => {
+    googlePackage.serverless.service.functions = {
+      func1: {
+        handler: 'func1',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+      },
+    };
+
+    googlePackage.serverless.service.provider.vpcEgress = 'all';
+
+    const compiledResources = [
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func1',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func1',
+          entryPoint: 'func1',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'ALL_TRAFFIC',
+        },
+      },
+    ];
+
+    return googlePackage.compileFunctions().then(() => {
+      expect(consoleLogStub.called).toEqual(true);
+      expect(
+        googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+      ).toEqual(compiledResources);
+    });
+  });
+
+  it('should allow vpc egress private at provider level', () => {
+    googlePackage.serverless.service.functions = {
+      func1: {
+        handler: 'func1',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+      },
+    };
+
+    googlePackage.serverless.service.provider.vpcEgress = 'private';
+
+    const compiledResources = [
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func1',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func1',
+          entryPoint: 'func1',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY',
+        },
+      },
+    ];
+
+    return googlePackage.compileFunctions().then(() => {
+      expect(consoleLogStub.called).toEqual(true);
+      expect(
+        googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+      ).toEqual(compiledResources);
+    });
+  });
+
+  it('should replace vpc egress private at provider level for a vpc egress all defined at function level', () => {
+    googlePackage.serverless.service.functions = {
+      func1: {
+        handler: 'func1',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+        vpcEgress: 'all',
+      },
+    };
+
+    googlePackage.serverless.service.provider.vpcEgress = 'private';
+
+    const compiledResources = [
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func1',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func1',
+          entryPoint: 'func1',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'ALL_TRAFFIC',
+        },
+      },
+    ];
+
+    return googlePackage.compileFunctions().then(() => {
+      expect(consoleLogStub.called).toEqual(true);
+      expect(
+        googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+      ).toEqual(compiledResources);
+    });
+  });
+
+  it('should replace vpc egress private at provider level for a vpc egress all defined at function level', () => {
+    googlePackage.serverless.service.functions = {
+      func1: {
+        handler: 'func1',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+        vpcEgress: 'private',
+      },
+    };
+
+    googlePackage.serverless.service.provider.vpcEgress = 'all';
+
+    const compiledResources = [
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func1',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func1',
+          entryPoint: 'func1',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY',
+        },
+      },
+    ];
+
+    return googlePackage.compileFunctions().then(() => {
+      expect(consoleLogStub.called).toEqual(true);
+      expect(
+        googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+      ).toEqual(compiledResources);
+    });
+  });
+
+  it('should replace vpc egress private to vpc egress all defined at function level in the first function', () => {
+    googlePackage.serverless.service.functions = {
+      func1: {
+        handler: 'func1',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+        vpcEgress: 'all',
+      },
+      func2: {
+        handler: 'func2',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+      },
+    };
+
+    googlePackage.serverless.service.provider.vpcEgress = 'private';
+
+    const compiledResources = [
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func1',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func1',
+          entryPoint: 'func1',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'ALL_TRAFFIC',
+        },
+      },
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func2',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func2',
+          entryPoint: 'func2',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY',
+        },
+      },
+    ];
+
+    return googlePackage.compileFunctions().then(() => {
+      expect(consoleLogStub.called).toEqual(true);
+      expect(
+        googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+      ).toEqual(compiledResources);
+    });
+  });
+
+  it('should replace vpc egress all to vpc egress private defined at function level in the first function', () => {
+    googlePackage.serverless.service.functions = {
+      func1: {
+        handler: 'func1',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+        vpcEgress: 'private',
+      },
+      func2: {
+        handler: 'func2',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+      },
+    };
+
+    googlePackage.serverless.service.provider.vpcEgress = 'all';
+
+    const compiledResources = [
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func1',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func1',
+          entryPoint: 'func1',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY',
+        },
+      },
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func2',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func2',
+          entryPoint: 'func2',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'ALL_TRAFFIC',
+        },
+      },
+    ];
+
+    return googlePackage.compileFunctions().then(() => {
+      expect(consoleLogStub.called).toEqual(true);
+      expect(
+        googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+      ).toEqual(compiledResources);
+    });
+  });
+
+  it('should replace vpc egress all to vpc egress private defined at function level in the second function', () => {
+    googlePackage.serverless.service.functions = {
+      func1: {
+        handler: 'func1',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+      },
+      func2: {
+        handler: 'func2',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+        vpcEgress: 'private',
+      },
+    };
+
+    googlePackage.serverless.service.provider.vpcEgress = 'all';
+
+    const compiledResources = [
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func1',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func1',
+          entryPoint: 'func1',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'ALL_TRAFFIC',
+        },
+      },
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func2',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func2',
+          entryPoint: 'func2',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY',
+        },
+      },
+    ];
+
+    return googlePackage.compileFunctions().then(() => {
+      expect(consoleLogStub.called).toEqual(true);
+      expect(
+        googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+      ).toEqual(compiledResources);
+    });
+  });
+
+  it('should replace vpc egress private to vpc egress all defined at function level in the second function', () => {
+    googlePackage.serverless.service.functions = {
+      func1: {
+        handler: 'func1',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+      },
+      func2: {
+        handler: 'func2',
+        memorySize: 128,
+        runtime: 'nodejs10',
+        vpc: 'my-vpc',
+        events: [{ http: 'foo' }],
+        vpcEgress: 'all',
+      },
+    };
+
+    googlePackage.serverless.service.provider.vpcEgress = 'private';
+
+    const compiledResources = [
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func1',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func1',
+          entryPoint: 'func1',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY',
+        },
+      },
+      {
+        type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+        name: 'my-service-dev-func2',
+        properties: {
+          parent: 'projects/myProject/locations/us-central1',
+          runtime: 'nodejs10',
+          function: 'my-service-dev-func2',
+          entryPoint: 'func2',
+          availableMemoryMb: 128,
+          timeout: '60s',
+          sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+          httpsTrigger: {
+            url: 'foo',
+          },
+          labels: {},
+          vpcConnector: 'my-vpc',
+          vpcConnectorEgressSettings: 'ALL_TRAFFIC',
         },
       },
     ];
