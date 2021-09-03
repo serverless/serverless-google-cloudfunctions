@@ -20,14 +20,14 @@ module.exports = {
     this.serverless.service.getAllFunctions().forEach((functionName) => {
       const funcObject = this.serverless.service.getFunction(functionName);
 
-      funcObject.vpcEgress = funcObject.vpcEgress || this.serverless.service.provider.vpcEgress;
+      let vpcEgress = funcObject.vpcEgress || this.serverless.service.provider.vpcEgress;
 
       this.serverless.cli.log(`Compiling function "${functionName}"...`);
 
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);
       validateVpcConnectorProperty(funcObject, functionName);
-      validateVpcConnectorEgressProperty(funcObject.vpcEgress);
+      validateVpcConnectorEgressProperty(vpcEgress);
 
       const funcTemplate = getFunctionTemplate(
         funcObject,
@@ -60,8 +60,8 @@ module.exports = {
         });
       }
 
-      if (funcObject.vpcEgress) {
-        let vpcEgress = funcObject.vpcEgress.toUpperCase();
+      if (vpcEgress) {
+        vpcEgress = vpcEgress.toUpperCase();
         if (vpcEgress === 'ALL') vpcEgress = 'ALL_TRAFFIC';
         if (vpcEgress === 'PRIVATE') vpcEgress = 'PRIVATE_RANGES_ONLY';
         _.assign(funcTemplate.properties, {
