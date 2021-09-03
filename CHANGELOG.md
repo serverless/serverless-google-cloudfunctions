@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.4.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v4.3.0...v4.4.0) (2021-09-03)
+
+### Features
+
+- Support `provider.vpcEgress` configuration ([#271](https://github.com/serverless/serverless-google-cloudfunctions/issues/271)) ([269df15](https://github.com/serverless/serverless-google-cloudfunctions/commit/269df15e77eb51895c497608eaf4265005d83a5d)) ([Federico Rodríguez](https://github.com/fcr1193))
+
 ## [4.3.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v4.2.0...v4.3.0) (2021-08-03)
 
 ### Features
