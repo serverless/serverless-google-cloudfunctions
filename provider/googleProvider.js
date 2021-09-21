@@ -33,6 +33,7 @@ class GoogleProvider {
             'us-east4', // (Northern Virginia)
             'europe-west1', // (Belgium)
             'europe-west2', // (London)
+            'asia-east1', // (Taiwan)
             'asia-east2', // (Hong Kong)
             'asia-northeast1', // (Tokyo)
             'asia-northeast2', // (Osaka)
@@ -44,8 +45,10 @@ class GoogleProvider {
             'southamerica-east1', // (Sao Paulo)
             'europe-west3', // (Frankfurt)
             'europe-west6', // (Zurich)
+            'europe-central2', // (Warsaw)
             'australia-southeast1', // (Sydney)
             'asia-south1', // (Mumbai)
+            'asia-southeast1', // (Singapore)
             'asia-southeast2', // (Jakarta)
             'asia-northeast3', // (Seoul)
           ],
