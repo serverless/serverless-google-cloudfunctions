@@ -63,6 +63,7 @@ class GoogleProvider {
             'nodejs14',
             'python37',
             'python38',
+            'python39',
             'go111',
             'go113',
             'java11',
