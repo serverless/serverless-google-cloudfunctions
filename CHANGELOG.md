@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.5.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v4.4.0...v4.5.0) (2021-11-25)
+
+### Features
+
+- Recognize `python39` runtime ([#278](https://github.com/serverless/serverless-google-cloudfunctions/issues/278)) ([1dfcab0](https://github.com/serverless/serverless-google-cloudfunctions/commit/1dfcab013cb2bf77b5609c908fcfe617dc5da5eb)) ([Harry Robbins](https://github.com/harryrobbins))
+- Support new Serverless Framework variables resolver ([#280](https://github.com/serverless/serverless-google-cloudfunctions/issues/280)) ([65cf774](https://github.com/serverless/serverless-google-cloudfunctions/commit/65cf774a90af0e673108b5164470f094f9f242a4)) ([Mariusz Nowak](https://github.com/medikoo))
+- Update Cloud Functions locations lit ([#274](https://github.com/serverless/serverless-google-cloudfunctions/issues/274)) ([390bba5](https://github.com/serverless/serverless-google-cloudfunctions/commit/390bba5bee3796969c9798629bd588917759616d)) ([Eric Ho](https://github.com/dhoeric))
+
 ## [4.4.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v4.3.0...v4.4.0) (2021-09-03)
 
 ### Features
