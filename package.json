@@ -63,6 +63,9 @@
     "sinon": "^8.1.1",
     "standard-version": "^9.3.1"
   },
+  "peerDependencies": {
+    "serverless": "2 || 3"
+  },
   "scripts": {
     "commitlint": "commitlint -f HEAD@{15}",
     "commitlint:pull-request": "commitlint -f HEAD~1",
