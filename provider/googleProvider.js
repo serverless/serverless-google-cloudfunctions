@@ -155,16 +155,35 @@ class GoogleProvider {
       cloudfunctions: google.cloudfunctions('v1'),
     };
 
+    this.configurationVariablesSources = {
+      gs: {
+        async resolve({ address }) {
+          if (!address) {
+            throw new serverless.classes.Error(
+              'Missing address argument in variable "gs" source',
+              'GOOGLE_CLOUD_MISSING_GS_VAR ADDRESS'
+            );
+          }
+          const groups = address.split('/');
+          const bucket = groups.shift();
+          const object = groups.join('/');
+          return { value: await this.gsValue({ bucket, object }) };
+        },
+      },
+    };
+
+    // TODO: Remove with next major
     this.variableResolvers = {
-      gs: this.getGsValue,
+      gs: (variableString) => {
+        const groups = variableString.split(':')[1].split('/');
+        const bucket = groups.shift();
+        const object = groups.join('/');
+        return this.gsValue({ bucket, object });
+      },
     };
   }
 
-  getGsValue(variableString) {
-    const groups = variableString.split(':')[1].split('/');
-    const bucket = groups.shift();
-    const object = groups.join('/');
-
+  async getGsValue({ bucket, object }) {
     return this.serverless
       .getProvider('google')
       .request('storage', 'objects', 'get', {
@@ -173,7 +192,7 @@ class GoogleProvider {
         alt: 'media',
       })
       .catch((err) => {
-        throw new Error(`Error getting value for ${variableString}. ${err.message}`);
+        throw new Error(`Error getting value for ${bucket}/${object}. ${err.message}`);
       });
   }
 
