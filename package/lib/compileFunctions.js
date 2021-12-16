@@ -73,6 +73,10 @@ module.exports = {
         funcTemplate.properties.maxInstances = funcObject.maxInstances;
       }
 
+      if (funcObject.minInstances) {
+        funcTemplate.properties.minInstances = funcObject.minInstances;
+      }
+
       if (!_.size(funcTemplate.properties.environmentVariables)) {
         delete funcTemplate.properties.environmentVariables;
       }
