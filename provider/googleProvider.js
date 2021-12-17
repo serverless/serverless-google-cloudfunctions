@@ -129,6 +129,7 @@ class GoogleProvider {
           serviceAccountEmail: { type: 'string' }, // Override provider configuration
           memorySize: { $ref: '#/definitions/cloudFunctionMemory' }, // Override provider configuration
           timeout: { type: 'string' }, // Override provider configuration
+          minInstances: { type: 'number' },
           environment: { $ref: '#/definitions/cloudFunctionEnvironmentVariables' }, // Override provider configuration
           vpc: { type: 'string' }, // Override provider configuration
           vpcEgress: { $ref: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration

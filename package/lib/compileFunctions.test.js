@@ -766,6 +766,115 @@ describe('CompileFunctions', () => {
         ).toEqual(compiledResources);
       });
     });
+
+    it('should set min instances on the function configuration', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          memorySize: 128,
+          runtime: 'nodejs10',
+          minInstances: 5,
+          vpc: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          events: [{ http: 'foo' }],
+        },
+      };
+
+      const compiledResources = [
+        {
+          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          name: 'my-service-dev-func1',
+          properties: {
+            parent: 'projects/myProject/locations/us-central1',
+            runtime: 'nodejs10',
+            function: 'my-service-dev-func1',
+            entryPoint: 'func1',
+            availableMemoryMb: 128,
+            timeout: '60s',
+            minInstances: 5,
+            sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+            httpsTrigger: {
+              url: 'foo',
+            },
+            labels: {},
+            vpcConnector: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          },
+        },
+      ];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.called).toEqual(true);
+        expect(
+          googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+        ).toEqual(compiledResources);
+      });
+    });
+
+    it('should not require min instances on each function configuration', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          memorySize: 128,
+          runtime: 'nodejs10',
+          vpc: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          events: [{ http: 'foo' }],
+        },
+        func2: {
+          handler: 'func2',
+          memorySize: 128,
+          runtime: 'nodejs10',
+          minInstances: 5,
+          vpc: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          events: [{ http: 'bar' }],
+        },
+      };
+
+      const compiledResources = [
+        {
+          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          name: 'my-service-dev-func1',
+          properties: {
+            parent: 'projects/myProject/locations/us-central1',
+            runtime: 'nodejs10',
+            function: 'my-service-dev-func1',
+            entryPoint: 'func1',
+            availableMemoryMb: 128,
+            timeout: '60s',
+            sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+            httpsTrigger: {
+              url: 'foo',
+            },
+            labels: {},
+            vpcConnector: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          },
+        },
+        {
+          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          name: 'my-service-dev-func2',
+          properties: {
+            parent: 'projects/myProject/locations/us-central1',
+            runtime: 'nodejs10',
+            function: 'my-service-dev-func2',
+            entryPoint: 'func2',
+            availableMemoryMb: 128,
+            timeout: '60s',
+            minInstances: 5,
+            sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+            httpsTrigger: {
+              url: 'bar',
+            },
+            labels: {},
+            vpcConnector: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          },
+        },
+      ];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.called).toEqual(true);
+        expect(
+          googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+        ).toEqual(compiledResources);
+      });
+    });
   });
 
   it('should allow vpc as short name', () => {
