@@ -2,7 +2,11 @@
 
 module.exports = {
   removeDeployment() {
-    this.serverless.cli.log('Removing deployment...');
+    if (this.log) {
+      this.provider.progress.get('remove').update('Removing deployment from Deployment Manager');
+    } else {
+      this.serverless.cli.log('Removing deployment...');
+    }
 
     const deploymentName = `sls-${this.serverless.service.service}-${this.options.stage}`;
 

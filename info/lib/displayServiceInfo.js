@@ -65,7 +65,7 @@ module.exports = {
     return BbPromise.resolve(data);
   },
 
-  printInfo(data) {
+  printInfoV2(data) {
     let message = '';
 
     // get all the service related information
@@ -89,6 +89,37 @@ module.exports = {
     }
 
     this.serverless.cli.consoleLog(message);
+  },
+
+  printInfoV3(data) {
+    // get all the service related information
+    this.serverless.addServiceOutputSection('Service', data.service);
+    this.serverless.addServiceOutputSection('Project', data.project);
+    this.serverless.addServiceOutputSection('Stage', data.stage);
+    this.serverless.addServiceOutputSection('Region', data.region);
+
+    // get all the functions
+    if (data.resources.functions.length) {
+      this.serverless.addServiceOutputSection(
+        'Deployed Functions',
+        data.resources.functions.reduce((previous, current) => {
+          return previous.push(current.name);
+        }, [])
+      );
+    } else {
+      this.serverless.addServiceOutputSection(
+        'Deployed Functions',
+        'No functions currently deployed'
+      );
+    }
+  },
+
+  printInfo(data) {
+    if (this.provider.log) {
+      this.printInfoV3(data);
+    } else {
+      this.printInfoV2(data);
+    }
 
     return BbPromise.resolve();
   },

@@ -4,7 +4,11 @@ const fs = require('fs');
 
 module.exports = {
   uploadArtifacts() {
-    this.serverless.cli.log('Uploading artifacts...');
+    if (this.provider.progress) {
+      this.provider.progress.get('deploy').update('Uploading artifacts');
+    } else {
+      this.serverless.cli.log('Uploading artifacts...');
+    }
 
     const params = {
       bucket: this.serverless.service.provider.deploymentBucketName,
@@ -19,7 +23,9 @@ module.exports = {
     };
 
     return this.provider.request('storage', 'objects', 'insert', params).then(() => {
-      this.serverless.cli.log('Artifacts successfully uploaded...');
+      if (!this.provider.progress) {
+        this.serverless.cli.log('Artifacts successfully uploaded...');
+      }
     });
   },
 };

@@ -22,7 +22,11 @@ module.exports = {
 
       let vpcEgress = funcObject.vpcEgress || this.serverless.service.provider.vpcEgress;
 
-      this.serverless.cli.log(`Compiling function "${functionName}"...`);
+      if (this.log) {
+        this.log.verbose(`Compiling function "${functionName}"...`);
+      } else {
+        this.serverless.cli.log(`Compiling function "${functionName}"...`);
+      }
 
       validateHandlerProperty(funcObject, functionName);
       validateEventsProperty(funcObject, functionName);

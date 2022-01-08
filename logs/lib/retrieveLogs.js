@@ -48,7 +48,11 @@ module.exports = {
     output = `Displaying the ${logs.entries.length} most recent log(s):\n\n${output}`; // prettify output
     output = output.slice(0, output.length - 1); // remove "\n---\n\n" for the last log entry
 
-    this.serverless.cli.log(output);
+    if (this.provider.writeText) {
+      this.provider.writeText(output);
+    } else {
+      this.serverless.cli.log(output);
+    }
 
     return BbPromise.resolve();
   },

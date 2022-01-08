@@ -15,6 +15,15 @@ class GoogleRemove {
     this.options = options;
     this.provider = this.serverless.getProvider('google');
 
+    let removeProgress;
+
+    if (this.provider.progress) {
+      removeProgress = this.provider.progress.create({
+        message: 'Removing deployment',
+        name: 'remove',
+      });
+    }
+
     Object.assign(
       this,
       validate,
@@ -33,7 +42,10 @@ class GoogleRemove {
           .then(this.setDeploymentBucketName),
 
       'remove:remove': () =>
-        BbPromise.bind(this).then(this.emptyDeploymentBucket).then(this.removeDeployment),
+        BbPromise.bind(this)
+          .then(this.emptyDeploymentBucket)
+          .then(this.removeDeployment)
+          .finally(() => removeProgress && removeProgress.remove()),
     };
   }
 }

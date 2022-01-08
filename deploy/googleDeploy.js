@@ -17,6 +17,15 @@ class GoogleDeploy {
     this.options = options;
     this.provider = this.serverless.getProvider('google');
 
+    let deployProgress;
+
+    if (this.provider.progress) {
+      deployProgress = this.provider.progress.create({
+        message: 'Beginning deployment',
+        name: 'deploy',
+      });
+    }
+
     Object.assign(
       this,
       validate,
@@ -39,7 +48,10 @@ class GoogleDeploy {
           .then(this.uploadArtifacts)
           .then(this.updateDeployment),
 
-      'after:deploy:deploy': () => BbPromise.bind(this).then(this.cleanupDeploymentBucket),
+      'after:deploy:deploy': () =>
+        BbPromise.bind(this)
+          .then(this.cleanupDeploymentBucket)
+          .finally(() => deployProgress && deployProgress.remove()),
     };
   }
 }
