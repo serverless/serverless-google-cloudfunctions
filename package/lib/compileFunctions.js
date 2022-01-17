@@ -23,7 +23,7 @@ module.exports = {
       let vpcEgress = funcObject.vpcEgress || this.serverless.service.provider.vpcEgress;
 
       if (this.log) {
-        this.log.verbose(`Compiling function "${functionName}"...`);
+        this.log.notice(`Compiling function "${functionName}"...`);
       } else {
         this.serverless.cli.log(`Compiling function "${functionName}"...`);
       }
