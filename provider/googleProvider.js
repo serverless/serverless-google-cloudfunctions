@@ -67,6 +67,7 @@ class GoogleProvider {
             'python39',
             'go111',
             'go113',
+            'go116', // recommended
             'java11',
             'dotnet3',
             'ruby26',
