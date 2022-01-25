@@ -95,6 +95,13 @@ class GoogleProvider {
         cloudFunctionVpcEgress: {
           enum: ['ALL', 'ALL_TRAFFIC', 'PRIVATE', 'PRIVATE_RANGES_ONLY'],
         },
+        cloudFunctionBuildEnvironmentVariables: {
+          type: 'object',
+          patternProperties: {
+            '^.*$': { type: 'string' },
+          },
+          additionalProperties: false,
+        },
         resourceManagerLabels: {
           type: 'object',
           propertyNames: {
@@ -119,6 +126,7 @@ class GoogleProvider {
           memorySize: { $ref: '#/definitions/cloudFunctionMemory' }, // Can be overridden by function configuration
           timeout: { type: 'string' }, // Can be overridden by function configuration
           environment: { $ref: '#/definitions/cloudFunctionEnvironmentVariables' }, // Can be overridden by function configuration
+          buildEnvironment: { $ref: '#/definitions/cloudFunctionBuildEnvironmentVariables' }, // Can be overridden by function configuration
           vpc: { type: 'string' }, // Can be overridden by function configuration
           vpcEgress: { $ref: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration
           labels: { $ref: '#/definitions/resourceManagerLabels' }, // Can be overridden by function configuration
@@ -133,6 +141,7 @@ class GoogleProvider {
           timeout: { type: 'string' }, // Override provider configuration
           minInstances: { type: 'number' },
           environment: { $ref: '#/definitions/cloudFunctionEnvironmentVariables' }, // Override provider configuration
+          buildEnvironment: { $ref: '#/definitions/cloudFunctionBuildEnvironmentVariables' }, // Override provider configuration
           vpc: { type: 'string' }, // Override provider configuration
           vpcEgress: { $ref: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration
           labels: { $ref: '#/definitions/resourceManagerLabels' }, // Override provider configuration
@@ -284,6 +293,14 @@ class GoogleProvider {
       {},
       _.get(this, 'serverless.service.provider.environment'),
       funcObject.environment
+    );
+  }
+
+  getConfiguredBuildEnvironment(funcObject) {
+    return _.merge(
+      {},
+      _.get(this, 'serverless.service.provider.buildEnvironment'),
+      funcObject.buildEnvironment
     );
   }
 }
