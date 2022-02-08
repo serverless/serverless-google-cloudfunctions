@@ -507,6 +507,108 @@ describe('CompileFunctions', () => {
       });
     });
 
+    it('should set the secret environment variables based on the function configuration', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          secrets: {
+            TEST_SECRET: {
+              secret: 'secret',
+              version: 'latest',
+            },
+          },
+          events: [{ http: 'foo' }],
+        },
+      };
+
+      const compiledResources = [
+        {
+          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          name: 'my-service-dev-func1',
+          properties: {
+            parent: 'projects/myProject/locations/us-central1',
+            runtime: 'nodejs10',
+            function: 'my-service-dev-func1',
+            entryPoint: 'func1',
+            availableMemoryMb: 256,
+            secretEnvironmentVariables: [
+              {
+                key: 'TEST_SECRET',
+                secret: 'secret',
+                version: 'latest',
+              },
+            ],
+            timeout: '60s',
+            sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+            httpsTrigger: {
+              url: 'foo',
+            },
+            labels: {},
+          },
+        },
+      ];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(
+          googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+        ).toEqual(compiledResources);
+      });
+    });
+
+    it('should merge the secret environment variables on the provider configuration and function definition', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          secrets: {
+            TEST_SECRET: { secret: 'secret1', version: 'latest' },
+            TEST_SECRET2: { secret: 'secret2', version: 'latest' },
+          },
+          events: [{ http: 'foo' }],
+        },
+      };
+      googlePackage.serverless.service.provider.secrets = {
+        TEST_SECRET: { secret: 'secretbase', version: 'latest' },
+        TEST_SECRET_PROVIDER: { secret: 'secretprovider', version: 'latest' },
+      };
+
+      const compiledResources = [
+        {
+          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          name: 'my-service-dev-func1',
+          properties: {
+            parent: 'projects/myProject/locations/us-central1',
+            runtime: 'nodejs10',
+            function: 'my-service-dev-func1',
+            entryPoint: 'func1',
+            availableMemoryMb: 256,
+            secretEnvironmentVariables: [
+              { key: 'TEST_SECRET', secret: 'secret1', version: 'latest' },
+              { key: 'TEST_SECRET2', secret: 'secret2', version: 'latest' },
+              { key: 'TEST_SECRET_PROVIDER', secret: 'secretprovider', version: 'latest' },
+            ],
+            timeout: '60s',
+            sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+            httpsTrigger: {
+              url: 'foo',
+            },
+            labels: {},
+          },
+        },
+      ];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.calledOnce).toEqual(true);
+        expect(
+          googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+        ).toEqual(compiledResources);
+        expect(googlePackage.serverless.service.provider.secrets).toEqual({
+          TEST_SECRET: { secret: 'secretbase', version: 'latest' },
+          TEST_SECRET_PROVIDER: { secret: 'secretprovider', version: 'latest' },
+        });
+      });
+    });
+
     it('should compile "http" events properly', () => {
       googlePackage.serverless.service.functions = {
         func1: {
