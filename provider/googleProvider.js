@@ -92,6 +92,29 @@ class GoogleProvider {
           },
           additionalProperties: false,
         },
+        cloudFunctionSecretEnvironmentVariables: {
+          type: 'object',
+          patternProperties: {
+            '^[a-zA-Z0-9_]+$': {
+              type: 'object',
+              properties: {
+                projectId: {
+                  type: 'string',
+                  minLength: 1,
+                },
+                secret: {
+                  type: 'string',
+                  pattern: '^[a-zA-Z0-9_-]+$',
+                },
+                version: {
+                  type: 'string',
+                  pattern: '^(latest|[0-9.]+)$',
+                },
+              },
+              required: ['secret', 'version'],
+            },
+          },
+        },
         cloudFunctionVpcEgress: {
           enum: ['ALL', 'ALL_TRAFFIC', 'PRIVATE', 'PRIVATE_RANGES_ONLY'],
         },
@@ -119,6 +142,7 @@ class GoogleProvider {
           memorySize: { $ref: '#/definitions/cloudFunctionMemory' }, // Can be overridden by function configuration
           timeout: { type: 'string' }, // Can be overridden by function configuration
           environment: { $ref: '#/definitions/cloudFunctionEnvironmentVariables' }, // Can be overridden by function configuration
+          secrets: { $ref: '#/definitions/cloudFunctionSecretEnvironmentVariables' }, // Can be overridden by function configuration
           vpc: { type: 'string' }, // Can be overridden by function configuration
           vpcEgress: { $ref: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration
           labels: { $ref: '#/definitions/resourceManagerLabels' }, // Can be overridden by function configuration
@@ -133,6 +157,7 @@ class GoogleProvider {
           timeout: { type: 'string' }, // Override provider configuration
           minInstances: { type: 'number' },
           environment: { $ref: '#/definitions/cloudFunctionEnvironmentVariables' }, // Override provider configuration
+          secrets: { $ref: '#/definitions/cloudFunctionSecretEnvironmentVariables' }, // Can be overridden by function configuration
           vpc: { type: 'string' }, // Override provider configuration
           vpcEgress: { $ref: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration
           labels: { $ref: '#/definitions/resourceManagerLabels' }, // Override provider configuration
@@ -277,6 +302,19 @@ class GoogleProvider {
       _.get(this, 'serverless.service.provider.runtime') ||
       'nodejs10'
     );
+  }
+
+  getConfiguredSecrets(funcObject) {
+    const providerSecrets = _.get(this, 'serverless.service.provider.secrets', {});
+    const secrets = _.merge({}, providerSecrets, funcObject.secrets);
+
+    const keys = Object.keys(secrets).sort();
+    return keys.map((key) => {
+      return {
+        key,
+        ...secrets[key],
+      };
+    });
   }
 
   getConfiguredEnvironment(funcObject) {
