@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.6.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v4.5.0...v4.6.0) (2022-05-09)
+
+### Features
+
+- Add support for Node.js 16 and Go 1.16 Runtimes ([#285](https://github.com/serverless/serverless-google-cloudfunctions/issues/285)) ([24e62d8](https://github.com/serverless/serverless-google-cloudfunctions/commit/24e62d8e12208049e2de1991fd30614545994e00)) ([Mark Davydov](https://github.com/markrity))
+- Add support for secrets manager environment variables ([#287](https://github.com/serverless/serverless-google-cloudfunctions/issues/287)) ([4e59429](https://github.com/serverless/serverless-google-cloudfunctions/commit/4e59429ad2857cbc8d95ce70db6b41bed76b67ad)) ([Christopher Chow](https://github.com/christophersjchow))
+- Support `provider.minInstances`([#283](https://github.com/serverless/serverless-google-cloudfunctions/issues/283)) ([66ba98f](https://github.com/serverless/serverless-google-cloudfunctions/commit/66ba98f3307110f8a19b4d5b3f798b71e791d2f5)) ([Jorge Montanez](https://github.com/jmontanezphysna))
+
 ## [4.5.0](https://github.com/serverless/serverless-google-cloudfunctions/compare/v4.4.0...v4.5.0) (2021-11-25)
 
 ### Features
