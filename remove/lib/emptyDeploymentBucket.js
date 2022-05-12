@@ -22,7 +22,11 @@ module.exports = {
   removeObjects(objectsToRemove) {
     if (!objectsToRemove.length) return BbPromise.resolve();
 
-    this.serverless.cli.log('Removing artifacts in deployment bucket...');
+    if (this.log) {
+      this.provider.progress.get('remove').update('Removing artifacts from deployment bucket');
+    } else {
+      this.serverless.cli.log('Removing artifacts in deployment bucket...');
+    }
 
     const removePromises = objectsToRemove.map((object) => {
       const params = {

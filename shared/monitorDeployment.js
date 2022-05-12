@@ -11,7 +11,9 @@ module.exports = {
 
     let deploymentStatus = null;
 
-    this.serverless.cli.log(`Checking deployment ${action} progress...`);
+    if (!this.provider.log) {
+      this.serverless.cli.log(`Checking deployment ${action} progress...`);
+    }
 
     return new BbPromise((resolve, reject) => {
       async.whilst(
@@ -53,9 +55,12 @@ module.exports = {
         },
 
         () => {
-          // empty console.log for a prettier output
-          this.serverless.cli.consoleLog('');
-          this.serverless.cli.log('Done...');
+          if (!this.provider.log) {
+            // empty console.log for a prettier output
+            this.serverless.cli.consoleLog('');
+            this.serverless.cli.log('Done...');
+          }
+
           resolve(deploymentStatus);
         }
       );

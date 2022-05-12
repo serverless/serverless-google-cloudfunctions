@@ -28,7 +28,11 @@ module.exports = {
   },
 
   update(deployment) {
-    this.serverless.cli.log('Updating deployment...');
+    if (this.provider.progress) {
+      this.provider.progress.get('deploy').update('Updating deployment');
+    } else {
+      this.serverless.cli.log('Updating deployment...');
+    }
 
     const filePath = path.join(
       this.serverless.config.servicePath,

@@ -16,9 +16,15 @@ const GoogleLogs = require('./logs/googleLogs');
 const GoogleInfo = require('./info/googleInfo');
 
 class GoogleIndex {
-  constructor(serverless, options) {
+  constructor(serverless, options, v3Utils) {
     this.serverless = serverless;
     this.options = options;
+
+    if (v3Utils) {
+      this.log = v3Utils.log;
+      this.progress = v3Utils.progress;
+      this.writeText = v3Utils.writeText;
+    }
 
     this.serverless.pluginManager.addPlugin(GoogleProvider);
     this.serverless.pluginManager.addPlugin(GooglePackage);

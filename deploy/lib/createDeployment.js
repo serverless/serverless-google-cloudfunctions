@@ -34,7 +34,11 @@ module.exports = {
   createIfNotExists(foundDeployment) {
     if (foundDeployment) return BbPromise.resolve();
 
-    this.serverless.cli.log('Creating deployment...');
+    if (this.provider.progress) {
+      this.provider.progress.get('deploy').update('Creating deployment via Deployment Manager');
+    } else {
+      this.serverless.cli.log('Creating deployment...');
+    }
 
     const filePath = path.join(
       this.serverless.config.servicePath,

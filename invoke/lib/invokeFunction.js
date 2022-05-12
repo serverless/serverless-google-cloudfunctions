@@ -47,7 +47,11 @@ module.exports = {
 
     const log = `${chalk.grey(res.executionId)} ${res.result}`;
 
-    this.serverless.cli.log(log);
+    if (this.provider.writeText) {
+      this.provider.writeText(log);
+    } else {
+      this.serverless.cli.log(log);
+    }
 
     return BbPromise.resolve();
   },
