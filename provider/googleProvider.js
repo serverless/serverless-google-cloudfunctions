@@ -126,7 +126,7 @@ class GoogleProvider {
             maxLength: 63,
           },
           patternProperties: {
-            '^[a-z][a-z0-9_.]*$': { type: 'string' },
+            '^[a-z][a-z0-9_.-]*$': { type: 'string' },
           },
           additionalProperties: false,
         },
