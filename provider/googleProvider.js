@@ -31,6 +31,7 @@ class GoogleProvider {
             'us-central1', // (Iowa)
             'us-east1', // (South Carolina)
             'us-east4', // (Northern Virginia)
+            'us-west1', // (Oregon)
             'europe-west1', // (Belgium)
             'europe-west2', // (London)
             'asia-east1', // (Taiwan)
