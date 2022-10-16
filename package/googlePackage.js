@@ -10,6 +10,7 @@ const prepareDeployment = require('./lib/prepareDeployment');
 const saveCreateTemplateFile = require('./lib/writeFilesToDisk');
 const mergeServiceResources = require('./lib/mergeServiceResources');
 const generateArtifactDirectoryName = require('./lib/generateArtifactDirectoryName');
+const createIamRoles = require('./lib/createIamRoles');
 const compileFunctions = require('./lib/compileFunctions');
 const saveUpdateTemplateFile = require('./lib/writeFilesToDisk');
 
@@ -54,6 +55,7 @@ class GooglePackage {
       prepareDeployment,
       saveCreateTemplateFile,
       generateArtifactDirectoryName,
+      createIamRoles,
       compileFunctions,
       mergeServiceResources,
       saveUpdateTemplateFile
@@ -72,7 +74,9 @@ class GooglePackage {
           .then(this.saveCreateTemplateFile),
 
       'before:package:compileFunctions': () =>
-        BbPromise.bind(this).then(this.generateArtifactDirectoryName),
+        BbPromise.bind(this)
+          .then(this.generateArtifactDirectoryName)
+          .then(this.createIamRoles),
 
       'package:compileFunctions': () => BbPromise.bind(this).then(this.compileFunctions),
 

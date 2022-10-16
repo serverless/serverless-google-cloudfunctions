@@ -130,8 +130,50 @@ class GoogleProvider {
           },
           additionalProperties: false,
         },
+        iamCustomRoles: {
+          type: 'object',
+          properties: {
+            permissions: {
+              type: 'array',
+              items: {
+                anyOf: [
+                  {
+                    $ref: '#/definitions/iamPermissionsOnResource',
+                  },
+                  {
+                    type: 'string',
+                  },
+                ],
+              },
+            },
+          },
+          additionalProperties: false,
+        },
+        iamPermissionsOnResource: {
+          type: 'object',
+          properties: {
+            bucket: { type: 'string' },
+            organizationId: { type: 'string' },
+            folderId: { type: 'string' },
+            projectId: { type: 'string' },
+            cloudFunction: { type: 'string' },
+            permissions: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+          },
+          additionalProperties: false,
+          oneOf: [
+            { required: ['bucket', 'permissions'] },
+            { required: ['organizationId', 'permissions'] },
+            { required: ['folderId', 'permissions'] },
+            { required: ['projectId', 'permissions'] },
+            { required: ['cloudFunction', 'permissions'] },
+          ]
+        },
       },
-
       provider: {
         properties: {
           credentials: { type: 'string' },
@@ -146,6 +188,7 @@ class GoogleProvider {
           vpc: { type: 'string' }, // Can be overridden by function configuration
           vpcEgress: { $ref: '#/definitions/cloudFunctionVpcEgress' }, // Can be overridden by function configuration
           labels: { $ref: '#/definitions/resourceManagerLabels' }, // Can be overridden by function configuration
+          iam: { $ref: '#/definitions/iamCustomRoles' },
         },
       },
       function: {
