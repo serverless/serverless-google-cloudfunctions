@@ -76,7 +76,7 @@ const getCustomRoleTemplate = (project, serviceName, config) => {
       roleId: name,
       role: {
         title: name,
-        description: 'Generated IAM role for Serverless project ${serviceName}',
+        description: `Generated IAM role for Serverless project ${serviceName}`,
         stage: 'GA',
         includedPermissions: config.permissions,
       },
