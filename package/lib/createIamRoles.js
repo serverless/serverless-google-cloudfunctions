@@ -49,7 +49,7 @@ module.exports = {
       );
     }
 
-    // Create and assign custom role(s) for each specific resource resource
+    // Create and assign custom role(s) for each specific resource
     resourceSpecificRoles.forEach((iamObject) => {
       const role = getCustomRoleTemplate(projectId, serviceName, iamObject);
       deploymentResources.push(role);
@@ -60,12 +60,13 @@ module.exports = {
   },
 };
 
+const ROLE_NAME_MAX_LENGTH = 64;
 const getCustomRoleTemplate = (project, serviceName, config) => {
   const namePrefix = serviceName.slice(0, 48).replaceAll('-', '_');
   const nameSuffix = getResourceRoleSuffix(config)
     .replace(/[^a-zA-Z_]/g, '')
-    .slice(0, 64 - namePrefix.length);
-  const name = `${namePrefix}_${nameSuffix}`;
+    .slice(0, ROLE_NAME_MAX_LENGTH - namePrefix.length);
+  const name = `${namePrefix}${nameSuffix}`;
 
   return {
     type: 'gcp-types/iam-v1:projects.roles',
