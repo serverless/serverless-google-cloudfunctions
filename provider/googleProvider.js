@@ -57,21 +57,29 @@ class GoogleProvider {
           // Source: https://cloud.google.com/functions/docs/concepts/exec#runtimes
           enum: [
             'nodejs6', // decommissioned
-            'nodejs8', // deprecated
+            'nodejs8', // decommissioned
             'nodejs10',
             'nodejs12',
             'nodejs14',
             'nodejs16', // recommended
+            'nodejs18', // preview
             'python37',
             'python38',
             'python39',
             'go111',
             'go113',
             'go116', // recommended
+            'go118', // preview
+            'go119', // preview
             'java11',
+            'java17', // recommended
             'dotnet3',
+            'dotnet6', // recommended
             'ruby26',
             'ruby27',
+            'ruby30', // recommended
+            'php74',
+            'php81', // recommended
           ],
         },
         cloudFunctionMemory: {
