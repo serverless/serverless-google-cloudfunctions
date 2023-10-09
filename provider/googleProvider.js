@@ -198,6 +198,39 @@ class GoogleProvider {
           return { value: await this.gsValue({ bucket, object }) };
         },
       },
+      "gcp-sm": {
+        async resolve({ params }) {
+          const [value, defaultValue] = params;
+
+          const secretName = `projects/${this.serverless.configurationInput.provider.project}/secrets/${value}/versions/latest`;
+          try {
+
+            const auth = this.getAuthClient();
+
+            const secretManager = google.secretmanager("v1");
+
+            const secretVersion =
+              await secretManager.projects.secrets.versions.access({
+                auth,
+                name: secretName,
+              });
+
+            return {
+              value: Buffer.from(
+                secretVersion.data.payload.data,
+                "base64"
+              ).toString("utf-8"),
+            };
+          } catch (error) {
+            if (!defaultValue) {
+              throw new Error(
+                "Variable not found on GCP Secrets Manager: " + value
+              );
+            }
+            return { value: defaultValue };
+          }
+        },
+      }
     };
 
     // TODO: Remove with next major
