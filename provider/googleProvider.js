@@ -198,6 +198,50 @@ class GoogleProvider {
           return { value: await this.gsValue({ bucket, object }) };
         },
       },
+      'gcp-sm': {
+        async resolve({ params }) {
+          const [value, defaultValue] = params;
+          const secretName = `projects/${serverless.configurationInput.provider.project}/secrets/${value}/versions/latest`;
+          try {
+            let credentials = serverless.service.provider.credentials;
+            let auth;
+            if (credentials) {
+              const credParts = serverless.service.provider.credentials.split(path.sep);
+              if (credParts[0] === '~') {
+                credParts[0] = os.homedir();
+                credentials = credParts.reduce((memo, part) => path.join(memo, part), '');
+              }
+
+              auth = new google.auth.GoogleAuth({
+                keyFile: credentials.toString(),
+                scopes: 'https://www.googleapis.com/auth/cloud-platform',
+                projectId: serverless.configurationInput.provider.project,
+              });
+            }
+
+            auth = new google.auth.GoogleAuth({
+              scopes: 'https://www.googleapis.com/auth/cloud-platform',
+              projectId: serverless.configurationInput.provider.project,
+            });
+
+            const secretManager = google.secretmanager('v1');
+
+            const secretVersion = await secretManager.projects.secrets.versions.access({
+              auth,
+              name: secretName,
+            });
+
+            return {
+              value: Buffer.from(secretVersion.data.payload.data, 'base64').toString('utf-8'),
+            };
+          } catch (error) {
+            if (!defaultValue) {
+              throw new Error('Variable not found on GCP Secrets Manager: ' + value);
+            }
+            return { value: defaultValue };
+          }
+        },
+      },
     };
 
     // TODO: Remove with next major
