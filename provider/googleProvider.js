@@ -61,7 +61,9 @@ class GoogleProvider {
             'nodejs10',
             'nodejs12',
             'nodejs14',
-            'nodejs16', // recommended
+            'nodejs16',
+            'nodejs18', 
+            'nodejs20', // recommended
             'python37',
             'python38',
             'python39',
