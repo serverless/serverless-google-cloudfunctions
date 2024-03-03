@@ -11,7 +11,98 @@ env:
   FORCE_COLOR: 1
 
 jobs:
-  linuxNode14:
+
+  linuxNode20:
+    name: '[Linux] Node.js 20: Unit tests'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Retrieve dependencies from cache
+        id: cacheNpm
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: npm-v20-${{ runner.os }}-${{ github.ref }}-${{ hashFiles('package.json') }}
+          restore-keys: npm-v20-${{ runner.os }}-${{ github.ref }}-
+
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v1
+        with:
+          node-version: 20.x
+
+      - name: Install dependencies
+        if: steps.cacheNpm.outputs.cache-hit != 'true'
+        run: |
+          npm update --no-save
+          npm update --save-dev --no-save
+      - name: Unit tests
+        run: npm test
+
+  linuxNode18:
+    name: '[Linux] Node.js 18: Unit tests'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Retrieve dependencies from cache
+        id: cacheNpm
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: npm-v18-${{ runner.os }}-${{ github.ref }}-${{ hashFiles('package.json') }}
+          restore-keys: npm-v18-${{ runner.os }}-${{ github.ref }}-
+
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        if: steps.cacheNpm.outputs.cache-hit != 'true'
+        run: |
+          npm update --no-save
+          npm update --save-dev --no-save
+      - name: Unit tests
+        run: npm test
+
+  linuxNode16:
+    name: '[Linux] Node.js 16: Unit tests'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Retrieve dependencies from cache
+        id: cacheNpm
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: npm-v16-${{ runner.os }}-${{ github.ref }}-${{ hashFiles('package.json') }}
+          restore-keys: npm-v16-${{ runner.os }}-${{ github.ref }}-
+
+      - name: Install Node.js and npm
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - name: Install dependencies
+        if: steps.cacheNpm.outputs.cache-hit != 'true'
+        run: |
+          npm update --no-save
+          npm update --save-dev --no-save
+      - name: Unit tests
+        run: npm test
+
+linuxNode14:
     name: '[Linux] Node.js 14: Unit tests '
     runs-on: ubuntu-latest
     steps:
@@ -56,102 +147,10 @@ jobs:
       - name: Unit tests
         run: npm test
 
-  linuxNode16:
-    name: '[Linux] Node.js 16: Unit tests'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Retrieve dependencies from cache
-        id: cacheNpm
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: npm-v16-${{ runner.os }}-${{ github.ref }}-${{ hashFiles('package.json') }}
-          restore-keys: npm-v16-${{ runner.os }}-${{ github.ref }}-
-
-      - name: Install Node.js and npm
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16.x
-
-      - name: Install dependencies
-        if: steps.cacheNpm.outputs.cache-hit != 'true'
-        run: |
-          npm update --no-save
-          npm update --save-dev --no-save
-      - name: Unit tests
-        run: npm test
-
-  linuxNode12:
-    name: '[Linux] Node.js 12: Unit tests'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Retrieve dependencies from cache
-        id: cacheNpm
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: npm-v12-${{ runner.os }}-${{ github.ref }}-${{ hashFiles('package.json') }}
-          restore-keys: npm-v12-${{ runner.os }}-${{ github.ref }}-
-
-      - name: Install Node.js and npm
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-
-      - name: Install dependencies
-        if: steps.cacheNpm.outputs.cache-hit != 'true'
-        run: |
-          npm update --no-save
-          npm update --save-dev --no-save
-      - name: Unit tests
-        run: npm test
-
-  linuxNode10:
-    name: '[Linux] Node.js v10: Unit tests'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Retrieve dependencies from cache
-        id: cacheNpm
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: npm-v10-${{ runner.os }}-${{ github.ref }}-${{ hashFiles('package.json') }}
-          restore-keys: |
-            npm-v10-${{ runner.os }}-${{ github.ref }}-
-            npm-v10-${{ runner.os }}-refs/heads/master-
-
-      - name: Install Node.js and npm
-        uses: actions/setup-node@v1
-        with:
-          node-version: 10.x
-
-      - name: Install dependencies
-        if: steps.cacheNpm.outputs.cache-hit != 'true'
-        run: |
-          npm update --no-save
-          npm update --save-dev --no-save
-      - name: Unit tests
-        run: npm test
-
   tagIfNewVersion:
     name: ubuntu-latest
     runs-on: ubuntu-latest
-    needs: [linuxNode14, linuxNode16, linuxNode12, linuxNode10]
+    needs: [linuxNode20, linuxNode18, linuxNode16,  linuxNode14]
     timeout-minutes: 30 # Default is 360
     steps:
       - name: Checkout repository
